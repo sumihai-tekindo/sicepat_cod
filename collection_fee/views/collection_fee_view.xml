@@ -1,0 +1,14 @@
+<openerp>
+	<data>		
+		<record id="res_partner_inherit_form_cod" model="ir.ui.view">
+			<field name="name">res.partner.inherit.form.cod</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@name='sales_purchases']/group/group[3]/field[@name='date']" position="after">
+					<field name='collection_fee'/>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>
