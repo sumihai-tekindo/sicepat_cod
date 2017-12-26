@@ -7,7 +7,7 @@
     'website': '-',
     'depends': ['base','account'],
     'data': [
-        'views/resi_status_view.xml',
+        'views/account_invoice_view.xml',
     ],
     'installable': True,
 }

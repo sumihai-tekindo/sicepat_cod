@@ -1,14 +1,15 @@
-from odoo import api, models, fields
+from openerp import models, fields
 
 
-class ResiStatus(models.Model):
-	_name="resi.status"
+class account_invoice_line(models.Model):
+	_inherit="account.invoice.line"
 
 	name = fields.Char(string='No. Resi')
 	recipient = fields.Char(string='Name of Recipient')
 	account_analytic_id = fields.Many2one('account.analytic.account', string='Analytic Account')
 	price_cod = fields.Float(string='Price COD')
 	price_package = fields.Float(string='Price Package')
+	nilai_edc = fields.Char(string='nilai_EDC')
 	sigesit = fields.Many2one('hr.employee',string='Sigesit')
 	internal_status = fields.Selection([('open','Open'),
 										('sigesit','Sigesit'),

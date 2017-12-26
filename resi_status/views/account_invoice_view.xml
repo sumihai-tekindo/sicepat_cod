@@ -1,0 +1,55 @@
+<openerp>
+	<data>
+		<!-- Account Invoice Line -->
+		<!-- <record id="view_invoice_line_inherit_tree" model="ir.ui.view">
+			<field name="name">invoice.line.inherit.tree</field>
+			<field name="model">account.invoice.line</field>
+			<field name="inherit_id" ref="account.view_invoice_line_tree"/>
+			<field name="arch" type="xml">
+
+				<xpath expr="//tree/field[@name='account_id']" position="after">
+					<field name='name'/>
+					<field name='recipient'/>
+					<field name='account_analytic_id'/>
+					<field name='price_cod'/>
+					<field name='price_package'/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_invoice_line_inherit_form" model="ir.ui.view">
+			<field name="name">invoice.line.inherit.form</field>
+			<field name="model">account.invoice.line</field>
+			<field name="inherit_id" ref="account.view_invoice_line_form"/>
+			<field name="arch" type="xml">
+
+				<xpath expr="//form/group/group[2]/field[@name='account_id']" position="after">
+					<field name='name'/>
+					<field name='recipient'/>
+					<field name='account_analytic_id'/>
+					<field name='price_cod'/>
+					<field name='price_package'/>
+				</xpath>
+			</field>
+		</record> -->
+		<record id="customer_invoice_form_cod" model="ir.ui.view">
+			<field name="name">customer.invoice.form.cod</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@string='Invoice Lines']/field[@name='invoice_line']/tree/field[@name='account_analytic_id']" position="after">
+					<field name='name'/>
+					<field name='recipient'/>
+					<field name='account_analytic_id'/>
+					<field name='price_cod'/>
+					<field name='price_package'/>
+					<field name='nilai_edc'/>
+					<field name='sigesit'/>
+					<field name='internal_status'/>
+					<field name='external_status'/>
+					<field name='status_retur'/>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>
