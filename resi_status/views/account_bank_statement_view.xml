@@ -1,0 +1,27 @@
+<openerp>
+	<data>
+		<record id="account_bank_statement_form" model="ir.ui.view">
+			<field name="name">account.bank.statement.form</field>
+			<field name="model">account.bank.statement</field>
+			<field name="inherit_id" ref="account.view_bank_statement_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@string='Transactions']/field[@name='line_ids']/tree/field[@name='partner_id']" position="after">
+					<field name='awb_number'/>
+					<field name='recipient'/>
+					<field name='account_analytic_id'/>
+					<field name='price_cod'/>
+					<field name='price_package'/>
+					<field name='nilai_edc'/>
+					<field name='sigesit'/>
+					<field name='internal_status' invisible='1'/>
+					<field name='external_status' invisible='1'/>
+					<field name='status_retur'/>
+				</xpath>
+			
+				<xpath expr="//form/sheet/notebook/page[@string='Transactions']/field[@name='line_ids']/tree" position="attributes">
+					<attribute name='editable'></attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

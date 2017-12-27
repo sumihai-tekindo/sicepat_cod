@@ -1,0 +1,47 @@
+<openerp>
+	<data>
+		<record id="view_bank_statement_line" model="ir.ui.view">
+            <field name="name">account.bank.statement.line.form</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="arch" type="xml">
+                <form string="Statement Line">
+                	<group>
+                        <group>
+                        	<field name="sequence"/>
+                        	<field name="awb_number"/>
+	                        <field name="partner_id"/>
+	                        <field name="partner_name"/>
+	                        <field name="company_id"/>
+	                        <field name="recipient"/>
+	                    	<field name="name"/>
+	                    </group>
+	                    <group>
+	                    	<field name="internal_status"/>
+	                    	<field name="external_status"/>
+	                    	<field name="status_retur"/>
+	                    </group>
+	                    <group>
+	                    	<field name="date"/>
+	                    	<field name="sigesit"/>
+	                    	<field name="ref"/>
+	                    	<field name="nilai_edc"/>
+	                    	<field name="price_package"/>
+	                    	<field name="price_cod"/>
+	                    	<field name="amount"/>
+	                    	<field name="currency_id"/>
+	                    	<field name="amount_currency"/>
+	                    </group>
+	                    <group>
+	                    	<field name="account_id"/>
+	                    	<field name="account_analytic_id"/>
+	                    	<field name="bank_account_id"/>
+	                    	<field name="journal_id"/>
+	                    	<field name="journal_entry_id"/>
+	                    	<field name="note"/>
+	                    </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>
