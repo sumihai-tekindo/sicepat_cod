@@ -8,6 +8,7 @@
     'depends': ['base','account'],
     'data': [
         'views/account_invoice_view.xml',
+        'views/paket_bermasalah_view.xml',
     ],
     'installable': True,
 }

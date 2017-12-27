@@ -1,0 +1,63 @@
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="paket_bermasalah_form_view">
+            <field name="name">paket.bermasalah.form</field>
+            <field name="model">paket.bermasalah</field>
+            <field name="arch" type="xml">
+                <form string="Paket Bermasalah">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="no_resi"/>
+                                <field name="no_tiket"/>
+                            </group>
+                            <group>
+                                <field name="kondisi"/>
+                                <field name="note"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="paket_bermasalah_tree_view">
+            <field name="name">paket.bermasalah.tree</field>
+            <field name="model">paket.bermasalah</field>
+            <field name="arch" type="xml">
+                <tree string="Paket Bermasalah Tree">
+                    <field name="no_resi"/>
+                    <field name="no_tiket"/>
+                    <field name="kondisi"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="paket_bermasalah_search_view">
+            <field name="name">paket.bermasalah.search</field>
+            <field name="model">paket.bermasalah</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="no_resi"/>
+                    <field name="no_tiket"/>
+                    <field name="kondisi"/>
+                    <field name="note"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_paket_bermasalah">
+            <field name="name">Paket Bermasalah</field>
+            <field name="res_model">paket.bermasalah</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem 
+            id="paket_bermasalah_menu" 
+            name="Paket Bermasalah"
+            parent="account.menu_finance_receivables" 
+            action="action_paket_bermasalah"/>
+        
+    </data>
+</openerp>
