@@ -1,0 +1,19 @@
+git pull
+
+git add .
+
+git commit -m "pesan akan melakukan commit apa"
+
+git push
+
+
+kalau  ada error saat git pull, tahapnya:
+ git add .
+ git commit -m "update message apa"
+ git pull
+
+ perbaiki conflict di file mana
+
+ git add .
+ git commit -m "update conflict"
+ git push

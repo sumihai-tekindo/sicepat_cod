@@ -3,7 +3,7 @@ from openerp import models, fields
 class Paket_Bermasalah(models.Model):
     _name = 'paket.bermasalah'
 
-    no_resi = fields.Many2one('account_invoice_line', string='No. Resi',required=True)
+    no_resi = fields.Many2one('account.invoice.line', string='No. Resi',required=True)
     kondisi = fields.Selection([
     	('lost','Hilang'),
     	('retur','Retur'),
