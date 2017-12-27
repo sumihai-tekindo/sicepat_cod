@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+		<record id="bank_2703935656" model="res.partner.bank">
+            <field name="state">bank</field>
+            <field name="acc_number">270.393.5656</field>
+            <field name="partner_id" ref="base.main_partner"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="bank" ref="l10n_id_bank.CENAIDJAXXX"/>
+            <field name="journal_id" ref="l10n_id_cod.account_journal_111002001"/>
+        </record>
+        <record id="bank_2703933335" model="res.partner.bank">
+            <field name="state">bank</field>
+            <field name="acc_number">270.393.3335</field>
+            <field name="partner_id" ref="base.main_partner"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="bank" ref="l10n_id_bank.CENAIDJAXXX"/>
+            <field name="journal_id" ref="l10n_id_cod.account_journal_111002002"/>
+        </record>
+	</data>
+</openerp>

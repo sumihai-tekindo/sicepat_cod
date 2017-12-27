@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+		<!-- TAX -->
+		<record id="tax_input_vat_2_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPn Masukan 10% (include)</field>
+			<field name="price_include" eval="True"/>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.1"/>
+			<field name="account_collected_id" ref="chart_115007000"/>
+			<field name="account_paid_id" ref="chart_115007000"/>
+			<field name="base_code_id" ref="tc_base_pur_vat_in2"/>
+			<field name="tax_code_id" ref="tc_bal_paid_vat_in2"/>
+			<field name="ref_base_code_id" ref="tc_base_pur_vat_in2"/>
+			<field name="ref_tax_code_id" ref="tc_bal_paid_vat_in2"/>
+			<field name="type_tax_use">purchase</field>
+		</record>
+		<record id="tax_input_vat_1_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPn Masukan 10%</field>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.1"/>
+			<field name="account_collected_id" ref="chart_115007000"/>
+			<field name="account_paid_id" ref="chart_115007000"/>
+			<field name="base_code_id" ref="tc_base_pur_vat_in1"/>
+			<field name="tax_code_id" ref="tc_bal_paid_vat_in1"/>
+			<field name="ref_base_code_id" ref="tc_base_pur_vat_in1"/>
+			<field name="ref_tax_code_id" ref="tc_bal_paid_vat_in1"/>
+			<field name="type_tax_use">purchase</field>
+		</record>
+		<record id="tax_wht23_1_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPh 23 2%</field>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.02"/>
+			<field name="account_collected_id" ref="chart_200004003"/>
+			<field name="account_paid_id" ref="chart_200004003"/>
+			<field name="base_code_id" ref="tc_base_sale_wht23_1"/>
+			<field name="tax_code_id" ref="tc_bal_reci_wht23_1"/>
+			<field name="ref_base_code_id" ref="tc_base_sale_wht23_1"/>
+			<field name="ref_tax_code_id" ref="tc_bal_reci_wht23_1"/>
+			<field name="type_tax_use">sale</field>
+		</record>
+		<record id="tax_output_vat_2_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPn Keluaran 1% (include)</field>
+			<field name="price_include" eval="True"/>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.01"/>
+			<field name="account_collected_id" ref="chart_200004006"/>
+			<field name="account_paid_id" ref="chart_200004006"/>
+			<field name="base_code_id" ref="tc_base_sale_vat_out2"/>
+			<field name="tax_code_id" ref="tc_bal_reci_vat_out2"/>
+			<field name="ref_base_code_id" ref="tc_base_sale_vat_out2"/>
+			<field name="ref_tax_code_id" ref="tc_bal_reci_vat_out2"/>
+			<field name="type_tax_use">sale</field>
+		</record>
+		<record id="tax_output_vat_1_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPn Keluaran 1%</field>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.01"/>
+			<field name="account_collected_id" ref="chart_200004006"/>
+			<field name="account_paid_id" ref="chart_200004006"/>
+			<field name="base_code_id" ref="tc_base_sale_vat_out1"/>
+			<field name="tax_code_id" ref="tc_bal_reci_vat_out1"/>
+			<field name="ref_base_code_id" ref="tc_base_sale_vat_out1"/>
+			<field name="ref_tax_code_id" ref="tc_bal_reci_vat_out1"/>
+			<field name="type_tax_use">sale</field>
+		</record>
+		<record id="tax_output_vat_4_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPn Keluaran 10% (include)</field>
+			<field name="price_include" eval="True"/>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.1"/>
+			<field name="account_collected_id" ref="chart_200004006"/>
+			<field name="account_paid_id" ref="chart_200004006"/>
+			<field name="base_code_id" ref="tc_base_sale_vat_out4"/>
+			<field name="tax_code_id" ref="tc_bal_reci_vat_out4"/>
+			<field name="ref_base_code_id" ref="tc_base_sale_vat_out4"/>
+			<field name="ref_tax_code_id" ref="tc_bal_reci_vat_out4"/>
+			<field name="type_tax_use">sale</field>
+		</record>
+		<record id="tax_output_vat_3_tmp" model="account.tax.template">
+			<field name="chart_template_id" ref="chart_sicepat"/>
+			<field name="name">PPn Keluaran 10%</field>
+			<field name="type">percent</field>
+			<field name="amount" eval="0.1"/>
+			<field name="account_collected_id" ref="chart_200004006"/>
+			<field name="account_paid_id" ref="chart_200004006"/>
+			<field name="base_code_id" ref="tc_base_sale_vat_out3"/>
+			<field name="tax_code_id" ref="tc_bal_reci_vat_out3"/>
+			<field name="ref_base_code_id" ref="tc_base_sale_vat_out3"/>
+			<field name="ref_tax_code_id" ref="tc_bal_reci_vat_out3"/>
+			<field name="type_tax_use">sale</field>
+		</record>
+	</data>
+</openerp>

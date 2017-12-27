@@ -1,0 +1,873 @@
+<openerp>
+	<data>
+		<record id="account_journal_111001001" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Transit Sigesit</field>
+			<field name="code">1001</field>
+			<field search="[('code','=','111.001.001')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.001')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001002" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bandung (Ciateul)</field>
+			<field name="code">1002</field>
+			<field search="[('code','=','111.001.002')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.002')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001003" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bekasi (Delta Pekayon)</field>
+			<field name="code">1003</field>
+			<field search="[('code','=','111.001.003')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.003')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001004" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bogor (Tanah Sereal)</field>
+			<field name="code">1004</field>
+			<field search="[('code','=','111.001.004')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.004')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001005" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Purwokerto (Jatisari)</field>
+			<field name="code">1005</field>
+			<field search="[('code','=','111.001.005')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.005')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001006" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Semarang (Suratmo)</field>
+			<field name="code">1006</field>
+			<field search="[('code','=','111.001.006')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.006')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001007" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Banjarmasin (BDJ)</field>
+			<field name="code">1007</field>
+			<field search="[('code','=','111.001.007')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.007')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001008" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bengkulu (Timur Indah)</field>
+			<field name="code">1008</field>
+			<field search="[('code','=','111.001.008')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.008')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001009" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Balikpapan (Sepinggan)</field>
+			<field name="code">1009</field>
+			<field search="[('code','=','111.001.009')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.009')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001010" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jambi (P.Antasari)</field>
+			<field name="code">1010</field>
+			<field search="[('code','=','111.001.010')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.010')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001011" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Denpasar (Pelita)</field>
+			<field name="code">1011</field>
+			<field search="[('code','=','111.001.011')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.011')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001012" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Pekanbaru (Paus Ujung)</field>
+			<field name="code">1012</field>
+			<field search="[('code','=','111.001.012')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.012')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001013" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Palembang (Angkatan 45)</field>
+			<field name="code">1013</field>
+			<field search="[('code','=','111.001.013')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.013')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001014" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Surabaya (Gubeng Kertajaya)</field>
+			<field name="code">1014</field>
+			<field search="[('code','=','111.001.014')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.014')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001015" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Samarinda (P. Suryanata)</field>
+			<field name="code">1015</field>
+			<field search="[('code','=','111.001.015')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.015')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001016" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Ujung Pandang (Pelita Raya)</field>
+			<field name="code">1016</field>
+			<field search="[('code','=','111.001.016')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.016')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001017" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Medan (Brigjend Katamso)</field>
+			<field name="code">1017</field>
+			<field search="[('code','=','111.001.017')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.017')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001018" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Malang (Bandara Abdul Rahman Saleh)</field>
+			<field name="code">1018</field>
+			<field search="[('code','=','111.001.018')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.018')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001019" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Lampung (Teluk Betung)</field>
+			<field name="code">1019</field>
+			<field search="[('code','=','111.001.019')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.019')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001020" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Pusat (Lautze)</field>
+			<field name="code">1020</field>
+			<field search="[('code','=','111.001.020')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.020')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001021" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Depok (Beji Timur)</field>
+			<field name="code">1021</field>
+			<field search="[('code','=','111.001.021')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.021')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001022" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Sukabumi (Cisaat)</field>
+			<field name="code">1022</field>
+			<field search="[('code','=','111.001.022')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.022')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001023" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tanjung Pinang (Srikaton)</field>
+			<field name="code">1023</field>
+			<field search="[('code','=','111.001.023')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.023')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001024" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jogjakarta (Sagan)</field>
+			<field name="code">1024</field>
+			<field search="[('code','=','111.001.024')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.024')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001025" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Cilegon (Walantaka)</field>
+			<field name="code">1025</field>
+			<field search="[('code','=','111.001.025')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.025')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001026" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tangerang Selatan (Melati Mas)</field>
+			<field name="code">1026</field>
+			<field search="[('code','=','111.001.026')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.026')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001027" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Manado (Tuminting)</field>
+			<field name="code">1027</field>
+			<field search="[('code','=','111.001.027')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.027')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001028" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Solo (Laweyan)</field>
+			<field name="code">1028</field>
+			<field search="[('code','=','111.001.028')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.028')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001029" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Garut (Citisung)</field>
+			<field name="code">1029</field>
+			<field search="[('code','=','111.001.029')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.029')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001030" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Barat (Daan Mogot)</field>
+			<field name="code">1030</field>
+			<field search="[('code','=','111.001.030')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.030')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001031" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Pemalang (Raya Petarukan)</field>
+			<field name="code">1031</field>
+			<field search="[('code','=','111.001.031')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.031')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001032" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Palu (Rajawali)</field>
+			<field name="code">1032</field>
+			<field search="[('code','=','111.001.032')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.032')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001033" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Palangkaraya (Penarung)</field>
+			<field name="code">1033</field>
+			<field search="[('code','=','111.001.033')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.033')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001034" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tasikmalaya (TSI)</field>
+			<field name="code">1034</field>
+			<field search="[('code','=','111.001.034')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.034')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001035" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Timur (Ciracas)</field>
+			<field name="code">1035</field>
+			<field search="[('code','=','111.001.035')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.035')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001036" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Ternate (Bastiong Talangame)</field>
+			<field name="code">1036</field>
+			<field search="[('code','=','111.001.036')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.036')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001037" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Purwakarta (PWA)</field>
+			<field name="code">1037</field>
+			<field search="[('code','=','111.001.037')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.037')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001038" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Cikarang (CKR)</field>
+			<field name="code">1038</field>
+			<field search="[('code','=','111.001.038')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.038')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001039" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Ciamis</field>
+			<field name="code">1039</field>
+			<field search="[('code','=','111.001.039')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.039')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001040" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Selatan (Mampang)</field>
+			<field name="code">1040</field>
+			<field search="[('code','=','111.001.040')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.040')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001041" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Banyuwangi (BWI)</field>
+			<field name="code">1041</field>
+			<field search="[('code','=','111.001.041')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.041')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001042" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jember (JBR)</field>
+			<field name="code">1042</field>
+			<field search="[('code','=','111.001.042')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.042')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001043" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Kediri (KDR)</field>
+			<field name="code">1043</field>
+			<field search="[('code','=','111.001.043')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.043')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001044" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Sumedang (SMD)</field>
+			<field name="code">1044</field>
+			<field search="[('code','=','111.001.044')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.044')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001045" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Batam (Batam Centre)</field>
+			<field name="code">1045</field>
+			<field search="[('code','=','111.001.045')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.045')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001046" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Blora </field>
+			<field name="code">1046</field>
+			<field search="[('code','=','111.001.046')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.046')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001047" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bandung (Timur)</field>
+			<field name="code">1047</field>
+			<field search="[('code','=','111.001.047')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.047')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001048" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Ambon</field>
+			<field name="code">1048</field>
+			<field search="[('code','=','111.001.048')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.048')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001049" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Cengkareng</field>
+			<field name="code">1049</field>
+			<field search="[('code','=','111.001.049')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.049')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001050" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Kupang (Kakatua)</field>
+			<field name="code">1050</field>
+			<field search="[('code','=','111.001.050')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.050')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001051" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tangerang (Sangiang)</field>
+			<field name="code">1051</field>
+			<field search="[('code','=','111.001.051')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.051')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001052" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bekasi (Utara)</field>
+			<field name="code">1052</field>
+			<field search="[('code','=','111.001.052')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.052')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001053" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bekasi (Galaxy)</field>
+			<field name="code">1053</field>
+			<field search="[('code','=','111.001.053')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.053')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001054" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Cianjur</field>
+			<field name="code">1054</field>
+			<field search="[('code','=','111.001.054')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.054')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001055" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Berau</field>
+			<field name="code">1055</field>
+			<field search="[('code','=','111.001.055')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.055')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001056" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Cimahi</field>
+			<field name="code">1056</field>
+			<field search="[('code','=','111.001.056')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.056')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001057" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Timur (Cawang)</field>
+			<field name="code">1057</field>
+			<field search="[('code','=','111.001.057')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.057')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001058" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bogor (Tapos)</field>
+			<field name="code">1058</field>
+			<field search="[('code','=','111.001.058')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.058')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001059" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Selatan (Gandaria)</field>
+			<field name="code">1059</field>
+			<field search="[('code','=','111.001.059')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.059')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001060" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Selatan (Pasar Minggu)</field>
+			<field name="code">1060</field>
+			<field search="[('code','=','111.001.060')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.060')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001061" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Utara (Cempaka Putih)</field>
+			<field name="code">1061</field>
+			<field search="[('code','=','111.001.061')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.061')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001062" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Utara (Teluk Gong)</field>
+			<field name="code">1062</field>
+			<field search="[('code','=','111.001.062')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.062')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001063" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Timur (Duren Sawit)</field>
+			<field name="code">1063</field>
+			<field search="[('code','=','111.001.063')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.063')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001064" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tarakan (Kampung Bugis)</field>
+			<field name="code">1064</field>
+			<field search="[('code','=','111.001.064')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.064')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001065" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Barat (Tambora)</field>
+			<field name="code">1065</field>
+			<field search="[('code','=','111.001.065')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.065')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001066" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Barat (Kebon Jeruk)</field>
+			<field name="code">1066</field>
+			<field search="[('code','=','111.001.066')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.066')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001067" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Barat (Cengkareng)</field>
+			<field name="code">1067</field>
+			<field search="[('code','=','111.001.067')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.067')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001068" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Depok (Cimanggis)</field>
+			<field name="code">1068</field>
+			<field search="[('code','=','111.001.068')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.068')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001069" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tangerang Selatan (Pamulang)</field>
+			<field name="code">1069</field>
+			<field search="[('code','=','111.001.069')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.069')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001070" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tangerang (Tigaraksa)</field>
+			<field name="code">1070</field>
+			<field search="[('code','=','111.001.070')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.070')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001071" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Pusat (Bendungan Hilir)</field>
+			<field name="code">1071</field>
+			<field search="[('code','=','111.001.071')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.071')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001072" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Tangerang (Ciledug)</field>
+			<field name="code">1072</field>
+			<field search="[('code','=','111.001.072')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.072')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001073" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Toko</field>
+			<field name="code">1073</field>
+			<field search="[('code','=','111.001.073')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.073')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001074" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Selatan (Pancoran)</field>
+			<field name="code">1074</field>
+			<field search="[('code','=','111.001.074')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.074')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001075" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Pusat (Salemba)</field>
+			<field name="code">1075</field>
+			<field search="[('code','=','111.001.075')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.075')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001076" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Bekasi (Timur)</field>
+			<field name="code">1076</field>
+			<field search="[('code','=','111.001.076')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.076')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111001077" model="account.journal">
+			<field name="type">cash</field>
+			<field name="name">Kas Jakarta Utara (Cilincing)</field>
+			<field name="code">1077</field>
+			<field search="[('code','=','111.001.077')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.001.077')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111002001" model="account.journal">
+			<field name="type">bank</field>
+			<field name="name">BCA 270.393.5656</field>
+			<field name="code">2001</field>
+			<field search="[('code','=','111.002.001')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.002.001')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+		<record id="account_journal_111002002" model="account.journal">
+			<field name="type">bank</field>
+			<field name="name">BCA 270.393.3335</field>
+			<field name="code">2002</field>
+			<field search="[('code','=','111.002.002')]" model="account.account" name="default_debit_account_id"/>
+			<field search="[('code','=','111.002.002')]" model="account.account" name="default_credit_account_id"/>
+			<field name="centralisation" eval="False"/>
+			<field name="entry_posted" eval="True"/>
+			<field name="update_posted" eval="True"/>
+			<field name="with_last_closing_balance" eval="True"/>
+		</record>
+	</data>
+</openerp>

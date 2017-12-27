@@ -1,0 +1,35 @@
+id,country_id:id,name,code
+state_id_11,base.id,Nanggroe Aceh Darussalam,11
+state_id_12,base.id,Sumatra Utara,12
+state_id_13,base.id,Sumatra Barat,13
+state_id_14,base.id,Riau,14
+state_id_15,base.id,Jambi,15
+state_id_16,base.id,Sumatra Selatan,16
+state_id_17,base.id,Bengkulu,17
+state_id_18,base.id,Lampung,18
+state_id_19,base.id,Kepulauan Bangka Belitung,19
+state_id_21,base.id,Kepulauan Riau,21
+state_id_31,base.id,Daerah Khusus Ibukota Jakarta,31
+state_id_32,base.id,Jawa Barat,32
+state_id_33,base.id,Jawa Tengah,33
+state_id_34,base.id,Daerah Istimewa Yogyakarta,34
+state_id_35,base.id,Jawa Timur,35
+state_id_36,base.id,Banten,36
+state_id_51,base.id,Bali,51
+state_id_52,base.id,Nusa Tenggara Barat,52
+state_id_53,base.id,Nusa Tenggara Timur,53
+state_id_61,base.id,Kalimantan Barat,61
+state_id_62,base.id,Kalimantan Tengah,62
+state_id_63,base.id,Kalimantan Selatan,63
+state_id_64,base.id,Kalimantan Timur,64
+state_id_65,base.id,Kalimantan Utara,65
+state_id_71,base.id,Sulawesi Utara,71
+state_id_72,base.id,Sulawesi Tengah,72
+state_id_73,base.id,Sulawesi Selatan,73
+state_id_74,base.id,Sulawesi Tenggara,74
+state_id_75,base.id,Gorontalo,75
+state_id_76,base.id,Sulawesi Barat,76
+state_id_81,base.id,Maluku,81
+state_id_82,base.id,Maluku Utara,82
+state_id_91,base.id,Papua,91
+state_id_92,base.id,Papua Barat,92

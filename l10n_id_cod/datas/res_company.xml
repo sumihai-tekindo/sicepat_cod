@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+        <record id="base.IDR" model="res.currency">
+            <field name="base" eval="1"/>
+            <field name="position">before</field>
+        </record>
+        
+        <record id="rateIDR" model="res.currency.rate">
+            <field name="rate">1.0</field>
+            <field name="currency_id" ref="base.IDR"/>
+            <field eval="time.strftime('%Y-01-01')" name="name"/>
+        </record>
+                
+        <!-- Company as Partner -->
+        <record id="base.main_partner" model="res.partner" context="{'default_is_company': True}">
+            <field name="name">Sicepat Ekspres Indonesia</field>
+        </record>
+        
+        <!-- Company contact as Bank Owner -->
+        <record id="contact1_partner" model="res.partner" context="{'default_is_company': False}">
+            <field name="name">Tenny Sari Dewi</field>
+            <field name="parent_id" ref="base.main_partner"/>
+        </record>
+        <record id="contact2_partner" model="res.partner" context="{'default_is_company': False}">
+            <field name="name">Darwin Kalim</field>
+            <field name="parent_id" ref="base.main_partner"/>
+        </record>
+        <record id="contact3_partner" model="res.partner" context="{'default_is_company': False}">
+            <field name="name">Murwanto</field>
+            <field name="parent_id" ref="base.main_partner"/>
+        </record>
+        
+        <!-- Basic Company -->
+		<record id="base.main_company" model="res.company">
+			<field name="name">Sicepat Ekspres Indonesia</field>
+			<field name="currency_id" ref="base.IDR"/>
+		</record>
+
+	</data>
+</openerp>

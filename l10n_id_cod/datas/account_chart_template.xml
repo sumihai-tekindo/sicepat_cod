@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+		<!-- CHART OF ACCOUNTS -->
+		<record id="chart_sicepat" model="account.chart.template">
+			<field name="name">Sicepat Ekspres - Chart of Accounts for COD</field>
+		</record>
+	</data>
+</openerp>

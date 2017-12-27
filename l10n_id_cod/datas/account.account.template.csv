@@ -1,0 +1,100 @@
+id,code,reconcile,type,parent_id/id,user_type/id,name
+chart_sicepat_root,0,0,view,,l10n_id_cod.user_type_view,Sicepat Ekspres
+chart_100000000,100.000.000,0,view,chart_sicepat_root,l10n_id_cod.user_type_current_asset,Aset
+chart_110000000,110.000.000,0,view,chart_100000000,l10n_id_cod.user_type_current_asset,Aset Lancar
+chart_111000000,111.000.000,0,view,chart_110000000,l10n_id_cod.user_type_cash_bank,Kas dan Bank
+chart_111001000,111.001.000,0,view,chart_111000000,account.data_account_type_cash,Kas
+chart_111001001,111.001.001,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Transit Sigesit
+chart_111001002,111.001.002,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bandung (Ciateul)
+chart_111001003,111.001.003,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bekasi (Delta Pekayon)
+chart_111001004,111.001.004,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bogor (Tanah Sereal)
+chart_111001005,111.001.005,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Purwokerto (Jatisari)
+chart_111001006,111.001.006,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Semarang (Suratmo)
+chart_111001007,111.001.007,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Banjarmasin (BDJ)
+chart_111001008,111.001.008,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bengkulu (Timur Indah)
+chart_111001009,111.001.009,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Balikpapan (Sepinggan)
+chart_111001010,111.001.010,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jambi (P.Antasari)
+chart_111001011,111.001.011,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Denpasar (Pelita)
+chart_111001012,111.001.012,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Pekanbaru (Paus Ujung)
+chart_111001013,111.001.013,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Palembang (Angkatan 45)
+chart_111001014,111.001.014,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Surabaya (Gubeng Kertajaya)
+chart_111001015,111.001.015,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Samarinda (P. Suryanata)
+chart_111001016,111.001.016,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Ujung Pandang (Pelita Raya)
+chart_111001017,111.001.017,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Medan (Brigjend Katamso)
+chart_111001018,111.001.018,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Malang (Bandara Abdul Rahman Saleh)
+chart_111001019,111.001.019,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Lampung (Teluk Betung)
+chart_111001020,111.001.020,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Pusat (Lautze)
+chart_111001021,111.001.021,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Depok (Beji Timur)
+chart_111001022,111.001.022,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Sukabumi (Cisaat)
+chart_111001023,111.001.023,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tanjung Pinang (Srikaton)
+chart_111001024,111.001.024,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jogjakarta (Sagan)
+chart_111001025,111.001.025,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Cilegon (Walantaka)
+chart_111001026,111.001.026,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tangerang Selatan (Melati Mas)
+chart_111001027,111.001.027,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Manado (Tuminting)
+chart_111001028,111.001.028,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Solo (Laweyan)
+chart_111001029,111.001.029,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Garut (Citisung)
+chart_111001030,111.001.030,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Daan Mogot)
+chart_111001031,111.001.031,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Pemalang (Raya Petarukan)
+chart_111001032,111.001.032,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Palu (Rajawali)
+chart_111001033,111.001.033,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Palangkaraya (Penarung)
+chart_111001034,111.001.034,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tasikmalaya (TSI)
+chart_111001035,111.001.035,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Timur (Ciracas)
+chart_111001036,111.001.036,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Ternate (Bastiong Talangame)
+chart_111001037,111.001.037,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Purwakarta (PWA)
+chart_111001038,111.001.038,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Cikarang (CKR)
+chart_111001039,111.001.039,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Ciamis
+chart_111001040,111.001.040,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Selatan (Mampang)
+chart_111001041,111.001.041,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Banyuwangi (BWI)
+chart_111001042,111.001.042,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jember (JBR)
+chart_111001043,111.001.043,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Kediri (KDR)
+chart_111001044,111.001.044,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Sumedang (SMD)
+chart_111001045,111.001.045,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Batam (Batam Centre)
+chart_111001046,111.001.046,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Blora 
+chart_111001047,111.001.047,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bandung (Timur)
+chart_111001048,111.001.048,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Ambon
+chart_111001049,111.001.049,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Cengkareng
+chart_111001050,111.001.050,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Kupang (Kakatua)
+chart_111001051,111.001.051,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tangerang (Sangiang)
+chart_111001052,111.001.052,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bekasi (Utara)
+chart_111001053,111.001.053,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bekasi (Galaxy)
+chart_111001054,111.001.054,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Cianjur
+chart_111001055,111.001.055,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Berau
+chart_111001056,111.001.056,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Cimahi
+chart_111001057,111.001.057,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Timur (Cawang)
+chart_111001058,111.001.058,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bogor (Tapos)
+chart_111001059,111.001.059,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Selatan (Gandaria)
+chart_111001060,111.001.060,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Selatan (Pasar Minggu)
+chart_111001061,111.001.061,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Utara (Cempaka Putih)
+chart_111001062,111.001.062,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Utara (Teluk Gong)
+chart_111001063,111.001.063,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Timur (Duren Sawit)
+chart_111001064,111.001.064,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tarakan (Kampung Bugis)
+chart_111001065,111.001.065,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Tambora)
+chart_111001066,111.001.066,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Kebon Jeruk)
+chart_111001067,111.001.067,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Cengkareng)
+chart_111001068,111.001.068,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Depok (Cimanggis)
+chart_111001069,111.001.069,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tangerang Selatan (Pamulang)
+chart_111001070,111.001.070,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tangerang (Tigaraksa)
+chart_111001071,111.001.071,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Pusat (Bendungan Hilir)
+chart_111001072,111.001.072,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Tangerang (Ciledug)
+chart_111001073,111.001.073,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Toko
+chart_111001074,111.001.074,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Selatan (Pancoran)
+chart_111001075,111.001.075,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Pusat (Salemba)
+chart_111001076,111.001.076,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bekasi (Timur)
+chart_111001077,111.001.077,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Utara (Cilincing)
+chart_111002000,111.002.000,0,view,chart_111000000,account.data_account_type_bank,Bank
+chart_111002001,111.002.001,0,liquidity,chart_111002000,account.data_account_type_bank,BCA 270.393.5656
+chart_111002002,111.002.002,0,liquidity,chart_111002000,account.data_account_type_bank,BCA 270.393.3335
+chart_112000000,112.000.000,0,view,chart_110000000,l10n_id_cod.user_type_account_receivable,Piutang
+chart_112001000,112.001.000,1,receivable,chart_112000000,l10n_id_cod.user_type_account_receivable,Piutang Usaha
+chart_113001000,113.001.000,0,other,chart_110000000,l10n_id_cod.user_type_current_asset,Ayat Silang
+chart_200000000,200.000.000,0,view,chart_sicepat_root,l10n_id_cod.user_type_current_liability,Hutang
+chart_200001000,200.001.000,0,view,chart_200000000,l10n_id_cod.user_type_account_payable,Hutang Jangka Pendek
+chart_200001001,200.001.001,1,payable,chart_200001000,l10n_id_cod.user_type_account_payable,Hutang Usaha
+chart_200001002,200.001.002,0,payable,chart_200001000,l10n_id_cod.user_type_account_payable,Hutang Akrual
+chart_200002000,200.002.000,0,payable,chart_200000000,l10n_id_cod.user_type_account_payable,Akun Temporer
+chart_200002002,200.002.001,0,payable,chart_200002000,l10n_id_cod.user_type_account_payable,Barang COD
+chart_200002003,200.002.002,0,payable,chart_200002000,l10n_id_cod.user_type_account_payable,Transaksi Bank
+chart_500000000,500.000.000,0,view,chart_sicepat_root,l10n_id_cod.user_type_cogs,Biaya Langsung
+chart_500001000,500.001.000,0,view,chart_500000000,l10n_id_cod.user_type_cogs,Biaya Operasional
+chart_500001001,500.001.001,0,other,chart_500001000,l10n_id_cod.user_type_cogs,Biaya Kerugian Penggantian Paket
+chart_500001002,500.001.002,0,other,chart_500001000,l10n_id_cod.user_type_cogs,Biaya Transaksi
