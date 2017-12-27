@@ -5,10 +5,13 @@
     'category': 'CoD',
     'author': 'Andrean Wijaya',
     'website': '-',
-    'depends': ['base','account'],
+    'depends': ['base','account','hr'],
     'data': [
         'views/account_invoice_view.xml',
         'views/paket_bermasalah_view.xml',
+        'views/account_bank_statement_view.xml',
+        'views/account_bank_statement_line_view.xml',
+        'views/account_cash_register_view.xml',
     ],
     'installable': True,
 }
