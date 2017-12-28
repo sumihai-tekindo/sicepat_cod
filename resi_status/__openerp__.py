@@ -12,6 +12,7 @@
         'views/account_bank_statement_view.xml',
         'views/account_bank_statement_line_view.xml',
         'views/account_cash_register_view.xml',
+        'views/account_bank_statement_sigesit_view.xml',
     ],
     'installable': True,
 }
