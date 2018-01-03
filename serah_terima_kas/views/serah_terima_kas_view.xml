@@ -1,0 +1,41 @@
+<openerp>
+	<data>
+		<record id="serah_terima_kas_form" model="ir.ui.view">
+			<field name="name">serah.terima.kas.form</field>
+			<field name="model">serah.terima.kas</field>
+			<field name="arch" type="xml">
+				<form string="Serah Terima Kas">
+					<group>
+						<group string="Serah Terima Kas" colspan="4"></group>
+						<group colspan="4">
+							<field name="serah_terima_ids" colspan="4" nolabel="1"/>
+						</group>
+					</group>
+					<footer>
+						<button type="object" name="generate_serah_terima_kas" string="Serah Terima Kas" class="oe_highlight"/>
+						<button string="Close" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_serah_terima_kas" model="ir.actions.act_window">
+            <field name="name">Serah Terima Kas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">serah.terima.kas</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="serah_terima_kas.serah_terima_kas_form"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="serah_terima_kas_values">
+            <field name="name">Serah Terima Kas</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_serah_terima_kas'))" />
+            <field name="key">action</field>
+            <field name="model">account.bank.statement</field>
+        </record>
+	</data>
+</openerp>
