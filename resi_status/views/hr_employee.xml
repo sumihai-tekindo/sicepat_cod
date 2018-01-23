@@ -1,0 +1,21 @@
+<openerp>
+	<data>
+		<record id="hr_employee_cod" model="ir.ui.view">
+			<field name="name">hr.employee.cod</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//page[@string='HR Settings']" position="after">
+					<page name='cod_config' string="COD Configuration">
+						<group string="Sigesit Account">
+							<field name="account_cash_cod"/>
+						</group>
+					</page>
+				</xpath>
+				<field name="address_id" position="after">
+					<field name="nik"/>
+				</field>
+			</field>
+		</record>
+	</data>
+</openerp>

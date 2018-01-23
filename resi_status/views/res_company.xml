@@ -1,0 +1,19 @@
+<openerp>
+	<data>
+		<record id="res_company_cod" model="ir.ui.view">
+			<field name="name">res.company.cod</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@string='Configuration']/group[1]/group[@name='account_grp']" position="after">
+					<group name="account_cod" string="COD Configuration">
+						<field name="account_temp_1"/>
+						<field name="account_temp_2"/>
+						<field name="cod_accrue_account_id"/>
+						<field name="cod_accrue_journal_id"/>
+					</group>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

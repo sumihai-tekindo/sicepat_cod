@@ -1,0 +1,21 @@
+<openerp>
+	<data>
+		<record id="account_journal_inherit_cod" model="ir.ui.view">
+			<field name="name">account.journal.inherit.cod</field>
+			<field name="model">account.journal</field>
+			<field name="inherit_id" ref="account.view_account_journal_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/notebook/page[@string='Cash Registers']" position="after">
+					<page string="COD Responsibles">
+						<group string="Responsible for Sigesit Cash Journal">
+							<field name="cod_user_responsible" colspan="4"/>
+						</group>
+						<group string="Responsible for Admin Cash Journal">
+							<field name="cod_admin_user" colspan="4"/>
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pod_invoice_line,account.invoice.line.pod,account.model_account_invoice_line,resi_status.group_pod,1,1,0,0

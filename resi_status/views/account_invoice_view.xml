@@ -1,56 +1,120 @@
 <openerp>
 	<data>
 		<!-- Account Invoice Line -->
-		<!-- <record id="view_invoice_line_inherit_tree" model="ir.ui.view">
-			<field name="name">invoice.line.inherit.tree</field>
-			<field name="model">account.invoice.line</field>
-			<field name="inherit_id" ref="account.view_invoice_line_tree"/>
-			<field name="arch" type="xml">
 
-				<xpath expr="//tree/field[@name='account_id']" position="after">
-					<field name='name'/>
-					<field name='recipient'/>
-					<field name='account_analytic_id'/>
-					<field name='price_cod'/>
-					<field name='price_package'/>
-				</xpath>
-			</field>
-		</record>
-
-		<record id="view_invoice_line_inherit_form" model="ir.ui.view">
-			<field name="name">invoice.line.inherit.form</field>
-			<field name="model">account.invoice.line</field>
-			<field name="inherit_id" ref="account.view_invoice_line_form"/>
-			<field name="arch" type="xml">
-
-				<xpath expr="//form/group/group[2]/field[@name='account_id']" position="after">
-					<field name='name'/>
-					<field name='recipient'/>
-					<field name='account_analytic_id'/>
-					<field name='price_cod'/>
-					<field name='price_package'/>
-				</xpath>
-			</field>
-		</record> -->
 		<record id="customer_invoice_form_cod" model="ir.ui.view">
 			<field name="name">customer.invoice.form.cod</field>
 			<field name="model">account.invoice</field>
 			<field name="inherit_id" ref="account.invoice_form"/>
 			<field name="arch" type="xml">
+				<field name="partner_id" position="after">
+					<field name="cod_customer"/>
+				</field>
+				<field name="move_id" position="after">
+					<field name="cod_move_id"/>
+				</field>
 				<xpath expr="//form/sheet/notebook/page[@string='Invoice Lines']/field[@name='invoice_line']/tree/field[@name='account_analytic_id']" position="after">
-					<field name='name'/>
 					<field name='recipient'/>
-					<field name='account_analytic_id'/>
 					<field name='price_cod'/>
 					<field name='price_package'/>
-					<field name='nilai_edc'/>
+					<field name='nilai_edc' invisible="1"/>
 					<field name='sigesit'/>
 					<field name='internal_status'/>
 					<field name='external_status'/>
-					<field name='status_retur'/>
+					<field name='status_retur' />
+				</xpath>
+				<xpath expr="//form/sheet/notebook/page[@string='Invoice Lines']/field[@name='invoice_line']/tree/field[@name='product_id']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+				<xpath expr="//form/sheet/notebook/page[@string='Invoice Lines']/field[@name='invoice_line']/tree/field[@name='invoice_line_tax_id']" position="attributes">
+					<attribute name="invisible">True</attribute>
 				</xpath>
 			</field>
 		</record>
-		
+
+		<!-- Menu Resi to be ticked -->
+
+		<record id="customer_invoice_line_resi_tick" model="ir.ui.view">
+			<field name="name">customer.invoice.line.tick</field>
+			<field name="model">account.invoice.line</field>
+			<field name="arch" type="xml">
+				<tree string="Resi Numbers" create="false" write="false">
+					<field name="name"/>
+					<field name="recipient"/>
+					<field name="account_analytic_id"/>
+					<field name="price_cod"/>
+					<field name="price_package"/>
+					<field name="nilai_edc"/>
+					<field name="sigesit"/>
+					<field name="internal_status"/>
+					<field name="external_status"/>
+					<field name="status_retur"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="customer_invoice_line_resi_tick_form" model="ir.ui.view">
+			<field name="name">customer.invoice.line.tick.form</field>
+			<field name="model">account.invoice.line</field>
+			<field name="arch" type="xml">
+				<form string="Invoice Line Resi">
+					<group>
+						<group>
+							<field name="product_id"/>
+							<label for="quantity"/>
+							<div>
+								<field name="quantity" class="oe_inline"/>
+								<field name="uos_id" class="oe_inline" groups="product.group_uom"/>
+							</div>
+							<field name="price_unit"/>
+							<field name="discount" groups="sale.group_discount_per_so_line"/>
+						</group>
+						<group>
+							<field name="account_id"  groups="account.group_account_user"/>
+							<field name="invoice_line_tax_id" widget="many2many_tags"/>
+							<field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+							<field name="company_id" groups="base.group_multi_company" readonly="1"/>
+						</group>
+						<group name="cod_info" string="COD Information">
+							<field name="recipient"/>
+							<field name="account_analytic_id"/>
+							<field name="price_cod"/>
+							<field name="price_package"/>
+							<field name="nilai_edc"/>
+							<field name="sigesit"/>
+							<field name="internal_status"/>
+							<field name="external_status"/>
+							<field name="status_retur"/>
+						</group>
+					</group>
+					<label for="name"/>
+					<field name="name"/>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_customer_invoice_line_resi_tick" model="ir.actions.act_window">
+			<field name="name">Resi Numbers</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.invoice.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_form">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick_form"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick"/>
+		</record>
+		<menuitem id="menu_invoice_line_resi_tick" parent="account.menu_finance_receivables" name="Resi Numbers" action="action_customer_invoice_line_resi_tick" sequence="2"/>
 	</data>
 </openerp>
