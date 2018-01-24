@@ -263,11 +263,16 @@ class account_invoice_line(models.Model):
 	price_cod = fields.Float(string='Price COD')
 	price_package = fields.Float(string='Price Package')
 	nilai_edc = fields.Char(string='Nilai EDC')
+	pod_datetime = fields.Datetime(string='POD Datetime')
 	sigesit = fields.Many2one('hr.employee',string='Sigesit')
 	internal_status = fields.Selection([('open','Open'),
+										('antar','Pengantaran'),
 										('sigesit','Sigesit'),
 										('lost','Lost'),
 										('pusat','Pusat'),
+										('rta','RTA'),
+										('rtg','Returned to Gerai'),
+										('rts','Returned to Shipper'),
 										('cabang','Cabang'),
 										('paid','Paid')],string='Internal Status')
 	external_status = fields.Selection([('reconciled','Reconciled'),

@@ -13,7 +13,6 @@ from openerp.addons.web.controllers.main import login_redirect
 
 
 class update_resi(http.Controller):
-
 	@http.route(['/resi/update',], type='json',method="POST", auth="user")
 	def update_resi(self,**post):
 		gesit_pool = request.registry['hr.employee']
@@ -22,36 +21,56 @@ class update_resi(http.Controller):
 		nik = post.get('nik',False)
 		resi_number = post.get('resi_number',False)
 		resi_status = post.get('resi_status',False)
-		if resi_number and nik and resi_status:
-			emp_id = gesit_pool.search(request.cr,request.uid,[('nik','=',nik)],context={})
-			print "resi===============",emp_id
+		pod_datetime = post.get('pod_datetime',False)
+		cod_value = post.get('cod_value',0.0)
+		if resi_number and resi_status:
 			invl_id = invl_pool.search(request.cr,request.uid,[('name','=',resi_number)],context={})
-			message = ''
-			if not emp_id or not invl_id:
-				if not emp_id:
-					message+='Karyawan dengan NIK %s tidak ditemukan'%nik
-					status = 'ERROR'
-				if emp_id and not invl_id:
-					message+='Resi %s tidak ditemukan'%resi
-					status = 'ERROR'
-				if not emp_id and not invl_id:
-					message+=', dan Resi %s tidak ditemukan'%resi
-					status = 'ERROR'
+		if nik :
+			emp_id = gesit_pool.search(request.cr,request.uid,[('nik','=',nik)],context={})
+			if not emp_id:
+				message+='Karyawan %s tidak ditemukan'%resi
+				status = 'ERROR'
 				response.update({
 					'status': status,
 					'message':message,
 					})
-			else:
+		message = ''
+		if not invl_id:
+			if not invl_id:
+				message+=(status=='ERROR' and ',' or '')+'Resi %s tidak ditemukan'%resi
+				status = 'ERROR'
+				response.update({
+					'status': status,
+					'message':message,
+					})
+		else:
+			if emp_id:
 				write_value = {'sigesit':emp_id[0]}
-				if resi_status=='DLV':
-					write_value.update({'internal_status':'sigesit'})
-				if resi_status=='LOSS':
-					write_value.update({'internal_status':'lost'})
-				print "###################",request.cr,request.uid,write_value
-				result = invl_pool.write(request.cr,request.uid,invl_id,write_value,context={})
-				if result:
-					response = {
-						'status':'OK',
-						'message': 'Data Entry Valid'
-						}
+			else:
+				write_value = {}
+			if resi_status=='DLV':
+				write_value.update({'price_cod':cod_value,'internal_status':'sigesit'})
+			elif resi_status=='LOST':
+				write_value.update({'internal_status':'lost'})
+			elif resi_status=='ANT':
+				write_value.update({'internal_status':'antar'}) #status dalam pengantaran
+			elif resi_status=='RTA':
+				write_value.update({'internal_status':'rta','sigesit':False}) #status return to a
+			elif resi_status=='RTG':
+				write_value.update({'internal_status':'rtg','sigesit':False}) #status return to gerai
+			elif resi_status=='RTS':
+				write_value.update({'internal_status':'rts','sigesit':False}) #status return to shipper
+			else:
+				write_value.update({'internal_status':'open','sigesit':False})
+			result = invl_pool.write(request.cr,request.uid,invl_id,write_value,context={})
+			if result:
+				response = {
+					'status':'OK',
+					'message': 'Data Entry Valid'
+					}
+			else:
+				response = {
+					'status':'ERROR',
+					'message': 'An Odoo Internal Server is occured. Please contact the administrator!'
+					}
 		return response
