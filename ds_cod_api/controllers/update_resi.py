@@ -29,7 +29,7 @@ class update_resi(http.Controller):
 		if nik :
 			emp_id = gesit_pool.search(request.cr,request.uid,[('nik','=',nik)],context={})
 			if not emp_id:
-				message+='Karyawan %s tidak ditemukan'%resi
+				message+='Karyawan %s tidak ditemukan'%nik
 				status = 'ERROR'
 				response.update({
 					'status': status,
@@ -37,7 +37,7 @@ class update_resi(http.Controller):
 					})
 		if not invl_id:
 			if not invl_id:
-				message+=(status=='ERROR' and ',' or '')+'Resi %s tidak ditemukan'%resi
+				message+=(status=='ERROR' and ',' or '')+'Resi %s tidak ditemukan'%resi_number
 				status = 'ERROR'
 				response.update({
 					'status': status,
