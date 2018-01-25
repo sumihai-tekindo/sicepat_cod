@@ -23,6 +23,8 @@ class serah_terima_kas(models.TransientModel):
             self.env.context = {}
         proxy = self.env['account.bank.statement'].search([('journal_id.type','=','cash')])
 
+        serah_terima_id = self.env['serah.terima.kas'].browse(serah_terima_ids)
 
+        
         # belum selesai
 

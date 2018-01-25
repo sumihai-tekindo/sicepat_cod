@@ -81,6 +81,12 @@ chart_111001074,111.001.074,0,liquidity,chart_111001000,account.data_account_typ
 chart_111001075,111.001.075,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Pusat (Salemba)
 chart_111001076,111.001.076,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Bekasi (Timur)
 chart_111001077,111.001.077,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Utara (Cilincing)
+chart_111001084,111.001.084,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Utara (Pluit)
+chart_111001093,111.001.093,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Selatan (Tebet)
+chart_111001094,111.001.094,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Bandengan)
+chart_111001096,111.001.096,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Green Lake City)
+chart_111001097,111.001.097,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Barat (Meruya)
+chart_111001106,111.001.106,0,liquidity,chart_111001000,account.data_account_type_cash,Kas Jakarta Selatan (Kebayoran Lama)
 chart_111002000,111.002.000,0,view,chart_111000000,account.data_account_type_bank,Bank
 chart_111002001,111.002.001,0,liquidity,chart_111002000,account.data_account_type_bank,BCA 270.393.5656
 chart_111002002,111.002.002,0,liquidity,chart_111002000,account.data_account_type_bank,BCA 270.393.3335
