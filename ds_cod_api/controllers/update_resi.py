@@ -25,6 +25,7 @@ class update_resi(http.Controller):
 		cod_value = post.get('cod_value',0.0)
 		if resi_number and resi_status:
 			invl_id = invl_pool.search(request.cr,request.uid,[('name','=',resi_number)],context={})
+		message = ''
 		if nik :
 			emp_id = gesit_pool.search(request.cr,request.uid,[('nik','=',nik)],context={})
 			if not emp_id:
@@ -34,7 +35,6 @@ class update_resi(http.Controller):
 					'status': status,
 					'message':message,
 					})
-		message = ''
 		if not invl_id:
 			if not invl_id:
 				message+=(status=='ERROR' and ',' or '')+'Resi %s tidak ditemukan'%resi
