@@ -5,12 +5,13 @@ import json
 
 from openerp import SUPERUSER_ID
 from openerp import http
+
 from openerp import tools
 from openerp.http import request
 from openerp.tools.translate import _
 from openerp.addons.website.models.website import slug
 from openerp.addons.web.controllers.main import login_redirect
-
+import simplejson
 
 class update_resi(http.Controller):
 	@http.route(['/resi/update',], type='json',method="POST", auth="user")
@@ -18,11 +19,19 @@ class update_resi(http.Controller):
 		gesit_pool = request.registry['hr.employee']
 		invl_pool = request.registry['account.invoice.line']
 		response = {}
-		nik = post.get('nik',False)
-		resi_number = post.get('resi_number',False)
-		resi_status = post.get('resi_status',False)
-		pod_datetime = post.get('pod_datetime',False)
-		cod_value = post.get('cod_value',0.0)
+		alldir=dir(request.httprequest)
+
+
+		pod_data = request.jsonrequest.get('pod_data',{})
+
+		status = 'ERROR'
+		nik = pod_data.get('nik',False)
+
+		resi_number = pod_data.get('resi_number',False)
+		resi_status = pod_data.get('resi_status',False)
+		pod_datetime = pod_data.get('pod_datetime',False)
+		cod_value = pod_data.get('cod_value',0.0)
+		invl_id=False
 		if resi_number and resi_status:
 			invl_id = invl_pool.search(request.cr,request.uid,[('name','=',resi_number)],context={})
 		message = ''

@@ -1,0 +1,62 @@
+<openerp>
+	<data>
+		<record id="view_orm_force_tree" model="ir.ui.view">
+			<field name="name">orm.force.tree</field>
+			<field name="model">orm.force</field>
+			<field name="arch" type="xml">
+				<tree string="ORM Force" >
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_orm_force_search" model="ir.ui.view">
+			<field name="name">orm.force.search</field>
+			<field name="model">orm.force</field>
+			<field name="arch" type="xml">
+				<search string="ORM Force">
+					<field name="name" string="Search" filter_domain="['|',('name','ilike', self),('ref','ilike',self)]"/>
+				</search>
+			</field>
+		</record>
+		
+		<record id="view_orm_force_form" model="ir.ui.view">
+			<field name="name">orm.force.form</field>
+			<field name="model">orm.force</field>
+			<field name="arch" type="xml">
+				<form string="ORM Force" version="7.0">
+					<header>
+						<button name="execute_orm" type="object" string="Execute ORM"/>
+					</header>
+					<sheet>
+					<h1>
+						<field name="name" class="oe_inline"/>
+					</h1>
+					<notebook>
+						<page string="Eval &amp; Exec Text" >
+                            <separator string="Eval" colspan="4"/>
+                            <field name="eval_text" colspan="4" nolabel="1"/>
+                            <separator string="Exec" colspan="4"/>
+                            <field name="exec_text" colspan="4" nolabel="1"/>
+                        </page>
+                        <page string="Result Text" >
+							<field name="result" colspan="4" nolabel="1"/>
+                        </page>
+					</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_orm_force" model="ir.actions.act_window">
+			<field name="name">ORM Force</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">orm.force</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_orm_force_search"/>
+		</record>
+        <menuitem id="menu_orm_access" parent="base.menu_custom" sequence="12" name="ORM Access"/>
+		<menuitem action="action_orm_force" id="menu_orm_force" parent="menu_orm_access" sequence="1" string="ORM Force"/>
+	</data>
+</openerp>

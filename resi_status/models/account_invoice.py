@@ -1,6 +1,6 @@
 from openerp import models, fields, api, _
-from datetime import datetime
-
+from datetime import datetime, timedelta
+import requests
 from openerp.osv import expression
 
 class account_invoice(models.Model):
@@ -289,6 +289,38 @@ class account_invoice_line(models.Model):
 	cr_admin_id = fields.Many2one("account.bank.statement","CR Admin",ondelete="set null")
 	bs_line = fields.Many2one("account.bank.statement.line","BS Line Pusat",ondelete="set null")
 	bs_id = fields.Many2one("account.bank.statement","BS Pusat",ondelete="set null")
+	update_block_failed = fields.Boolean("Update Blocked Status to POD",help="True if update to POD is failed")
+	update_unblock_failed = fields.Boolean("Update Unblocked to POD",help="True if update to POD is failed")
+
+	
+	def get_all_blocked_sigesit(self,cr,uid,context=None):
+		if not context:
+			context={}
+		now = datetime.today().strftime('%Y-%m-%d')
+		# inv_line_ids = self.search([('sigesit','!=',False),('internal_status','in',('sigesit','lost')),('pod_datetime','<=',"(now() - interval '1' day)")])
+		query = """select id 
+			from account_invoice_line 
+			where sigesit is not NULL 
+			and internal_status in ('sigesit','lost') 
+			and pod_datetime <= (now() - interval '1' day)
+			and pod_datetime >= (now() - interval '40' day);"""
+		cr.execute(query)
+
+		inv_lines = cr.fetchall()
+		inv_line_ids=[]
+		if inv_lines:
+			inv_line_ids = [x[0] for x in inv_lines]
+			sigesit = []
+			for line in self.pool.get('account.invoice.line').browse(cr,uid,inv_line_ids):
+				if line.sigesit.nik:
+					sigesit.append(line.sigesit.nik)
+		sigesit = list(set(sigesit))
+		for s in sigesit:
+			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?username='+s
+			r = requests.get(url)
+			print "===============",r
+		return sigesit
+		# for invl in inv_line_ids:
 
 
 class account_journal(models.Model):
@@ -369,3 +401,4 @@ class account_invoice_line_picker(models.TransientModel):
 					cr_line_id = self.pool.get('account.bank.statement.line').create(cr,uid,cr_lines)
 					inv_line.write({'cr_gesit_line':cr_line_id,'cr_gesit_id':cr_id})
 		return True
+

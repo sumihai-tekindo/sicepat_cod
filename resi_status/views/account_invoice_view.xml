@@ -82,6 +82,7 @@
 							<field name="price_package"/>
 							<field name="nilai_edc"/>
 							<field name="sigesit"/>
+							<field name="pod_datetime"/>
 							<field name="internal_status"/>
 							<field name="external_status"/>
 							<field name="status_retur"/>
