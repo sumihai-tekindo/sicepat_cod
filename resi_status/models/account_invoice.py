@@ -1,7 +1,7 @@
 from openerp import models, fields, api, _
 from datetime import datetime, timedelta
 import requests
-from openerp.osv import expression
+from openerp.osv import osv, expression
 
 class account_invoice(models.Model):
 	_inherit = "account.invoice"
@@ -316,7 +316,7 @@ class account_invoice_line(models.Model):
 					sigesit.append(line.sigesit.nik)
 		sigesit = list(set(sigesit))
 		for s in sigesit:
-			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?username='+s
+			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?employee='+s
 			r = requests.get(url)
 			print "===============",r
 		return sigesit
@@ -394,7 +394,7 @@ class account_invoice_line_picker(models.TransientModel):
 						'amount'		: inv_line.price_subtotal,
 						'internal_status': 'sigesit',
 						'account_id'	: inv_line.invoice_id and inv_line.invoice_id.account_id and inv_line.invoice_id.account_id.id or False,
-						'invoce_line_id': inv_line.id,
+						'invoice_line_id': inv_line.id,
 						'account_analytic_id': inv_line.account_analytic_id and inv_line.account_analytic_id.id or False,
 						'statement_id'	: cr_id,
 					}

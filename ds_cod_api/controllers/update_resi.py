@@ -12,6 +12,22 @@ from openerp.tools.translate import _
 from openerp.addons.website.models.website import slug
 from openerp.addons.web.controllers.main import login_redirect
 import simplejson
+from openerp.addons.web.controllers.main import Session
+
+class Sessionx(Session):
+	
+	@http.route('/web/session/authenticate', type='json', auth="none")
+	def authenticate(self, db=None, login=None, password=None, base_location=None):
+		pod_data = request.jsonrequest.get('pod_data',{})
+		if not db:
+			db=pod_data.get('db',False)
+		if not login:
+			login=pod_data.get('login',False)
+		if not password:
+			password=pod_data.get('password',False)
+		res=super(Sessionx,self).authenticate(db,login,password,base_location=base_location)
+
+		return self.session_info()
 
 class update_resi(http.Controller):
 	@http.route(['/resi/update',], type='json',method="POST", auth="user")

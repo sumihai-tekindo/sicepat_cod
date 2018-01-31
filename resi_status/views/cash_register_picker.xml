@@ -24,6 +24,8 @@
 			</field>
 		</record>
 
+		
+
 		<record id="action_cash_register_gesit_picker" model="ir.actions.act_window">
 			<field name="name">Create Cash Receipt</field>
 			<field name="type">ir.actions.act_window</field>
@@ -31,7 +33,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="view_id" ref="cash_register_gesit_picker"/>
-			<field name="context">{}</field>
+			<field name="context">{'destination':'cabang'}</field>
 			<field name="target">new</field>
 		</record>
 
@@ -40,6 +42,51 @@
 			<field name="name">Create Cash Receipt</field>
 			<field name="key2">client_action_multi</field>
 			<field name="value" eval="'ir.actions.act_window,' + str(ref('action_cash_register_gesit_picker'))" />
+			<field name="key">action</field>
+			<field name="model">account.bank.statement</field>
+		</record>
+
+
+		<record id="bank_statement_picker_to_finance" model="ir.ui.view">
+			<field name="name">account.bank.statement.picker.form</field>
+			<field name="model">account.bank.statement.picker</field>
+			<field name="arch" type="xml">
+				<form string="Transfer Payment to Head Office">
+					<group string="General Info">
+						<field name="user_id" readonly="1"/>
+						<field name="journal_id" domain="[('type','=','bank')]"/>
+						<field name="reconciliation_date"/>
+						<field name="existing_id"/>
+					</group>
+					<notebook>
+						<page string="Sigesit Register">
+							<field name="line_ids" colspan="4" nolabel="1"/>
+						</page>
+					</notebook>
+					<footer>
+						<button string="Create Transfer" class="oe_highlight"  name="create_bank_statement_finance" type="object"/>
+						<button string="Close" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_bank_statement_picker_to_finance" model="ir.actions.act_window">
+			<field name="name">Transfer to Head Office</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.bank.statement.picker</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="bank_statement_picker_to_finance"/>
+			<field name="context">{'destination':'pusat'}</field>
+			<field name="target">new</field>
+		</record>
+
+		<record model="ir.values" id="bank_statement_picker_to_finance_values">
+			<field name="model_id" ref="resi_status.model_account_bank_statement_picker" />
+			<field name="name">Transfer to Head Office</field>
+			<field name="key2">client_action_multi</field>
+			<field name="value" eval="'ir.actions.act_window,' + str(ref('action_bank_statement_picker_to_finance'))" />
 			<field name="key">action</field>
 			<field name="model">account.bank.statement</field>
 		</record>
