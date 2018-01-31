@@ -33,6 +33,7 @@ class update_resi(http.Controller):
 	@http.route(['/resi/update',], type='json',method="POST", auth="user")
 	def update_resi(self,**post):
 		gesit_pool = request.registry['hr.employee']
+		pt_pool = request.registry['acc.invoice.line.pt']
 		invl_pool = request.registry['account.invoice.line']
 		response = {}
 		alldir=dir(request.httprequest)
@@ -45,8 +46,9 @@ class update_resi(http.Controller):
 
 		resi_number = pod_data.get('resi_number',False)
 		resi_status = pod_data.get('resi_status',False)
-		pod_datetime = pod_data.get('pod_datetime',False)
-		cod_value = pod_data.get('cod_value',0.0)
+		pod_datetime = pod_data.get('trackingDtm',False)
+		cod_value = pod_data.get('amount',0.0)
+		payment_type = pod_data.get('payment_type','CASH')
 		invl_id=False
 		if resi_number and resi_status:
 			invl_id = invl_pool.search(request.cr,request.uid,[('name','=',resi_number)],context={})
@@ -60,7 +62,13 @@ class update_resi(http.Controller):
 					'status': status,
 					'message':message,
 					})
-		if not invl_id:
+		pt_id=False
+		if payment_type:
+			pt_id = pt_pool.search(request.cr,request.uid,[('code','=',payment_type)],context={})
+			if pt_id:
+				pt_id=pt_id[0]
+			
+		if resi_number and not invl_id:
 			if not invl_id:
 				message+=(status=='ERROR' and ',' or '')+'Resi %s tidak ditemukan'%resi_number
 				status = 'ERROR'
@@ -74,19 +82,19 @@ class update_resi(http.Controller):
 			else:
 				write_value = {}
 			if resi_status=='DLV':
-				write_value.update({'price_cod':cod_value,'internal_status':'sigesit'})
+				write_value.update({'price_cod':cod_value,'internal_status':'sigesit','payment_type':pt_id,'pod_datetime':pod_datetime})
 			elif resi_status=='LOST':
-				write_value.update({'internal_status':'lost'})
+				write_value.update({'internal_status':'lost','pod_datetime':pod_datetime})
 			elif resi_status=='ANT':
-				write_value.update({'internal_status':'antar'}) #status dalam pengantaran
+				write_value.update({'internal_status':'antar','pod_datetime':pod_datetime}) #status dalam pengantaran
 			elif resi_status=='RTA':
-				write_value.update({'internal_status':'rta','sigesit':False}) #status return to a
+				write_value.update({'internal_status':'rta','sigesit':False,'pod_datetime':pod_datetime}) #status return to a
 			elif resi_status=='RTG':
-				write_value.update({'internal_status':'rtg','sigesit':False}) #status return to gerai
+				write_value.update({'internal_status':'rtg','sigesit':False,'pod_datetime':pod_datetime}) #status return to gerai
 			elif resi_status=='RTS':
-				write_value.update({'internal_status':'rts','sigesit':False}) #status return to shipper
+				write_value.update({'internal_status':'rts','sigesit':False,'pod_datetime':pod_datetime}) #status return to shipper
 			else:
-				write_value.update({'internal_status':'open','sigesit':False})
+				write_value.update({'internal_status':'open','sigesit':False,'pod_datetime':pod_datetime})
 			result = invl_pool.write(request.cr,request.uid,invl_id,write_value,context={})
 			if result:
 				response = {

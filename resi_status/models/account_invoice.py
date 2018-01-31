@@ -255,6 +255,13 @@ class account_invoice(models.Model):
 			cod_moves.unlink()
 		return res
 
+class account_invoice_line_payment_type(models.Model):
+	_name = "acc.invoice.line.pt"
+
+	name = fields.Char(string='Payment Type Name')
+	code = fields.Char(string='Payment Type Code')
+
+	
 class account_invoice_line(models.Model):
 	_inherit="account.invoice.line"
 
@@ -265,6 +272,7 @@ class account_invoice_line(models.Model):
 	nilai_edc = fields.Char(string='Nilai EDC')
 	pod_datetime = fields.Datetime(string='POD Datetime')
 	sigesit = fields.Many2one('hr.employee',string='Sigesit')
+	payment_type = fields.Many2one('acc.invoice.line.pt',string='Payment Type')
 	internal_status = fields.Selection([('open','Open'),
 										('antar','Pengantaran'),
 										('sigesit','Sigesit'),
@@ -316,9 +324,10 @@ class account_invoice_line(models.Model):
 					sigesit.append(line.sigesit.nik)
 		sigesit = list(set(sigesit))
 		for s in sigesit:
-			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?employee='+s
+			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?employeeno='+s
 			r = requests.get(url)
-			print "===============",r
+			print "===============",r.text
+
 		return sigesit
 		# for invl in inv_line_ids:
 
