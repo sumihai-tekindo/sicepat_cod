@@ -11,6 +11,7 @@
 						<field name="account_temp_2"/>
 						<field name="cod_accrue_account_id"/>
 						<field name="cod_accrue_journal_id"/>
+						<field name="cod_customer"/>
 					</group>
 				</xpath>
 			</field>

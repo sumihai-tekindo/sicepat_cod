@@ -38,7 +38,6 @@ class update_resi(http.Controller):
 		response = {}
 		alldir=dir(request.httprequest)
 
-
 		pod_data = request.jsonrequest.get('pod_data',{})
 
 		status = 'ERROR'

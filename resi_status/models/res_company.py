@@ -8,9 +8,13 @@ class res_company(models.Model):
 	account_temp_2			= fields.Many2one('account.account',"Temp Account Cabang")
 	cod_accrue_account_id 	= fields.Many2one('account.account',"Temp Acc. Accrual Liability Cust.Inv")
 	cod_accrue_journal_id 	= fields.Many2one('account.journal',"Temp Acc. Accrual Journal Cust.Inv")
+	cod_customer 			= fields.Many2one('res.partner',"Default Customer")
 
 class hr_employee(models.Model):
 	_inherit = "hr.employee"
 
 	account_cash_cod = fields.Many2one('account.account',"Sigesit Account")
 	nik = fields.Char("NIK")
+	cod_position = fields.Selection([('koordinator_cod','Koordinator COD'),
+    									('admin_cod','Admin COD'),
+    									('sigesit','Sigesit')],string='COD Position')

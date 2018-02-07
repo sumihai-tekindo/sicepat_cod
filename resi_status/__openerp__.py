@@ -17,6 +17,7 @@
         'views/account_cash_register_view.xml',
         'views/account_bank_statement_sigesit_view.xml',
         'views/invoice_picker.xml',
+        'views/invoice_submit.xml',
         'views/cash_register_picker.xml',
         'views/account_journal_view.xml',
         'views/res_company.xml',

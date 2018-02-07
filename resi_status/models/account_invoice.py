@@ -2,11 +2,12 @@ from openerp import models, fields, api, _
 from datetime import datetime, timedelta
 import requests
 from openerp.osv import osv, expression
+import mysql.connector
 
 class account_invoice(models.Model):
 	_inherit = "account.invoice"
 
-	cod_customer = fields.Many2one('res.partner',"COD Customer",required=True)
+	cod_customer = fields.Many2one('res.partner',"COD Customer",required=False)
 	cod_move_id = fields.Many2one('account.move',"Journal Entry Customer COD")
 
 	@api.model
@@ -255,6 +256,117 @@ class account_invoice(models.Model):
 			cod_moves.unlink()
 		return res
 
+
+	def scheduled_stt_pull(self,cr,uid,context=None):
+		
+		config = {
+			'user': 'rudydarw_damar',
+			'password': 'Rudybosnyasicepat168168',
+			'host': 'sicepatrds.cchjcxaiivov.ap-southeast-1.rds.amazonaws.com',
+			'database': 'rudydarw_sicepat',
+			'raise_on_warnings': True,
+		}
+		cnx = mysql.connector.connect(**config)
+		cur = cnx.cursor()
+		querystt = """select tgltransaksi,pengirim,nostt,penerima,codNilai 
+					from rudydarw_sicepat.stt 
+					where codNilai>0.0 and iscodpulled != 1 
+					order by tgltransaksi asc,pengirim asc,nostt asc
+				 """
+		
+		cur.execute(querystt)
+		result = cur.fetchall()
+		
+
+		############################################################################################
+		# group the data to make it easier creating invoice
+		# {tgl_transaksi:{pengirim:{'00000123123':{'penerima':'nama penerima','price_unit':50000}}}}
+		############################################################################################
+		data = {}
+		all_cod_cust = []
+		for r in result:
+			
+			data_tgl = data.get(r[0],{})
+			tgl_pengirim = data_tgl.get(r[1],{})
+			all_cod_cust.append(r[1])
+			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4]}})
+			data_tgl.update({r[1]:tgl_pengirim})
+			data.update({r[0]:data_tgl})
+		all_cod_cust=list(set(all_cod_cust))
+
+		partner_cod_ids = self.pool.get('res.partner').search(cr,uid,[('name','in',all_cod_cust)])
+				# print "----------",nomo
+		partner_cod = {}
+		if all_cod_cust and partner_cod_ids and (len(all_cod_cust)!=len(partner_cod_ids)):
+			for pc in self.pool.get('res.partner').browse(cr,uid,partner_cod_ids):
+				partner_cod.update({pc.name:pc.id})
+		not_in_partner = []
+		for x in all_cod_cust:
+			if not partner_cod.get(x,False):
+				not_in_partner.append(x)
+
+		for nip in not_in_partner:
+			print "-----------------",nip
+			if nip and nip!=None and nip !="":
+				pt_id = self.pool.get('res.partner').create(cr,uid,{'name':nip,'customer':True,'supplier':True})
+				partner_cod.update({nip:pt_id})
+
+		user = self.pool.get('res.users').browse(cr,uid,uid,context=context)
+		partner = user.company_id.cod_customer
+		domain = [('type', '=', 'sale'),
+			('company_id', '=', user.company_id.id)]
+		journal_id = self.pool.get('account.journal').search(cr,uid,domain, limit=1)
+		created_invoices = []
+		for tgl in data:
+			if tgl:
+				sender = data.get(tgl,{})
+				for pengirim in sender:
+					if pengirim:
+						values = {
+							'partner_id'	:	partner.id,
+							'date_invoice'	:	tgl.strftime('%Y-%m-%d'),
+							'journal_id'	:	journal_id and journal_id[0],
+							'invoice_type'	:	'out_invoice',
+							'account_id'	:	partner.property_account_receivable.id,
+							'state'			:	'draft',
+							'sales_person'	:	uid,
+							'invoice_line'	:	[],
+							'cod_customer'	: 	partner_cod.get(pengirim,False),
+						}
+						invoice_line = []
+						awbs = sender.get(pengirim,{})
+						for awb in awbs:
+							lines = {
+								'name'				:	awb,
+								'account_id'		:	user.company_id.account_temp_1.id,
+								'price_unit'		:	awbs.get(awb).get('price_unit',0.0),
+								'recipient'			:	awbs.get(awb).get('recipient',0.0),
+								'price_package'		:	awbs.get(awb).get('price_unit',0.0),
+								'internal_status'	:	'open',
+							}
+							invoice_line.append((0,0,lines))
+					values.update({'invoice_line':invoice_line})
+					# print "============",values
+					inv_id = self.pool.get('account.invoice').create(cr,uid,values)
+					if inv_id:
+						created_invoices.append(inv_id)
+		invoice_line = self.pool.get('account.invoice.line').search(cr,uid,[('invoice_id','in',created_invoices)])
+		
+		cnx.close()
+		cur.close()
+		to_update = ""
+		for x in self.pool.get('account.invoice.line').browse(cr,uid,invoice_line):
+			to_update+="'"+x.name+"',"
+		if to_update!="":
+			to_update=to_update[:-1]
+			query_update = """update stt set iscodpulled=1 where nostt in (%s)"""%to_update
+			cnx2 = mysql.connector.connect(**config)
+			cur2 = cnx2.cursor()
+			cur2.execute(query_update)
+			cur2.close()
+			cnx2.close()
+		return result
+
 class account_invoice_line_payment_type(models.Model):
 	_name = "acc.invoice.line.pt"
 
@@ -281,11 +393,12 @@ class account_invoice_line(models.Model):
 										('rta','RTA'),
 										('rtg','Returned to Gerai'),
 										('rts','Returned to Shipper'),
+										('submit','Submitted to Partner'),
 										('cabang','Cabang'),
 										('paid','Paid')],string='Internal Status')
-	external_status = fields.Selection([('reconciled','Reconciled'),
-										('accepted','Accepted'),
-										('payment','Payment')],string='External Status')
+	external_status = fields.Selection([('submitted','Sumbitted'),
+										('reconciled','Reconciled'),
+										('accepted','Accepted')],string='External Status')
 	status_retur = fields.Selection([('new','New'),
 									('propose','Propose'),
 									('rejected','Rejected'),
@@ -299,8 +412,16 @@ class account_invoice_line(models.Model):
 	bs_id = fields.Many2one("account.bank.statement","BS Pusat",ondelete="set null")
 	update_block_failed = fields.Boolean("Update Blocked Status to POD",help="True if update to POD is failed")
 	update_unblock_failed = fields.Boolean("Update Unblocked to POD",help="True if update to POD is failed")
+	recon_inv_line_id = fields.Many2one('account.invoice.line','Reconciliation Invoice Line',ondelete="set null")
+	recon_inv_id = fields.Many2one('account.invoice','Reconciliation Invoice Line',ondelete="set null")
+	source_recon_id = fields.Many2one('account.invoice.line',"Reconciliation AWB Source",)
 
-	
+	def unlink(self,cr,uid,ids,context=None):
+		if not context:context={}
+		res = super(account_invoice_line,self).unlink(cr,uid,ids,context=context)
+		for invl in self.browse(cr,uid,ids,context):
+			if invl.source_recon_id and invl.source_recon_id.id:
+				invl.source_recon_id.write()
 	def get_all_blocked_sigesit(self,cr,uid,context=None):
 		if not context:
 			context={}
@@ -326,9 +447,39 @@ class account_invoice_line(models.Model):
 		for s in sigesit:
 			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?employeeno='+s
 			r = requests.get(url)
-			print "===============",r.text
+			# print "===============",r.text
 
 		return sigesit
+
+	def get_all_unblocked_sigesit(self,cr,uid,context=None):
+		if not context:
+			context={}
+		now = datetime.today().strftime('%Y-%m-%d')
+		# inv_line_ids = self.search([('sigesit','!=',False),('internal_status','in',('sigesit','lost')),('pod_datetime','<=',"(now() - interval '1' day)")])
+		query = """select id 
+			from account_invoice_line 
+			where sigesit is not NULL 
+			and internal_status in ('sigesit','lost') 
+			and pod_datetime <= (now() - interval '1' day)
+			and pod_datetime >= (now() - interval '40' day);"""
+		cr.execute(query)
+
+		inv_lines = cr.fetchall()
+		inv_line_ids=[]
+		if inv_lines:
+			inv_line_ids = [x[0] for x in inv_lines]
+			sigesit = []
+			for line in self.pool.get('account.invoice.line').browse(cr,uid,inv_line_ids):
+				if line.sigesit.nik:
+					sigesit.append(line.sigesit.nik)
+		sigesit = list(set(sigesit))
+		unblocked_ids = self.pool.get('hr.employee').search(cr,uid,[('nik','not in',sigesit),('cod_position','=','sigesit')])
+		for s in self.pool.get('hr.employee').browse(cr,uid,unblocked_ids):
+			if s.nik:
+				url = 'http://pickup.sicepat.com:8087/api/integration/unblocksigesit?employeeno='+s.nik
+				r = requests.get(url)
+
+		return unblocked_ids
 		# for invl in inv_line_ids:
 
 
@@ -410,4 +561,84 @@ class account_invoice_line_picker(models.TransientModel):
 					cr_line_id = self.pool.get('account.bank.statement.line').create(cr,uid,cr_lines)
 					inv_line.write({'cr_gesit_line':cr_line_id,'cr_gesit_id':cr_id})
 		return True
+
+
+class account_invoice_line_submit(models.TransientModel):
+	_name = "account.invoice.line.submit"
+
+	partner_id = fields.Many2one('res.partner','Partner')
+	user_id = fields.Many2one('res.users',"User Responsible")
+	date_invoice = fields.Date("Invoice Date")
+	line_ids = fields.Many2many("account.invoice.line","account_invoice_line_submit_rel","submit_id","line_id","Invoice Lines")
+	journal_id = fields.Many2one('account.journal',"Supplier Invoice Journal")
+	existing_id = fields.Many2one('account.invoice','Existing Supplier Invoice',domain="[('invoice_type','=','in_invoice'),('state','=','draft')]")
+
+	def default_get(self, cr, uid, fields, context=None):
+		res = super(account_invoice_line_submit,self).default_get(cr,uid,fields,context=context)
+		journal_id = self.pool.get("account.journal").search(cr,uid,[('type','=','purchase')])
+		if not journal_id:
+			raise osv.except_osv(_('Error!'),_("There is no journal defined for Supplier Invoice"))
+		invoice_line_ids = context.get('active_ids',False)
+		partners = []
+		for x in self.pool.get('account.invoice.line').browse(cr,uid,invoice_line_ids):
+			partners.append(x.invoice_id.cod_customer.id)
+		partners = list(set(partners))
+		if len(partners)>1:
+			raise osv.except_osv(_('Error!'),_("You cannot submit AWBs that belongs to different partner in one invoice"))
+		res.update({
+			'user_id':uid,
+			'date_invoice': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+			'line_ids':context.get('active_ids',False),
+			'journal_id':journal_id[0] or False,
+			'partner_id': partners and partners[0] or False
+			})
+
+		return res
+
+	def create_supplier_invoice(self,cr,uid,ids,context=None):
+		if not context:context={}
+		context.update({'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase'})
+		period_pool = self.pool.get('account.period')
+		for picker in self.browse(cr,uid,ids,context=context):
+			date_invoice = picker.date_invoice or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+			pids = period_pool.find(cr, uid, dt=date_invoice, context=context)
+			user = self.pool.get('res.users').browse(cr,uid,uid)
+			
+			invoice ={
+				'partner_id'	:	picker.partner_id.id,
+				'date_invoice'	:	date_invoice,
+				'journal_id'	:	picker.journal_id.id,
+				'invoice_type'	:	'in_invoice',
+				'account_id'	:	picker.partner_id.property_account_payable.id,
+				'state'			:	'draft',
+				'sales_person'	:	uid,
+				'invoice_line'	:	[],
+				}
+			if picker.existing_id:
+				inv_id = picker.existing_id and picker.existing_id.id
+			else:
+				inv_id = self.pool.get('account.invoice').create(cr,uid,invoice,context=context)
+
+			for l in picker.line_ids:
+				lines ={
+					'name'				:	l.name,
+					'account_id'		:	user.company_id.cod_accrue_account_id.id,
+					'price_unit'		:	l.price_unit,
+					'recipient'			:	l.recipient,
+					'price_package'		:	l.price_unit,
+					'invoice_id'		: 	inv_id,
+					'source_recon_id'	: 	l.id
+					}
+				lid = self.pool.get('account.invoice.line').create(cr,uid,lines,context=context)				
+				l.write({'recon_inv_line_id':lid,'recon_inv_id':inv_id,'internal_status':'submit','external_status':'submitted'})
+		return True
+
+
+class account_invoice_line_retur(models.TransientModel):
+	_name = "account.invoice.line.retur"
+
+	partner_id = fields.Many2one('res.partner','Partner')
+	user_id = fields.Many2one('res.users',"User Responsible")
+	line_ids = fields.Many2many("paket.bermasalah","account_invoice_line_retur_rel","retur_id","line_id","Invoice Lines")
+
 

@@ -15,6 +15,9 @@
 				<field name="address_id" position="after">
 					<field name="nik"/>
 				</field>
+				<xpath expr="//form/sheet/notebook/page[@string='Public Information']/group/group[@string='Position']/field[@name='coach_id']" position="after">
+					<field name='cod_position'/>
+				</xpath>
 			</field>
 		</record>
 	</data>

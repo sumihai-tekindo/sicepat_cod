@@ -101,7 +101,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
-			<field name="domain">[]</field>
+			<field name="domain">[('source_recon_id','=',False)]</field>
 			<field name="context">{}</field>
 		</record>
 		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree">

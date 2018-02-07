@@ -1,0 +1,48 @@
+<openerp>
+	<data>
+		<record id="account_invoice_line_submit" model="ir.ui.view">
+			<field name="name">account.invoice.line.submit.form</field>
+			<field name="model">account.invoice.line.submit</field>
+			<field name="arch" type="xml">
+				<form string="Resi Picker">
+					<group string="General Info">
+						<field name="partner_id"/>
+						<field name="user_id"/>
+						<field name="journal_id" readonly="1"/>
+						<field name="date_invoice"/>
+						<field name="existing_id"/>
+					</group>
+					<notebook>
+						<page string="Resi Items">
+							<field name="line_ids" colspan="4" nolabel="1"/>
+						</page>
+					</notebook>
+					<footer>
+						<button string="Create Supplier Invoice" class="oe_highlight"  name="create_supplier_invoice" type="object"/>
+						<button string="Close" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_account_invoice_line_submit" model="ir.actions.act_window">
+			<field name="name">Submit Payment to Partner</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.invoice.line.submit</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account_invoice_line_submit"/>
+			<field name="context">{}</field>
+			<field name="target">new</field>
+		</record>
+
+		<record model="ir.values" id="account_invoice_line_submit_values">
+			<field name="model_id" ref="resi_status.model_account_invoice_line_submit" />
+			<field name="name">Submit Payment to Partner</field>
+			<field name="key2">client_action_multi</field>
+			<field name="value" eval="'ir.actions.act_window,' + str(ref('action_account_invoice_line_submit'))" />
+			<field name="key">action</field>
+			<field name="model">account.invoice.line</field>
+		</record>
+	</data>
+</openerp>
