@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <report 
+            id="report_cod_form" 
+            model="account.bank.statement" 
+            string="Print COD"
+            report_type="qweb-pdf"
+            name="resi_status.tanda_terima" 
+            file="resi_status.tanda_terima"
+        />
+
+<template id="tanda_terima">
+    
+
+    <t t-call="report.html_container">
+
+        <t t-foreach="docs" t-as="o">
+            <div class="header">
+                <div class="row" style="text-align:left;">
+                    <strong><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></strong>
+                </div>
+                <div class="row" style="text-align:left;">
+                    <h3><strong style="border-bottom: 4px double black;">TANDA TERIMA UANG</strong></h3>
+                </div>
+                <div class="row" style="text-align:left;">
+                    <strong><span t-esc="o.name"/></strong>
+                </div>
+            </div>
+            <div class="page">
+                <table class="row">
+                    <tr style="text-align:left;">
+                    <td><strong>Sicepat Ekspres Indonesia</strong></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>Nama Cabang</td>
+                        <td>:&#160;</td>
+                        <td><span t-field="o.user_id"/></td>
+                    </tr>
+                    <tr>
+                        <td>Penerima</td>
+                        <td>:&#160;</td>
+                        <td><span t-field="o.user_id"/></td>
+                    </tr>
+                    <tr>
+                        <td>Yang Menyerahkan</td>
+                        <td>:&#160;</td>
+                        <td><span t-field="o.sigesit"/></td>
+                    </tr>
+                </table>
+                <br>
+                </br>
+                <table class="row">
+                    <tr>
+                        <td>No. Resi</td>
+                        <td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;</td>
+                        <td>Nilai</td>
+                    </tr>
+                    <tr t-foreach="o.line_ids" t-as="line">
+                        <td><span t-field="line.name"/></td>
+                        <td></td>
+                        <td><span t-field="line.amount"/></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td><span t-field="o.total_entry_encoding" style="border-bottom: 4px double black;"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

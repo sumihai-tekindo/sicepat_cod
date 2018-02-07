@@ -23,6 +23,7 @@
         'views/res_company.xml',
         'views/hr_employee.xml',
         'views/analytic_view.xml',
+        'views/report_cod.xml',
     ],
     'installable': True,
 }
