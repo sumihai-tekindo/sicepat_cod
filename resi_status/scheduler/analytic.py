@@ -74,28 +74,28 @@ class account_analytic_account(models.Model):
 				value = {
 					'name': e.get('name',False),
 					'tag' : e.get('tag',False),
-					'type': e.get('type',False),
+					'type': len(e.get('code',''))> 4 and 'normal' or 'view',
 					'active': e.get('active',True),
 					'rds_id': e.get('rds_id',False),
 					'code': e.get('code',False),
 					'parent_id': local_analytic.get(e.get('parent_code',False),False),
 					'odoo1_id': e.get('id',False)
 					}
-				print "==========write==========",value,local_analytic.get(e.get('code',False))
+				# print "==========write==========",value,local_analytic.get(e.get('code',False))
 				self.pool.get('account.analytic.account').write(cr,uid,local_analytic.get(e.get('code',False)),value)
 
 			for ne in not_exists:
 				value = {
 					'name': ne.get('name',False),
 					'tag' : ne.get('tag',False),
-					'type': ne.get('type',False),
+					'type': len(ne.get('code',''))> 4 and 'normal' or 'view',
 					'code': ne.get('code',False),
 					'active': ne.get('active',True),
 					'rds_id': ne.get('rds_id',False),
 					'parent_id': local_analytic.get(ne.get('parent_code',False),False),
 					'odoo1_id': ne.get('id',False)
 					}
-				print "=========create===========",value
+				# print "=========create===========",value
 				self.pool.get('account.analytic.account').create(cr,uid,value)				
 			cr_odoo1.close()
 			if conn_odoo1 is not None:

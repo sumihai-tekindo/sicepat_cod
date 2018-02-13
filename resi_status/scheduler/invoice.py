@@ -1,17 +1,41 @@
+from openerp import models, fields
+from datetime import datetime
+import mysql.connector
 
+from openerp.osv import expression
 
 class account_invoice(models.Model):
 	_inherit = "account.invoice"
 
 	def scheduled_stt_pull(self,cr,uid,context=None):
-		
-		
+		odoo1_ids = self.pool.get('ir.config_parameter').search(cr,uid,[('key','in',['mysql.url','mysql.db','mysql.db_port','mysql.user','mysql.password'])])
+		config = {
+			'user'		: '',
+			'password'	: '',
+			'host' 		: '',
+			'database' 	: '',
+			'raise_on_warnings':True,
+			}
+		if odoo1_ids:
+			odoo1 = self.pool.get('ir.config_parameter').browse(cr,uid,odoo1_ids)
+			for x in odoo1:
+				if x.key =='mysql.url':
+					config.update({'host' : x.value})
+				elif x.key =='mysql.db':
+					config.update({'database' : x.value})
+				elif x.key =='mysql.user':
+					config.update({'user' : x.value})
+				elif x.key =='mysql.password':
+					config.update({'password' : x.value})
+					
+
 		cnx = mysql.connector.connect(**config)
 		cur = cnx.cursor()
-		querystt = """select tgltransaksi,pengirim,nostt,penerima,codNilai 
-					from rudydarw_sicepat.stt 
-					where codNilai>0.0 and iscodpulled != 1 
-					order by tgltransaksi asc,pengirim asc,nostt asc
+		querystt = """select s.tgltransaksi,s.pengirim,s.nostt,s.penerima,s.codNilai,coalesce(g.kode) as kode,tujuan  
+					from rudydarw_sicepat.stt s 
+					left join Gerai g on s.gerai=g.id 
+					where s.codNilai>0.0 and s.iscodpulled != 1 and tujuan is not NULL
+					order by s.tgltransaksi asc,s.pengirim asc,s.nostt asc
 				 """
 		
 		cur.execute(querystt)
@@ -29,7 +53,7 @@ class account_invoice(models.Model):
 			data_tgl = data.get(r[0],{})
 			tgl_pengirim = data_tgl.get(r[1],{})
 			all_cod_cust.append(r[1])
-			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4]}})
+			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4],'asal':r[5],'tujuan':r[6]}})
 			data_tgl.update({r[1]:tgl_pengirim})
 			data.update({r[0]:data_tgl})
 		all_cod_cust=list(set(all_cod_cust))
@@ -46,9 +70,9 @@ class account_invoice(models.Model):
 				not_in_partner.append(x)
 
 		for nip in not_in_partner:
-			print "-----------------",nip
+			# print "-----------------",nip
 			if nip and nip!=None and nip !="":
-				pt_id = self.pool.get('res.partner').create(cr,uid,{'name':nip,'customer':True,'supplier':True})
+				pt_id = self.pool.get('res.partner').create(cr,uid,{'name':nip,'customer':True,'supplier':True,})
 				partner_cod.update({nip:pt_id})
 
 		user = self.pool.get('res.users').browse(cr,uid,uid,context=context)
@@ -56,6 +80,16 @@ class account_invoice(models.Model):
 		domain = [('type', '=', 'sale'),
 			('company_id', '=', user.company_id.id)]
 		journal_id = self.pool.get('account.journal').search(cr,uid,domain, limit=1)
+		rds_destination_ids = self.pool.get('rds.destination').search(cr,uid,[],context=context)
+		rds_destination = {}
+		for x in self.pool.get('rds.destination').browse(cr,uid,rds_destination_ids):
+			rds_destination.update({x.code:x.id})
+
+		analytic_ids = self.pool.get('account.analytic.account').search(cr,uid,[],context=context)
+		analytic = {}		
+		for x in self.pool.get('account.analytic.account').browse(cr,uid,analytic_ids):
+			analytic.update({x.code:x.id})
+		
 		created_invoices = []
 		for tgl in data:
 			if tgl:
@@ -77,16 +111,18 @@ class account_invoice(models.Model):
 						awbs = sender.get(pengirim,{})
 						for awb in awbs:
 							lines = {
-								'name'				:	awb,
-								'account_id'		:	user.company_id.account_temp_1.id,
-								'price_unit'		:	awbs.get(awb).get('price_unit',0.0),
-								'recipient'			:	awbs.get(awb).get('recipient',0.0),
-								'price_package'		:	awbs.get(awb).get('price_unit',0.0),
-								'internal_status'	:	'open',
+								'name'					:	awb,
+								'account_id'			:	user.company_id.account_temp_1.id,
+								'price_unit'			:	awbs.get(awb).get('price_unit',0.0),
+								'recipient'				:	awbs.get(awb).get('penerima',0.0),
+								'price_package'			:	awbs.get(awb).get('price_unit',0.0),
+								'account_analytic_id'	:	analytic.get(awbs.get(awb).get('asal',0.0)),
+								'internal_status'		:	'open',
+								'rds_destination'		: 	rds_destination.get(awbs.get(awb).get('tujuan',0.0)),
 							}
 							invoice_line.append((0,0,lines))
 					values.update({'invoice_line':invoice_line})
-					# print "============",values
+
 					inv_id = self.pool.get('account.invoice').create(cr,uid,values)
 					if inv_id:
 						created_invoices.append(inv_id)

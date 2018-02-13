@@ -14,6 +14,7 @@
 					<field name="cod_move_id"/>
 				</field>
 				<xpath expr="//form/sheet/notebook/page[@string='Invoice Lines']/field[@name='invoice_line']/tree/field[@name='account_analytic_id']" position="after">
+					<field name='rds_destination'/>
 					<field name='recipient'/>
 					<field name='price_cod'/>
 					<field name='price_package'/>
@@ -42,6 +43,7 @@
 					<field name="name"/>
 					<field name="recipient"/>
 					<field name="account_analytic_id"/>
+					<field name="rds_destination"/>
 					<field name="price_cod"/>
 					<field name="price_package"/>
 					<field name="nilai_edc"/>
@@ -58,6 +60,9 @@
 			<field name="model">account.invoice.line</field>
 			<field name="arch" type="xml">
 				<form string="Invoice Line Resi">
+					<!-- <header>
+						<button name="package_returned" type="object" string="Package Returned" class="oe_highlight"/>
+					</header> -->
 					<group>
 						<group>
 							<field name="product_id"/>
@@ -78,6 +83,8 @@
 						<group name="cod_info" string="COD Information">
 							<field name="recipient"/>
 							<field name="account_analytic_id"/>
+							<field name="analytic_destination"/>
+							<field name="rds_destination"/>
 							<field name="price_cod"/>
 							<field name="price_package"/>
 							<field name="nilai_edc"/>
@@ -90,32 +97,152 @@
 					</group>
 					<label for="name"/>
 					<field name="name"/>
+					<notebook>
+						<page string="Tracking Datas">
+							<field name="tracking_ids" nolabel="1" colspan="4">
+								<tree string="Tracking Data">
+									<field name="resi_number"/>
+									<field name="pod_datetime"/>
+									<field name="position_id"/>
+									<field name="status"/>
+									<field name="user_tracking"/>
+									<field name="sigesit"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
 				</form>
 			</field>
 		</record>
 
-		<record id="action_customer_invoice_line_resi_tick" model="ir.actions.act_window">
-			<field name="name">Resi Numbers</field>
+		<record id="customer_invoice_line_resi_tick_search" model="ir.ui.view">
+			<field name="name">customer.invoice.line.tick.search</field>
+			<field name="model">account.invoice.line</field>
+			<field name="arch" type="xml">
+				<search string="Resi Numbers" create="false" write="false">
+					<field name="name"/>
+					<field name="recipient"/>
+					<field name="account_analytic_id"/>
+					<field name="rds_destination"/>
+					<field name="price_cod"/>
+					<field name="price_package"/>
+					<field name="nilai_edc"/>
+					<field name="sigesit"/>
+					<field name="internal_status"/>
+					<field name="external_status"/>
+					<field name="status_retur"/>
+					<group>
+						<group name="Filter" string="Filter">
+							<filter name="status_open" string="Open" domain="[('internal_status','=','open')]"/>  
+							<filter name="status_ant" string="Antar" domain="[('internal_status','=','antar')]"/>  
+							<filter name="status_sigesit" string="Sigesit" domain="[('internal_status','=','sigesit')]"/>  
+							<filter name="status_cabang" string="Cabang" domain="[('internal_status','=','cabang')]"/>  
+							<filter name="status_pusat" string="Pusat" domain="[('internal_status','=','pusat')]"/>  
+							<filter name="status_submit" string="Submit" domain="[('internal_status','=','submit')]"/>  
+							<filter name="status_paid" string="Paid" domain="[('internal_status','=','paid')]"/>   
+							<filter name="status_rtn" string="RTPusat" domain="[('internal_status','=','rtn')]"/>  
+							<filter name="status_rtg" string="RTGerai" domain="[('internal_status','=','rtg')]"/>  
+							<filter name="status_rts" string="RTShipper" domain="[('internal_status','=','rts')]"/>  
+							<filter name="my_resi" string="My Responsibility" domain="[('rds_destination.user_ids','in',[uid])]"/>
+						</group>
+						<group name="Groupby" string="Group by">
+							<filter name="group_by_sigesit" string="Sigesit" context="{'group_by':'sigesit'}"/>
+							<filter name="group_by_intstatus" string="Internal Status" context="{'group_by':'internal_status'}"/>
+							<filter name="group_by_extstatus" string="External Status" context="{'group_by':'external_status'}"/>
+							<filter name="group_by_retstatus" string="Retur Status" context="{'group_by':'status_retur'}"/>
+
+						</group>
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<!-- ALL Resi -->
+		<record id="action_customer_invoice_line_resi_tick_all" model="ir.actions.act_window">
+			<field name="name">All Resi Numbers</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">account.invoice.line</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
-			<field name="domain">[('source_recon_id','=',False)]</field>
+			<field name="domain">[('source_recon_id','=',False),('invoice_id.type','=','out_invoice')]</field>
 			<field name="context">{}</field>
 		</record>
-		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree">
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree_all">
 			<field name="sequence" eval="1"/>
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
-			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick_all"/>
 		</record>
-		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_form">
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_form_all">
 			<field name="sequence" eval="2"/>
 			<field name="view_mode">form</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick_form"/>
-			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick_all"/>
 		</record>
-		<menuitem id="menu_invoice_line_resi_tick" parent="account.menu_finance_receivables" name="Resi Numbers" action="action_customer_invoice_line_resi_tick" sequence="2"/>
+		<menuitem id="menu_invoice_line_resi_tick_all" parent="account.menu_finance_receivables" name="All Resi Numbers" action="action_customer_invoice_line_resi_tick_all" sequence="2"/>
+
+		<!-- My Resi -->
+
+		<record id="action_customer_invoice_line_resi_tick_my" model="ir.actions.act_window">
+			<field name="name">My Resi Numbers</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.invoice.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
+			<field name="domain">[('source_recon_id','=',False),('rds_destination.user_ids','in',[uid]),('invoice_id.type','=','out_invoice')]</field>
+			<field name="context">{}</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree_my">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick_my"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_form_my">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick_form"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick_my"/>
+		</record>
+		<menuitem id="menu_invoice_line_resi_tick_my" parent="account.menu_finance_receivables" name="My Resi Numbers" action="action_customer_invoice_line_resi_tick_my" sequence="3"/>
+
+		<!-- My Problem -->
+
+		<record id="action_customer_invoice_line_resi_tick_my_problem" model="ir.actions.act_window">
+			<field name="name">My Problems</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.invoice.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
+			<field name="domain">[('source_recon_id','=',False),('rds_destination.user_ids','in',[uid]),('invoice_id.type','=','out_invoice'),('status_retur','in',('rtn','rtg','rts'))]</field>
+			<field name="context">{'problem':True}</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree_my_problem">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick_my_problem"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_form_my_problem">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="customer_invoice_line_resi_tick_form"/>
+			<field name="act_window_id" ref="action_customer_invoice_line_resi_tick_my_problem"/>
+		</record>
+		<menuitem id="menu_invoice_line_resi_tick_my_problem" parent="account.menu_finance_receivables" name="My Problems" action="action_customer_invoice_line_resi_tick_my_problem" sequence="3"/>
+
+
+		<menuitem id="menu_cod_root" name="COD"/>
+		<menuitem id="menu_cod" name="COD Datas" parent="resi_status.menu_cod_root" sequence="1"/>
+		
+		<menuitem id="menu_cod_resi_tick_my" parent="menu_cod" name="My Resi Numbers" action="action_customer_invoice_line_resi_tick_my" sequence="1"/>
+		<menuitem id="menu_cod_resi_tick_my_problem" parent="menu_cod" name="My Problems" action="action_customer_invoice_line_resi_tick_my_problem" sequence="2"/>
+		
+		<menuitem id="cod_receipt" name="COD Receipts" parent="menu_cod_root" sequence="2"/>
+		<menuitem id="cod_receipt_sigesit" name="Sigesit" parent="cod_receipt" sequence="1" action="resi_status.action_view_bank_statement_sigesit_tree"/>
+		<menuitem id="cod_receipt_admin" name="Admin" parent="cod_receipt" sequence="2" action="resi_status.action_view_bank_statement_admin_tree"/>
 	</data>
 </openerp>

@@ -1,0 +1,67 @@
+<openerp>
+	<data>
+		<record id="rds_destination_form" model="ir.ui.view">
+			<field name="name">rds.destination.form</field>
+			<field name="model">rds.destination</field>
+			<field name="arch" type="xml">
+				<form string="RDS Destination">
+					<group string="General Info">
+						<group>
+							<field name="name" />
+							<field name="code" />
+						</group>
+						<group>
+							<field name="province" />
+							<field name="city"/>
+							<field name="subdistrict"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Maintainer(s)">
+							<field name="user_ids" colspan="4" nolabel="1"/>
+						</page>
+					</notebook>
+				</form>
+			</field>
+		</record>
+
+		<record id="rds_destination_tree" model="ir.ui.view">
+			<field name="name">rds.destination.tree</field>
+			<field name="model">rds.destination</field>
+			<field name="arch" type="xml">
+				<tree string="RDS Destination">
+					<field name="name" />
+					<field name="code" />
+					<field name="province" />
+					<field name="city"/>
+					<field name="subdistrict"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="rds_destination_search" model="ir.ui.view">
+			<field name="name">rds.destination.search</field>
+			<field name="model">rds.destination</field>
+			<field name="arch" type="xml">
+				<search string="RDS Destination">
+					<group string="General Info">
+						<field name="name" />
+						<field name="code" />
+						<field name="province" />
+						<field name="city"/>
+						<field name="subdistrict"/>
+					</group>
+				</search>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_rds_destination">
+            <field name="name">RDS Destination</field>
+            <field name="res_model">rds.destination</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_action_rds_destination" name="RDS Destination" parent="account.menu_analytic_accounting"
+        	action="action_rds_destination"/>
+	</data>
+</openerp>

@@ -35,6 +35,8 @@ class update_resi(http.Controller):
 		gesit_pool = request.registry['hr.employee']
 		pt_pool = request.registry['acc.invoice.line.pt']
 		invl_pool = request.registry['account.invoice.line']
+		invlt_pool = request.registry['account.invoice.line.tracking']
+		analytic_pool = request.registry['account.analytic.account']
 		response = {}
 		alldir=dir(request.httprequest)
 
@@ -47,7 +49,10 @@ class update_resi(http.Controller):
 		resi_status = pod_data.get('resi_status',False)
 		pod_datetime = pod_data.get('trackingDtm',False)
 		cod_value = pod_data.get('amount',0.0)
+		kode_cabang = pod_data.get('kode_cabang',False)
+		username = pod_data.get('username',False)
 		payment_type = pod_data.get('payment_type','CASH')
+
 		invl_id=False
 		if resi_number and resi_status:
 			invl_id = invl_pool.search(request.cr,request.uid,[('name','=',resi_number)],context={})
@@ -56,6 +61,15 @@ class update_resi(http.Controller):
 			emp_id = gesit_pool.search(request.cr,request.uid,[('nik','=',nik)],context={})
 			if not emp_id:
 				message+='Karyawan %s tidak ditemukan'%nik
+				status = 'ERROR'
+				response.update({
+					'status': status,
+					'message':message,
+					})
+		if kode_cabang:
+			analytic_id = analytic_pool.search(request.cr,request.uid,[('code','=',kode_cabang)])
+			if not analytic_id:
+				message+=',Cabang %s tidak ditemukan'%kode_cabang
 				status = 'ERROR'
 				response.update({
 					'status': status,
@@ -77,7 +91,7 @@ class update_resi(http.Controller):
 					})
 		else:
 			if emp_id:
-				write_value = {'sigesit':emp_id[0]}
+				write_value = {'sigesit':emp_id[0],'analytic_destination':analytic_id and analytic_id[0] or False,}
 			else:
 				write_value = {}
 			if resi_status=='DLV':
@@ -95,6 +109,22 @@ class update_resi(http.Controller):
 			else:
 				write_value.update({'internal_status':'open','sigesit':False,'pod_datetime':pod_datetime})
 			result = invl_pool.write(request.cr,request.uid,invl_id,write_value,context={})
+			invline = invl_pool.browse(request.cr,request.uid,invl_id[0])
+			max_invl_id_track_sequence = 0
+			if invline.tracking_ids:
+				max_invl_id_track_sequence = max([x.sequence for x in invline.tracking_ids])
+
+			tracking_value = {
+				"invoice_line_id": invline.id,
+				"sequence": max_invl_id_track_sequence+1 ,
+				"resi_number": resi_number,
+				"pod_datetime": pod_datetime,
+				"position_id": analytic_id and analytic_id[0] or False,
+				"status": resi_status,
+				"user_tracking": username,
+				"sigesit": emp_id and emp_id[0] or False,
+				}
+			invlt_pool.create(request.cr,request.uid,tracking_value)
 			if result:
 				response = {
 					'status':'OK',

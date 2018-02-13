@@ -16,5 +16,18 @@
 				</xpath>
 			</field>
 		</record>
+
+		<record id="res_users_cod" model="ir.ui.view">
+			<field name="name">res.users.cod</field>
+			<field name="model">res.users</field>
+			<field name="inherit_id" ref="base.view_users_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@string='Preferences']" position="after">
+					<page string="Locations">
+						<field name="destination_ids" colspan="4" nolabel="1"/>
+					</page>
+				</xpath>
+			</field>
+		</record>
 	</data>
 </openerp>

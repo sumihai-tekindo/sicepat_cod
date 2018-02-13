@@ -257,123 +257,29 @@ class account_invoice(models.Model):
 		return res
 
 
-	def scheduled_stt_pull(self,cr,uid,context=None):
-		
-		config = {
-			'user': 'rudydarw_damar',
-			'password': 'Rudybosnyasicepat168168',
-			'host': 'sicepatrds.cchjcxaiivov.ap-southeast-1.rds.amazonaws.com',
-			'database': 'rudydarw_sicepat',
-			'raise_on_warnings': True,
-		}
-		cnx = mysql.connector.connect(**config)
-		cur = cnx.cursor()
-		querystt = """select tgltransaksi,pengirim,nostt,penerima,codNilai 
-					from rudydarw_sicepat.stt 
-					where codNilai>0.0 and iscodpulled != 1 
-					order by tgltransaksi asc,pengirim asc,nostt asc
-				 """
-		
-		cur.execute(querystt)
-		result = cur.fetchall()
-		
-
-		############################################################################################
-		# group the data to make it easier creating invoice
-		# {tgl_transaksi:{pengirim:{'00000123123':{'penerima':'nama penerima','price_unit':50000}}}}
-		############################################################################################
-		data = {}
-		all_cod_cust = []
-		for r in result:
-			
-			data_tgl = data.get(r[0],{})
-			tgl_pengirim = data_tgl.get(r[1],{})
-			all_cod_cust.append(r[1])
-			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4]}})
-			data_tgl.update({r[1]:tgl_pengirim})
-			data.update({r[0]:data_tgl})
-		all_cod_cust=list(set(all_cod_cust))
-
-		partner_cod_ids = self.pool.get('res.partner').search(cr,uid,[('name','in',all_cod_cust)])
-				# print "----------",nomo
-		partner_cod = {}
-		if all_cod_cust and partner_cod_ids and (len(all_cod_cust)!=len(partner_cod_ids)):
-			for pc in self.pool.get('res.partner').browse(cr,uid,partner_cod_ids):
-				partner_cod.update({pc.name:pc.id})
-		not_in_partner = []
-		for x in all_cod_cust:
-			if not partner_cod.get(x,False):
-				not_in_partner.append(x)
-
-		for nip in not_in_partner:
-			print "-----------------",nip
-			if nip and nip!=None and nip !="":
-				pt_id = self.pool.get('res.partner').create(cr,uid,{'name':nip,'customer':True,'supplier':True})
-				partner_cod.update({nip:pt_id})
-
-		user = self.pool.get('res.users').browse(cr,uid,uid,context=context)
-		partner = user.company_id.cod_customer
-		domain = [('type', '=', 'sale'),
-			('company_id', '=', user.company_id.id)]
-		journal_id = self.pool.get('account.journal').search(cr,uid,domain, limit=1)
-		created_invoices = []
-		for tgl in data:
-			if tgl:
-				sender = data.get(tgl,{})
-				for pengirim in sender:
-					if pengirim:
-						values = {
-							'partner_id'	:	partner.id,
-							'date_invoice'	:	tgl.strftime('%Y-%m-%d'),
-							'journal_id'	:	journal_id and journal_id[0],
-							'invoice_type'	:	'out_invoice',
-							'account_id'	:	partner.property_account_receivable.id,
-							'state'			:	'draft',
-							'sales_person'	:	uid,
-							'invoice_line'	:	[],
-							'cod_customer'	: 	partner_cod.get(pengirim,False),
-						}
-						invoice_line = []
-						awbs = sender.get(pengirim,{})
-						for awb in awbs:
-							lines = {
-								'name'				:	awb,
-								'account_id'		:	user.company_id.account_temp_1.id,
-								'price_unit'		:	awbs.get(awb).get('price_unit',0.0),
-								'recipient'			:	awbs.get(awb).get('recipient',0.0),
-								'price_package'		:	awbs.get(awb).get('price_unit',0.0),
-								'internal_status'	:	'open',
-							}
-							invoice_line.append((0,0,lines))
-					values.update({'invoice_line':invoice_line})
-					# print "============",values
-					inv_id = self.pool.get('account.invoice').create(cr,uid,values)
-					if inv_id:
-						created_invoices.append(inv_id)
-		invoice_line = self.pool.get('account.invoice.line').search(cr,uid,[('invoice_id','in',created_invoices)])
-		
-		cnx.close()
-		cur.close()
-		to_update = ""
-		for x in self.pool.get('account.invoice.line').browse(cr,uid,invoice_line):
-			to_update+="'"+x.name+"',"
-		if to_update!="":
-			to_update=to_update[:-1]
-			query_update = """update stt set iscodpulled=1 where nostt in (%s)"""%to_update
-			cnx2 = mysql.connector.connect(**config)
-			cur2 = cnx2.cursor()
-			cur2.execute(query_update)
-			cur2.close()
-			cnx2.close()
-		return result
-
+	
 class account_invoice_line_payment_type(models.Model):
 	_name = "acc.invoice.line.pt"
 
 	name = fields.Char(string='Payment Type Name')
 	code = fields.Char(string='Payment Type Code')
 
-	
+class account_invoice_line_tracking(models.Model):
+	_name = "account.invoice.line.tracking"
+
+	_order = "invoice_line_id asc, pod_datetime asc, sequence asc"
+
+	invoice_line_id = fields.Many2one("account.invoice.line","Tracking ID")
+	sequence = fields.Integer("Sequence")
+	resi_number = fields.Char(related='invoice_line_id.name',string="Resi Number")
+	pod_datetime = fields.Datetime("POD Datetime")
+	position_id = fields.Many2one("account.analytic.account","Tracking Position")
+	status = fields.Char("Tracking Status")
+	user_tracking = fields.Char("User Tracking")
+	sigesit = fields.Many2one("hr.employee","Sigesit")
+	notes	= fields.Text("Remarks")
+
+
 class account_invoice_line(models.Model):
 	_inherit="account.invoice.line"
 
@@ -390,7 +296,7 @@ class account_invoice_line(models.Model):
 										('sigesit','Sigesit'),
 										('lost','Lost'),
 										('pusat','Pusat'),
-										('rta','RTA'),
+										('rtn','Return to Pusat'),
 										('rtg','Returned to Gerai'),
 										('rts','Returned to Shipper'),
 										('submit','Submitted to Partner'),
@@ -415,6 +321,9 @@ class account_invoice_line(models.Model):
 	recon_inv_line_id = fields.Many2one('account.invoice.line','Reconciliation Invoice Line',ondelete="set null")
 	recon_inv_id = fields.Many2one('account.invoice','Reconciliation Invoice Line',ondelete="set null")
 	source_recon_id = fields.Many2one('account.invoice.line',"Reconciliation AWB Source",)
+	rds_destination = fields.Many2one('rds.destination',"RDS Destination")
+	analytic_destination = fields.Many2one('account.analytic.account',"Current Position Branch")
+	tracking_ids = fields.One2many('account.invoice.line.tracking','invoice_line_id',"Tracking Lines")
 
 	def unlink(self,cr,uid,ids,context=None):
 		if not context:context={}
@@ -422,6 +331,13 @@ class account_invoice_line(models.Model):
 		for invl in self.browse(cr,uid,ids,context):
 			if invl.source_recon_id and invl.source_recon_id.id:
 				invl.source_recon_id.write()
+
+	def package_returned(self,cr,uid,ids,context=None):
+		if not context:context={}
+		if ids:
+			return self.pool.get('account.invoice.line').write(cr,uid,ids,{'sigesit':False})
+		return True
+		
 	def get_all_blocked_sigesit(self,cr,uid,context=None):
 		if not context:
 			context={}
@@ -634,11 +550,27 @@ class account_invoice_line_submit(models.TransientModel):
 		return True
 
 
-class account_invoice_line_retur(models.TransientModel):
-	_name = "account.invoice.line.retur"
+# class account_invoice_line_retur(models.TransientModel):
+# 	_name = "account.invoice.line.retur"
 
-	partner_id = fields.Many2one('res.partner','Partner')
-	user_id = fields.Many2one('res.users',"User Responsible")
-	line_ids = fields.Many2many("paket.bermasalah","account_invoice_line_retur_rel","retur_id","line_id","Invoice Lines")
+# 	user_id = fields.Many2one('res.users',"User Responsible")
+# 	line_ids = fields.Many2many("paket.bermasalah","account_invoice_line_retur_rel","retur_id","line_id","Invoice Lines")
 
 
+# 	def default_get(self, cr, uid, fields, context=None):
+# 		res = super(account_invoice_line_retur,self).default_get(cr,uid,fields,context=context)
+		
+# 		res.update({
+# 			'user_id':uid,
+# 			'line_ids':context.get('active_ids',False),
+# 			})
+
+# 		return res
+
+# 	def return_package(self,cr,uid,ids,context=None):
+# 		if not context:
+# 			context={}
+# 		for o in self.browse(cr,uid,ids,context=context):
+# 			invoice_lines = [x.id for x in o.line_ids]
+# 			self.pool.get('account.invoice.line').package_returned(self,cr,uid,invoice_lines,context=context)
+# 		return True
