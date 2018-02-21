@@ -21,6 +21,7 @@ class rds_destination(models.Model):
 
 		for d in existing_dests:
 			existing_dest.update({d.code:d.id})
+		# print "==========================",existing_dest
 		for x in res['sicepat']['results']:
 			values = {
 				'name': x.get('subdistrict',False),
@@ -30,7 +31,9 @@ class rds_destination(models.Model):
 				'code': x.get('destination_code',False),
 			}
 
-			if x.get('subdistrict',False) in existing_dest.keys():
+			print "##################",x.get('destination_code',False) in existing_dest.keys()
+			
+			if x.get('destination_code',False) in existing_dest.keys():
 				self.pool.get('rds.destination').write(cr,uid,existing_dest.get(x.get('subdistrict',False),False),values)
 			else:
 				self.pool.get('rds.destination').create(cr,uid,values)

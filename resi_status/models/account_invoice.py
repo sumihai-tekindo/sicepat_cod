@@ -10,6 +10,60 @@ class account_invoice(models.Model):
 	cod_customer = fields.Many2one('res.partner',"COD Customer",required=False)
 	cod_move_id = fields.Many2one('account.move',"Journal Entry Customer COD")
 
+	@api.multi
+	def action_cancel_resi(self,):
+		for inv in self:
+			if inv.type=='in_invoice':
+				line_ids = []
+				for line in inv.invoice_line:
+					if line.source_recon_id.id and line.source_recon_id.internal_status in ('submit','approved','paid'):
+						line_ids.append(line.source_recon_id.id)
+				if line_ids:
+					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
+					lines.write({'internal_status':'pusat','external_status':'new'})
+		return True
+
+	@api.multi
+	def action_reopen_resi(self,):
+		for inv in self:
+			if inv.type=='in_invoice':
+				line_ids = []
+				for line in inv.invoice_line:
+					if line.source_recon_id.id and line.source_recon_id.internal_status=='paid':
+						line_ids.append(line.source_recon_id.id)
+				if line_ids:
+					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
+					lines.write({'internal_status':'approved','external_status':'accepted'})
+		return True
+
+	@api.multi
+	def invoice_validate(self):
+		res = super(account_invoice,self).invoice_validate()
+		for inv in self:
+			if inv.type=='in_invoice':
+				line_ids = []
+				for line in inv.invoice_line:
+					if line.source_recon_id.id and line.source_recon_id.internal_status=='submit':
+						line_ids.append(line.source_recon_id.id)
+				if line_ids:
+					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
+					lines.write({'internal_status':'approved','external_status':'accepted'})
+		return res
+
+	@api.multi
+	def confirm_paid(self):
+		res = super(account_invoice,self).confirm_paid()
+		for inv in self:
+			if inv.type=='in_invoice':
+				line_ids = []
+				for line in inv.invoice_line:
+					if line.source_recon_id.id and line.source_recon_id.internal_status=='approved':
+						line_ids.append(line.source_recon_id.id)
+				if line_ids:
+					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
+					lines.write({'internal_status':'paid','external_status':'reconciled'})
+		return res
+
 	@api.model
 	def move_line_get_cod(self, invoice_id):
 		inv = self.env['account.invoice'].browse(invoice_id)
@@ -50,7 +104,6 @@ class account_invoice(models.Model):
 
 	@api.model
 	def line_get_convert_cod(self, line, part, date,company_id):
-		# print "=--==================>",line
 		return {
 			'date_maturity': line.get('date_maturity', False),
 			'partner_id': part,
@@ -92,7 +145,6 @@ class account_invoice(models.Model):
 		for inv in self:
 			if inv.type in ('in_invoice', 'in_refund'):
 				continue
-			# print "=============COD move create============="
 
 			if not inv.company_id.cod_accrue_journal_id.sequence_id:
 				raise except_orm(_('Error!'), _('Please define sequence on the journal related to this invoice.'))
@@ -292,17 +344,28 @@ class account_invoice_line(models.Model):
 	sigesit = fields.Many2one('hr.employee',string='Sigesit')
 	payment_type = fields.Many2one('acc.invoice.line.pt',string='Payment Type')
 	internal_status = fields.Selection([('open','Open'),
-										('antar','Pengantaran'),
-										('sigesit','Sigesit'),
-										('lost','Lost'),
-										('pusat','Pusat'),
-										('rtn','Return to Pusat'),
-										('rtg','Returned to Gerai'),
-										('rts','Returned to Shipper'),
-										('submit','Submitted to Partner'),
+										('IN',"Barang Masuk"),
+										('OUT',"Barang Keluar"),
+										('CC',"Criss Cross"),
+										('CU',"CKNEE Unknown"),
+										('NTH',"Not At Home"),
+										('AU',"Antar Ulang"),
+										('BA',"Bad Address"),
+										('MR',"Misroute"),
+										('CODA',"Closed Once Delivery Attempt"),
+										('LOST',"Barang Hilang"),
+										('BROKEN',"Barang Rusak"),
+										('RTN',"Retur ke Pusat"),
+										('RTS',"Retur ke Shipper"),
+										('RTA',"Retur ke Gerai"),
+										('HOLD',"Hold/Pending"),
 										('cabang','Cabang'),
+										('pusat','Pusat'),
+										('submit','Submitted to Partner'),
+										('approved','Approved By Partner'),
 										('paid','Paid')],string='Internal Status')
-	external_status = fields.Selection([('submitted','Sumbitted'),
+	external_status = fields.Selection([('new','New'),
+										('submitted','Submitted'),
 										('reconciled','Reconciled'),
 										('accepted','Accepted')],string='External Status')
 	status_retur = fields.Selection([('new','New'),
@@ -324,6 +387,9 @@ class account_invoice_line(models.Model):
 	rds_destination = fields.Many2one('rds.destination',"RDS Destination")
 	analytic_destination = fields.Many2one('account.analytic.account',"Current Position Branch")
 	tracking_ids = fields.One2many('account.invoice.line.tracking','invoice_line_id',"Tracking Lines")
+	service_type = fields.Many2one('consignment.service.type', string='Service Type')
+	detail_barang = fields.Text("Detail Barang")
+	cust_package_number=fields.Text("Customer Package Number")
 
 	def unlink(self,cr,uid,ids,context=None):
 		if not context:context={}
@@ -406,171 +472,6 @@ class account_journal(models.Model):
 	cod_admin_user = fields.Many2many('res.users', 'account_journal_admin_res_users_rel', 'journal_id', 'user_id', string='COD Admin Responsibles' )
 
 
-class account_invoice_line_picker(models.TransientModel):
-	_name = "account.invoice.line.picker"
 
 
-	user_id = fields.Many2one("res.users","Admin Responsible")
-	employee_id = fields.Many2one("hr.employee","Sigesit")
-	reconciliation_date = fields.Datetime("Tanggal Rekonsiliasi",required=True)
-	existing_id = fields.Many2one("account.bank.statement","Existing Reconciliation")
-	line_ids = fields.Many2many("account.invoice.line","account_invoice_line_picker_rel","picker_id","line_id","Invoice Lines")
-	journal_id = fields.Many2one("account.journal","Journal Kas Sigesit",required=True)
 
-	def default_get(self, cr, uid, fields, context=None):
-		res = super(account_invoice_line_picker,self).default_get(cr,uid,fields,context=context)
-		journal_id = self.pool.get("account.journal").search(cr,uid,[('cod_user_responsible','=',uid),('type','=','cash')])
-		if not journal_id:
-			raise osv.except_osv(_('Error!'),_("There is no journal defined for Sigesit Cash Account, please set the user responsible in Journal"))
-		res.update({
-			'user_id':uid,
-			'reconciliation_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-			'line_ids':context.get('active_ids',False),
-			'journal_id':journal_id[0] or False
-			})
-
-		return res
-
-	def create_cash_register_sigesit(self,cr,uid,ids,context=None):
-		if not context:context={}
-		context.update({'journal_type':'cash','register_type':'cr_gesit'})
-		period_pool = self.pool.get('account.period')
-		for picker in self.browse(cr,uid,ids,context=context):
-
-			date_period = picker.reconciliation_date or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-			pids = period_pool.find(cr, uid, dt=date_period, context=context)
-			user = self.pool.get('res.users').browse(cr,uid,uid)
-			if pids:
-				context.update({'period_id':pids[0]})
-				cash_register = {
-					'journal_id'		: picker.journal_id.id or False,
-					'date_period'		: date_period,
-					'period_id'			: pids[0],
-					'sigesit'			: picker.employee_id and picker.employee_id.id,
-					'partner_sigesit'	: picker.employee_id and picker.employee_id.user_id and picker.employee_id.user_id.partner_id and picker.employee_id.user_id.partner_id.id,
-				}
-			if picker.existing_id:
-				cr_id = picker.existing_id and picker.existing_id.id
-			else:
-				cr_id = self.pool.get('account.bank.statement').create(cr,uid,cash_register,context=context)
-			line_ids=[]
-			if picker.line_ids:
-				for inv_line in picker.line_ids:
-					cr_lines = {
-						'awb_number'	: inv_line.name,
-						'partner_id'	: inv_line.invoice_id.partner_id.id,
-						'company_id'	: user.company_id.id,
-						'recipient'		: inv_line.recipient,
-						'name'			: inv_line.name,
-						'date'			: date_period,
-						'sigesit'		: picker.employee_id and picker.employee_id.id,
-						'nilai_edc'		: inv_line.price_cod,
-						'price_package'	: inv_line.price_package,
-						'price_cod'		: inv_line.price_cod,
-						'amount'		: inv_line.price_subtotal,
-						'internal_status': 'sigesit',
-						'account_id'	: inv_line.invoice_id and inv_line.invoice_id.account_id and inv_line.invoice_id.account_id.id or False,
-						'invoice_line_id': inv_line.id,
-						'account_analytic_id': inv_line.account_analytic_id and inv_line.account_analytic_id.id or False,
-						'statement_id'	: cr_id,
-					}
-					cr_line_id = self.pool.get('account.bank.statement.line').create(cr,uid,cr_lines)
-					inv_line.write({'cr_gesit_line':cr_line_id,'cr_gesit_id':cr_id})
-		return True
-
-
-class account_invoice_line_submit(models.TransientModel):
-	_name = "account.invoice.line.submit"
-
-	partner_id = fields.Many2one('res.partner','Partner')
-	user_id = fields.Many2one('res.users',"User Responsible")
-	date_invoice = fields.Date("Invoice Date")
-	line_ids = fields.Many2many("account.invoice.line","account_invoice_line_submit_rel","submit_id","line_id","Invoice Lines")
-	journal_id = fields.Many2one('account.journal',"Supplier Invoice Journal")
-	existing_id = fields.Many2one('account.invoice','Existing Supplier Invoice',domain="[('invoice_type','=','in_invoice'),('state','=','draft')]")
-
-	def default_get(self, cr, uid, fields, context=None):
-		res = super(account_invoice_line_submit,self).default_get(cr,uid,fields,context=context)
-		journal_id = self.pool.get("account.journal").search(cr,uid,[('type','=','purchase')])
-		if not journal_id:
-			raise osv.except_osv(_('Error!'),_("There is no journal defined for Supplier Invoice"))
-		invoice_line_ids = context.get('active_ids',False)
-		partners = []
-		for x in self.pool.get('account.invoice.line').browse(cr,uid,invoice_line_ids):
-			partners.append(x.invoice_id.cod_customer.id)
-		partners = list(set(partners))
-		if len(partners)>1:
-			raise osv.except_osv(_('Error!'),_("You cannot submit AWBs that belongs to different partner in one invoice"))
-		res.update({
-			'user_id':uid,
-			'date_invoice': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-			'line_ids':context.get('active_ids',False),
-			'journal_id':journal_id[0] or False,
-			'partner_id': partners and partners[0] or False
-			})
-
-		return res
-
-	def create_supplier_invoice(self,cr,uid,ids,context=None):
-		if not context:context={}
-		context.update({'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase'})
-		period_pool = self.pool.get('account.period')
-		for picker in self.browse(cr,uid,ids,context=context):
-			date_invoice = picker.date_invoice or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-			pids = period_pool.find(cr, uid, dt=date_invoice, context=context)
-			user = self.pool.get('res.users').browse(cr,uid,uid)
-			
-			invoice ={
-				'partner_id'	:	picker.partner_id.id,
-				'date_invoice'	:	date_invoice,
-				'journal_id'	:	picker.journal_id.id,
-				'invoice_type'	:	'in_invoice',
-				'account_id'	:	picker.partner_id.property_account_payable.id,
-				'state'			:	'draft',
-				'sales_person'	:	uid,
-				'invoice_line'	:	[],
-				}
-			if picker.existing_id:
-				inv_id = picker.existing_id and picker.existing_id.id
-			else:
-				inv_id = self.pool.get('account.invoice').create(cr,uid,invoice,context=context)
-
-			for l in picker.line_ids:
-				lines ={
-					'name'				:	l.name,
-					'account_id'		:	user.company_id.cod_accrue_account_id.id,
-					'price_unit'		:	l.price_unit,
-					'recipient'			:	l.recipient,
-					'price_package'		:	l.price_unit,
-					'invoice_id'		: 	inv_id,
-					'source_recon_id'	: 	l.id
-					}
-				lid = self.pool.get('account.invoice.line').create(cr,uid,lines,context=context)				
-				l.write({'recon_inv_line_id':lid,'recon_inv_id':inv_id,'internal_status':'submit','external_status':'submitted'})
-		return True
-
-
-# class account_invoice_line_retur(models.TransientModel):
-# 	_name = "account.invoice.line.retur"
-
-# 	user_id = fields.Many2one('res.users',"User Responsible")
-# 	line_ids = fields.Many2many("paket.bermasalah","account_invoice_line_retur_rel","retur_id","line_id","Invoice Lines")
-
-
-# 	def default_get(self, cr, uid, fields, context=None):
-# 		res = super(account_invoice_line_retur,self).default_get(cr,uid,fields,context=context)
-		
-# 		res.update({
-# 			'user_id':uid,
-# 			'line_ids':context.get('active_ids',False),
-# 			})
-
-# 		return res
-
-# 	def return_package(self,cr,uid,ids,context=None):
-# 		if not context:
-# 			context={}
-# 		for o in self.browse(cr,uid,ids,context=context):
-# 			invoice_lines = [x.id for x in o.line_ids]
-# 			self.pool.get('account.invoice.line').package_returned(self,cr,uid,invoice_lines,context=context)
-# 		return True

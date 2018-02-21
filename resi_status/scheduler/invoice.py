@@ -1,7 +1,7 @@
 from openerp import models, fields
 from datetime import datetime
 import mysql.connector
-
+import pymssql
 from openerp.osv import expression
 
 class account_invoice(models.Model):
@@ -27,11 +27,32 @@ class account_invoice(models.Model):
 					config.update({'user' : x.value})
 				elif x.key =='mysql.password':
 					config.update({'password' : x.value})
-					
+		
+		ss_pickup_ids = self.pool.get('ir.config_parameter').search(cr,uid,[('key','in',['sqlpickup.url','sqlpickup.db','sqlpickup.db_port','sqlpickup.user','sqlpickup.password'])])
+		ss_pickup_config = {
+			'user'		: '',
+			'password'	: '',
+			'host' 		: '',
+			'database' 	: '',
+			'port'		: '',
+			}
+		if ss_pickup_ids:
+			ss_pickup = self.pool.get('ir.config_parameter').browse(cr,uid,ss_pickup_ids)
+			for x in ss_pickup:
+				if x.key =='sqlpickup.url':
+					ss_pickup_config.update({'host' : x.value})
+				elif x.key =='sqlpickup.db':
+					ss_pickup_config.update({'database' : x.value})
+				elif x.key =='sqlpickup.user':
+					ss_pickup_config.update({'user' : x.value})
+				elif x.key =='sqlpickup.password':
+					ss_pickup_config.update({'password' : x.value})
+				elif x.key =='sqlpickup.db_port':
+					ss_pickup_config.update({'port' : x.value})
 
 		cnx = mysql.connector.connect(**config)
 		cur = cnx.cursor()
-		querystt = """select s.tgltransaksi,s.pengirim,s.nostt,s.penerima,s.codNilai,coalesce(g.kode) as kode,tujuan  
+		querystt = """select s.tgltransaksi,s.pengirim,s.nostt,s.penerima,s.codNilai,coalesce(g.kode) as kode,tujuan,Layanan   
 					from rudydarw_sicepat.stt s 
 					left join Gerai g on s.gerai=g.id 
 					where s.codNilai>0.0 and s.iscodpulled != 1 and tujuan is not NULL
@@ -53,7 +74,7 @@ class account_invoice(models.Model):
 			data_tgl = data.get(r[0],{})
 			tgl_pengirim = data_tgl.get(r[1],{})
 			all_cod_cust.append(r[1])
-			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4],'asal':r[5],'tujuan':r[6]}})
+			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4],'asal':r[5],'tujuan':r[6],'layanan':r[7]}})
 			data_tgl.update({r[1]:tgl_pengirim})
 			data.update({r[0]:data_tgl})
 		all_cod_cust=list(set(all_cod_cust))
@@ -89,7 +110,10 @@ class account_invoice(models.Model):
 		analytic = {}		
 		for x in self.pool.get('account.analytic.account').browse(cr,uid,analytic_ids):
 			analytic.update({x.code:x.id})
-		
+		service_type = {}
+		service_type_ids = self.pool.get('consignment.service.type').search(cr,uid,[],context=context)
+		for x in self.pool.get('consignment.service.type').browse(cr,uid,service_type_ids):
+			service_type.update({x.code:x.id})
 		created_invoices = []
 		for tgl in data:
 			if tgl:
@@ -119,6 +143,7 @@ class account_invoice(models.Model):
 								'account_analytic_id'	:	analytic.get(awbs.get(awb).get('asal',0.0)),
 								'internal_status'		:	'open',
 								'rds_destination'		: 	rds_destination.get(awbs.get(awb).get('tujuan',0.0)),
+								'service_type'			: 	service_type.get(awbs.get(awb).get('layanan',0.0)),
 							}
 							invoice_line.append((0,0,lines))
 					values.update({'invoice_line':invoice_line})
@@ -131,8 +156,12 @@ class account_invoice(models.Model):
 		cnx.close()
 		cur.close()
 		to_update = ""
+		invoice_dict = {}
+		invoice_list = []
 		for x in self.pool.get('account.invoice.line').browse(cr,uid,invoice_line):
 			to_update+="'"+x.name+"',"
+			invoice_dict.update({x.name:x.id})
+			invoice_list.append(x.name)
 		if to_update!="":
 			to_update=to_update[:-1]
 			query_update = """update stt set iscodpulled=1 where nostt in (%s)"""%to_update
@@ -141,4 +170,24 @@ class account_invoice(models.Model):
 			cur2.execute(query_update)
 			cur2.close()
 			cnx2.close()
+
+			query_pickup = """select ReceiptNumber,parcel_content,cust_package_id from PartnerRequestExt WITH (NOLOCK) where ReceiptNumber in (%s)"""%to_update
+			# ss_pickup_config = {
+			# 'user'		: '',
+			# 'password'	: '',
+			# 'host' 		: '',
+			# 'database' 	: '',
+			# 'port'		: '',
+			# }
+			pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
+				port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
+			cr_pickup = pickup_conn.cursor(as_dict=True)
+			cr_pickup.execute(query_pickup)
+			records = cr_pickup.fetchall()
+			for record in records:
+				detail_value = {'detail_barang':record['parcelcontent'],'cust_package_number':record['cust_package_id']}
+				resi = record['ReceiptNumber']
+				if invoice_dict.get(resi,False):
+					self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
+			pickup_conn.close()
 		return result

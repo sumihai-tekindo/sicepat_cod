@@ -1,0 +1,32 @@
+<openerp>
+	<data>
+		<record id="account.act_open" model="workflow.activity">
+			<field name="wkf_id" ref="account.wkf"/>
+			<field name="name">open</field>
+			<field name="action">action_date_assign()
+action_move_create()
+action_move_create_cod()
+action_number()
+invoice_validate()</field>
+			<field name="kind">function</field>
+		</record>
+		<record model="workflow.activity" id="account.act_open_test">
+            <field name="wkf_id" ref="account.wkf"/>
+            <field name="name">re-open</field>
+            <field name="action">write({'state':'open'})
+action_reopen_resi()
+            </field>
+            <field name="kind">function</field>
+        </record>
+        <record id="account.act_cancel" model="workflow.activity">
+            <field name="wkf_id" ref="account.wkf"/>
+            <field name="name">cancel</field>
+            <field name="flow_stop">True</field>
+            <field name="action">action_cancel()
+write({'state':'cancel'})
+action_cancel_resi()
+</field>
+            <field name="kind">function</field>
+        </record>
+	</data>
+</openerp>

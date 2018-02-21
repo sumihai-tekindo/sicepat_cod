@@ -49,15 +49,19 @@ class update_resi(http.Controller):
 		resi_status = pod_data.get('resi_status',False)
 		pod_datetime = pod_data.get('trackingDtm',False)
 		cod_value = pod_data.get('amount',0.0)
-		kode_cabang = pod_data.get('kode_cabang',False)
+		kode_cabang = pod_data.get('kodeCabang',False)
 		username = pod_data.get('username',False)
 		payment_type = pod_data.get('payment_type','CASH')
 
+
+		write_value = {}
 		invl_id=False
 		if resi_number and resi_status:
 			invl_id = invl_pool.search(request.cr,request.uid,[('name','=',resi_number)],context={})
 		message = ''
-		if nik :
+		emp_id=False
+		analytic_id = False
+		if nik and nik!="":
 			emp_id = gesit_pool.search(request.cr,request.uid,[('nik','=',nik)],context={})
 			if not emp_id:
 				message+='Karyawan %s tidak ditemukan'%nik
@@ -66,7 +70,7 @@ class update_resi(http.Controller):
 					'status': status,
 					'message':message,
 					})
-		if kode_cabang:
+		if kode_cabang and kode_cabang!="":
 			analytic_id = analytic_pool.search(request.cr,request.uid,[('code','=',kode_cabang)])
 			if not analytic_id:
 				message+=',Cabang %s tidak ditemukan'%kode_cabang
@@ -76,7 +80,7 @@ class update_resi(http.Controller):
 					'message':message,
 					})
 		pt_id=False
-		if payment_type:
+		if payment_type and payment_type!="":
 			pt_id = pt_pool.search(request.cr,request.uid,[('code','=',payment_type)],context={})
 			if pt_id:
 				pt_id=pt_id[0]
@@ -91,23 +95,32 @@ class update_resi(http.Controller):
 					})
 		else:
 			if emp_id:
-				write_value = {'sigesit':emp_id[0],'analytic_destination':analytic_id and analytic_id[0] or False,}
-			else:
-				write_value = {}
-			if resi_status=='DLV':
-				write_value.update({'price_cod':cod_value,'internal_status':'sigesit','payment_type':pt_id,'pod_datetime':pod_datetime})
-			elif resi_status=='LOST':
-				write_value.update({'internal_status':'lost','pod_datetime':pod_datetime})
-			elif resi_status=='ANT':
-				write_value.update({'internal_status':'antar','pod_datetime':pod_datetime}) #status dalam pengantaran
-			elif resi_status=='RTA':
-				write_value.update({'internal_status':'rta','sigesit':False,'pod_datetime':pod_datetime}) #status return to a
-			elif resi_status=='RTG':
-				write_value.update({'internal_status':'rtg','sigesit':False,'pod_datetime':pod_datetime}) #status return to gerai
-			elif resi_status=='RTS':
-				write_value.update({'internal_status':'rts','sigesit':False,'pod_datetime':pod_datetime}) #status return to shipper
-			else:
-				write_value.update({'internal_status':'open','sigesit':False,'pod_datetime':pod_datetime})
+				write_value.update({'sigesit':emp_id[0]}) 
+			if analytic_id:
+				write_value.update({'analytic_destination':analytic_id and analytic_id[0] or False,})
+			if resi_status:
+				write_value.update({'internal_status':resi_status})
+			if pod_datetime:
+				write_value.update({'pod_datetime':pod_datetime})
+			if payment_type and payment_type!="":
+				write_value.update({'payment_type':pt_id})
+			if cod_value and cod_value>0.0:
+				write_value.update({'price_cod':cod_value})
+			# if resi_status=='DLV':
+			# 	write_value.update({'price_cod':cod_value,'internal_status':'sigesit','payment_type':pt_id,'pod_datetime':pod_datetime})
+			# elif resi_status=='LOST':
+			# 	write_value.update({'internal_status':'lost','pod_datetime':pod_datetime})
+			# elif resi_status=='ANT':
+			# 	write_value.update({'internal_status':'antar','pod_datetime':pod_datetime}) #status dalam pengantaran
+			# elif resi_status=='RTA':
+			# 	write_value.update({'internal_status':'rta','sigesit':False,'pod_datetime':pod_datetime}) #status return to a
+			# elif resi_status=='RTG':
+			# 	write_value.update({'internal_status':'rtg','sigesit':False,'pod_datetime':pod_datetime}) #status return to gerai
+			# elif resi_status=='RTS':
+			# 	write_value.update({'internal_status':'rts','sigesit':False,'pod_datetime':pod_datetime}) #status return to shipper
+			# else:
+			# 	write_value.update({'internal_status':'open','sigesit':False,'pod_datetime':pod_datetime})
+
 			result = invl_pool.write(request.cr,request.uid,invl_id,write_value,context={})
 			invline = invl_pool.browse(request.cr,request.uid,invl_id[0])
 			max_invl_id_track_sequence = 0

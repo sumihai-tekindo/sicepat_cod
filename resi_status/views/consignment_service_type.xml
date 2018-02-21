@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+        <record id="service_reg" model="consignment.service.type">
+            <field name="name">Regular</field>
+            <field name="code">REG</field>
+        </record>
+        <record id="service_best" model="consignment.service.type">
+            <field name="name">Besok Sampai Tujuan</field>
+            <field name="code">BEST</field>
+        </record>
+        <record id="service_cargo" model="consignment.service.type">
+            <field name="name">Cargo</field>
+            <field name="code">CARGO</field>
+        </record>
+        <record id="service_darat" model="consignment.service.type">
+            <field name="name">Darat</field>
+            <field name="code">DARAT</field>
+        </record>
+        <record id="service_sds" model="consignment.service.type">
+            <field name="name">Same Day Service</field>
+            <field name="code">SDS</field>
+        </record>
+	</data>
+    <data>
+        <record id="view_service_type_search" model="ir.ui.view">
+            <field name="name">consignment.service.type.search</field>
+            <field name="model">consignment.service.type</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]" string="Service Type"/>
+            		<separator/>
+            		<filter name="non_active" string="Non Active" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+        <record id="view_service_type_tree" model="ir.ui.view">
+            <field name="name">consignment.service.type.tree</field>
+            <field name="model">consignment.service.type</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_service_type_form" model="ir.ui.view">
+            <field name="name">consignment.service.type.form</field>
+            <field name="model">consignment.service.type</field>
+            <field name="arch" type="xml">
+                <form>
+                	<sheet>
+	                    <group col="4">
+	                        <field name="name"/>
+	                        <field name="code"/>
+		                    <field name="active"/>
+	                    </group>
+                	</sheet>
+	                <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                </form>
+            </field>
+        </record>
+        <record id="action_service_type" model="ir.actions.act_window">
+            <field name="name">Service Type</field>
+            <field name="res_model">consignment.service.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_service_type_search"/>
+        </record>
+        <menuitem action="action_service_type"
+            id="menu_action_service_type" parent="account.menu_configuration_misc"/>
+
+    </data>
+</openerp>

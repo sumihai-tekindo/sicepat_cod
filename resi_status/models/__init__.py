@@ -1,3 +1,4 @@
+from . import consignment_service_type
 from . import res_company
 from . import res_users
 from . import account_invoice
