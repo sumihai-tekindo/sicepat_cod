@@ -38,6 +38,7 @@ class account_bank_statement_picker(models.TransientModel):
 	existing_id = fields.Many2one("account.bank.statement","Existing Reconciliation")
 	line_ids = fields.Many2many("account.bank.statement","account_bank_statement_picker_rel","picker_id","bs_id","Cash Registers")
 	journal_id = fields.Many2one("account.journal","Journal Kas Admin",required=True)
+	notes = fields.Text("Notes")
 
 	def default_get(self, cr, uid, fields, context=None):
 		res = super(account_bank_statement_picker,self).default_get(cr,uid,fields,context=context)
@@ -125,6 +126,7 @@ class account_bank_statement_picker(models.TransientModel):
 						'journal_id'	: picker.journal_id.id or False,
 						'date_period'	: date_period,
 						'period_id'		: pids[0],
+						'notes'			: picker.notes
 					}
 				if picker.existing_id:
 					cr_id = picker.existing_id and picker.existing_id.id

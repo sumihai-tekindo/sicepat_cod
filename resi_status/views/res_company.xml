@@ -26,6 +26,11 @@
 					<page string="Locations">
 						<field name="destination_ids" colspan="4" nolabel="1"/>
 					</page>
+					<page string="Branch Responsibility">
+						<group>
+							<field name="analytic_id"/>
+						</group>
+					</page>
 				</xpath>
 			</field>
 		</record>

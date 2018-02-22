@@ -28,11 +28,11 @@ class account_bank_statement(osv.osv):
 				[('bs_normal','Bank Statement'),('bs_fin','Bank Statement'),('cr_normal','Cash Register'),
 				('cr_gesit','Cash Register Sigesit'),('cr_admin','Cash Register Admin')],
 				string="Register Type",required=True),
-
 		"sigesit" :fields.many2one("hr.employee","Sigesit"),
 		"partner_sigesit" : fields.many2one('res.partner','Partner Sigesit'),
 		"admin_receipt_id" : fields.many2one('account.bank.statement','CR Admin',ondelete='set null'),
 		"admin_receipt_line_id" : fields.many2one('account.bank.statement.line','CR Line Sigesit',ondelete='set null'),
+		"notes": fields.text("Notes")
 		}
 
 	_defaults = {

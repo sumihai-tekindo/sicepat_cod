@@ -431,6 +431,12 @@
 				<field name="company_id" position="after">
 					<field name="register_type" invisible="1"/>
 				</field>
+				<xpath expr="//form/sheet/notebook/page[@name='statement_line_ids']" position="after">
+					<page string="Notes" name="notes">
+						<field name="notes" colspan="4" nolabel="1"/>
+					</page>
+
+				</xpath>
 			</field>
 		</record>
 

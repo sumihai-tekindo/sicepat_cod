@@ -43,8 +43,9 @@
 					<field name="name"/>
 					<field name="recipient"/>
 					<field name="service_type"/>
-					<field name="account_analytic_id"/>
-					<field name="rds_destination"/>
+					<field name="account_analytic_id" invisible="1"/>
+					<field name="analytic_destination"/>
+					<field name="rds_destination" invisible="1"/>
 					<field name="price_cod"/>
 					<field name="price_package"/>
 					<field name="nilai_edc"/>
@@ -78,7 +79,6 @@
 						<group>
 							<field name="account_id"  groups="account.group_account_user"/>
 							<field name="invoice_line_tax_id" widget="many2many_tags"/>
-							<field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
 							<field name="company_id" groups="base.group_multi_company" readonly="1"/>
 						</group>
 						<group name="cod_info" string="COD Information">
@@ -115,6 +115,14 @@
 									<field name="status"/>
 									<field name="user_tracking"/>
 									<field name="sigesit"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Responsibles">
+							<field name="user_ids" nolabel="1" colspan="4">
+								<tree string="Tracking Data">
+									<field name="name"/>
+									<field name="login"/>
 								</tree>
 							</field>
 						</page>

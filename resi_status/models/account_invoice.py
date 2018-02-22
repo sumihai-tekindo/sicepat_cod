@@ -1,4 +1,4 @@
-from openerp import models, fields, api, _
+from openerp import models, fields, api,SUPERUSER_ID, _
 from datetime import datetime, timedelta
 import requests
 from openerp.osv import osv, expression
@@ -335,6 +335,14 @@ class account_invoice_line_tracking(models.Model):
 class account_invoice_line(models.Model):
 	_inherit="account.invoice.line"
 
+	@api.one
+	@api.depends('analytic_destination')
+	def _compute_users(self):
+		if self.analytic_destination:
+			user_ids = self.env['res.users'].sudo().search([('analytic_id','=',self.analytic_destination.id)])
+			self.user_ids = user_ids
+
+
 	name = fields.Char(string='No. Resi')
 	recipient = fields.Char(string='Name of Recipient')
 	price_cod = fields.Float(string='Price COD')
@@ -390,6 +398,7 @@ class account_invoice_line(models.Model):
 	service_type = fields.Many2one('consignment.service.type', string='Service Type')
 	detail_barang = fields.Text("Detail Barang")
 	cust_package_number=fields.Text("Customer Package Number")
+	user_ids = fields.Many2many('res.users',string='Users', store=True, readonly=True, compute='_compute_users')
 
 	def unlink(self,cr,uid,ids,context=None):
 		if not context:context={}
@@ -400,8 +409,30 @@ class account_invoice_line(models.Model):
 
 	def package_returned(self,cr,uid,ids,context=None):
 		if not context:context={}
+		invlt_pool = self.pool.get('account.invoice.line.tracking')
 		if ids:
-			return self.pool.get('account.invoice.line').write(cr,uid,ids,{'sigesit':False})
+			user = self.pool.get('res.users').browse(cr,uid,uid)
+			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
+				self.pool.get('account.invoice.line').write(cr,uid,ids,{
+					'sigesit':False,
+					'internal_status':'IN',
+					'pod_datetime':datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+					"analytic_destination":user.analytic_id and user.analytic_id.id or False
+					})
+				max_invl_id_track_sequence = 0
+				if x.tracking_ids:
+					max_invl_id_track_sequence = max([x.sequence for x in x.tracking_ids])
+				tracking_value = {
+					"invoice_line_id": x.id,
+					"sequence": max_invl_id_track_sequence+1 ,
+					"resi_number": x.name,
+					"pod_datetime": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+					"position_id": user.analytic_id and user.analytic_id.id or False,
+					"status": 'IN',
+					"user_tracking": user.name,
+					"sigesit": False,
+				}
+				invlt_pool.create(cr,uid,tracking_value)
 		return True
 		
 	def get_all_blocked_sigesit(self,cr,uid,context=None):
