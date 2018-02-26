@@ -415,7 +415,7 @@ class account_invoice_line(models.Model):
 		invlt_pool = self.pool.get('account.invoice.line.tracking')
 		if ids:
 			user = self.pool.get('res.users').browse(cr,uid,uid)
-			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
+			for x in self.pool.get('account.invoice.line').browse(cr,SUPERUSER_ID,ids,context=context):
 				self.pool.get('account.invoice.line').write(cr,SUPERUSER_ID,ids,{
 					'sigesit':False,
 					'internal_status':'IN',
