@@ -26,7 +26,7 @@
 		</record>
 
 		<record id="action_account_invoice_line_picker" model="ir.actions.act_window">
-			<field name="name">Create Cash Register Sigesit</field>
+			<field name="name">Setoran Sigesit</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">account.invoice.line.picker</field>
 			<field name="view_type">form</field>
@@ -38,7 +38,7 @@
 
 		<record model="ir.values" id="account_invoice_line_picker_values">
 			<field name="model_id" ref="resi_status.model_account_invoice_line_picker" />
-			<field name="name">Create Cash Register</field>
+			<field name="name">Setoran Sigesit</field>
 			<field name="key2">client_action_multi</field>
 			<field name="value" eval="'ir.actions.act_window,' + str(ref('action_account_invoice_line_picker'))" />
 			<field name="key">action</field>

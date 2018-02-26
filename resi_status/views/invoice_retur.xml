@@ -22,7 +22,7 @@
 		</record>
 
 		<record id="action_account_invoice_line_retur" model="ir.actions.act_window">
-			<field name="name">Return Package</field>
+			<field name="name">COD Gagal</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">account.invoice.line.retur</field>
 			<field name="view_type">form</field>
@@ -34,7 +34,7 @@
 
 		<record model="ir.values" id="account_invoice_line_retur_values">
 			<field name="model_id" ref="resi_status.model_account_invoice_line_retur" />
-			<field name="name">Return Package</field>
+			<field name="name">COD Gagal</field>
 			<field name="key2">client_action_multi</field>
 			<field name="value" eval="'ir.actions.act_window,' + str(ref('action_account_invoice_line_retur'))" />
 			<field name="key">action</field>
