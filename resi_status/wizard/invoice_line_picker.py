@@ -58,7 +58,7 @@ class account_invoice_line_picker(models.TransientModel):
 						'partner_id'	: inv_line.invoice_id.partner_id.id,
 						'company_id'	: user.company_id.id,
 						'recipient'		: inv_line.recipient,
-						# 'name'			: inv_line.name,
+						'name'			: inv_line.name,
 						'date'			: date_period,
 						'sigesit'		: picker.employee_id and picker.employee_id.id,
 						'nilai_edc'		: inv_line.price_cod,

@@ -428,7 +428,7 @@ class account_invoice_line(models.Model):
 				tracking_value = {
 					"invoice_line_id": x.id,
 					"sequence": max_invl_id_track_sequence+1 ,
-					"resi_number": x.name,
+					# "resi_number": x.name,
 					"pod_datetime": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
 					"position_id": user.analytic_id and user.analytic_id.id or False,
 					"status": 'IN',
