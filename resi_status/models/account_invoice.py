@@ -416,7 +416,7 @@ class account_invoice_line(models.Model):
 		if ids:
 			user = self.pool.get('res.users').browse(cr,uid,uid)
 			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
-				self.pool.get('account.invoice.line').write(cr,uid,ids,{
+				self.pool.get('account.invoice.line').write(cr,SUPERUSER_ID,ids,{
 					'sigesit':False,
 					'internal_status':'IN',
 					'pod_datetime':datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
