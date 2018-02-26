@@ -60,7 +60,7 @@ class account_invoice(models.Model):
 							ts.Name ,
 							dh.CourierName,
 							emp.EmployeeNo,
-							LEAD(tn.TrackingType) over (ORDER BY tn.TrackingDatetime) as nexttn 
+							LEAD(tn.TrackingType) over (ORDER BY tn.Id) as nexttn 
 						from BOSICEPAT.POD.dbo.TrackingNote tn WITH (NOLOCK) 
 						left join BOSICEPAT.POD.dbo.MsTrackingSite ts with (NOLOCK) on tn.TrackingSiteId=ts.Id
 						left join PICKUPORDER.dbo.ReceivedResi rr with (NOLOCK) on tn.ReceiptNumber=rr.NoResi
