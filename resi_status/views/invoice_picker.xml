@@ -10,7 +10,7 @@
 						<field name="employee_id"/>
 						<field name="journal_id" readonly="1"/>
 						<field name="reconciliation_date"/>
-						<field name="existing_id"/>
+						<field name="existing_id" invisible="1"/>
 					</group>
 					<notebook>
 						<page string="Resi Items">
