@@ -9,6 +9,7 @@
     'data': [
         'security/cod_security.xml',
         'security/ir.model.access.csv',
+        'scheduler/ir_cron.xml',
         'workflow/account_invoice_workflow.xml',
         'views/account_invoice_view.xml',
         'views/paket_bermasalah_view.xml',

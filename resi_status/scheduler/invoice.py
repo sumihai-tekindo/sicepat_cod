@@ -191,3 +191,61 @@ class account_invoice(models.Model):
 					self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
 			pickup_conn.close()
 		return result
+
+
+	def get_all_blocked_sigesit(self,cr,uid,context=None):
+		if not context:
+			context={}
+		now = datetime.today().strftime('%Y-%m-%d')
+		# inv_line_ids = self.search([('sigesit','!=',False),('internal_status','in',('sigesit','lost')),('pod_datetime','<=',"(now() - interval '1' day)")])
+		query = """select id 
+			from account_invoice_line 
+			where sigesit is not NULL 
+			and internal_status in ('sigesit','lost') 
+			and pod_datetime <= (now() - interval '1' day)
+			and pod_datetime >= (now() - interval '40' day);"""
+		cr.execute(query)
+
+		inv_lines = cr.fetchall()
+		inv_line_ids=[]
+		if inv_lines:
+			inv_line_ids = [x[0] for x in inv_lines]
+			sigesit = []
+			for line in self.pool.get('account.invoice.line').browse(cr,uid,inv_line_ids):
+				if line.sigesit.nik:
+					sigesit.append(line.sigesit.nik)
+		sigesit = list(set(sigesit))
+		for s in sigesit:
+			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?employeeno='+s
+			r = requests.get(url)
+		return sigesit
+
+	def get_all_unblocked_sigesit(self,cr,uid,context=None):
+		if not context:
+			context={}
+		now = datetime.today().strftime('%Y-%m-%d')
+		# inv_line_ids = self.search([('sigesit','!=',False),('internal_status','in',('sigesit','lost')),('pod_datetime','<=',"(now() - interval '1' day)")])
+		query = """select id 
+			from account_invoice_line 
+			where sigesit is not NULL 
+			and internal_status in ('sigesit','lost') 
+			and pod_datetime <= (now() - interval '1' day)
+			and pod_datetime >= (now() - interval '40' day);"""
+		cr.execute(query)
+
+		inv_lines = cr.fetchall()
+		inv_line_ids=[]
+		if inv_lines:
+			inv_line_ids = [x[0] for x in inv_lines]
+			sigesit = []
+			for line in self.pool.get('account.invoice.line').browse(cr,uid,inv_line_ids):
+				if line.sigesit.nik:
+					sigesit.append(line.sigesit.nik)
+		sigesit = list(set(sigesit))
+		unblocked_ids = self.pool.get('hr.employee').search(cr,uid,[('nik','not in',sigesit),('cod_position','=','sigesit')])
+		for s in self.pool.get('hr.employee').browse(cr,uid,unblocked_ids):
+			if s.nik:
+				url = 'http://pickup.sicepat.com:8087/api/integration/unblocksigesit?employeeno='+s.nik
+				r = requests.get(url)
+
+		return unblocked_ids

@@ -1,0 +1,71 @@
+<openerp>
+	<data noupdate="1">
+		<record model="ir.cron" id="cod_tracking_note_pull_cron">
+            <field name="name">COD - Tracking Note Pull</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_stt_pull_cron">
+            <field name="name">COD - STT/AWB Pull</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_stt_pull'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.cron" id="cod_analytic_pull_cron">
+            <field name="name">COD - Account Analytic Pull</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.analytic.account'"/>
+            <field name="function" eval="'fetch_analytic'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.cron" id="cod_employee_pull_cron">
+            <field name="name">COD - Employee Pull</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'hr.employee'"/>
+            <field name="function" eval="'fetch_employee'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.cron" id="cod_rds_destination_pull_cron">
+            <field name="name">COD - RDS Destination Pull</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'rds.destination'"/>
+            <field name="function" eval="'fetch_rds_destination'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.cron" id="cod_service_type_pull_cron">
+            <field name="name">COD - Service Type Pull</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'consignment.service.type'"/>
+            <field name="function" eval="'fetch_service_type'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+	</data>
+</openerp>
