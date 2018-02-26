@@ -216,7 +216,7 @@ class account_invoice(models.Model):
 					sigesit.append(line.sigesit.nik)
 		sigesit = list(set(sigesit))
 		for s in sigesit:
-			url = 'http://pickup.sicepat.com:8087/api/integration/blocksigesit?employeeno='+s
+			url = 'http://pickup.sicepat.com:8082/api/integration/blocksigesit?employeeno='+s
 			r = requests.get(url)
 		return sigesit
 
@@ -245,7 +245,7 @@ class account_invoice(models.Model):
 		unblocked_ids = self.pool.get('hr.employee').search(cr,uid,[('nik','not in',sigesit),('cod_position','=','sigesit')])
 		for s in self.pool.get('hr.employee').browse(cr,uid,unblocked_ids):
 			if s.nik:
-				url = 'http://pickup.sicepat.com:8087/api/integration/unblocksigesit?employeeno='+s.nik
+				url = 'http://pickup.sicepat.com:8082/api/integration/unblocksigesit?employeeno='+s.nik
 				r = requests.get(url)
 
 		return unblocked_ids
