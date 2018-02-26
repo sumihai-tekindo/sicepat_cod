@@ -424,7 +424,8 @@ class account_invoice_line(models.Model):
 					})
 				max_invl_id_track_sequence = 0
 				if x.tracking_ids:
-					max_invl_id_track_sequence = max([x.sequence for x in x.tracking_ids])
+					max_invl_id_track_sequence = max([a.sequence for a in x.tracking_ids])
+				print "==============",x.id,x.name
 				tracking_value = {
 					"invoice_line_id": x.id,
 					"sequence": max_invl_id_track_sequence+1 ,
