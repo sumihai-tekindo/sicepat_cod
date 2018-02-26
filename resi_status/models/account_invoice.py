@@ -435,7 +435,7 @@ class account_invoice_line(models.Model):
 					"user_tracking": user.name,
 					"sigesit": False,
 				}
-				invlt_pool.create(cr,uid,tracking_value)
+				invlt_pool.create(cr,SUPERUSER_ID,tracking_value)
 		return True
 		
 	
