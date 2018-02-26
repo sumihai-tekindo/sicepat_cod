@@ -319,7 +319,7 @@ class account_invoice_line_payment_type(models.Model):
 class account_invoice_line_tracking(models.Model):
 	_name = "account.invoice.line.tracking"
 
-	_order = "invoice_line_id asc, pod_datetime asc, sequence asc"
+	_order = "invoice_line_id asc, tracking_note_id asc, sequence asc"
 
 	invoice_line_id = fields.Many2one("account.invoice.line","Tracking ID")
 	sequence = fields.Integer("Sequence")
