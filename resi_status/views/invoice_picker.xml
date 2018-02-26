@@ -18,7 +18,7 @@
 						</page>
 					</notebook>
 					<footer>
-						<button string="Create Cash Register" class="oe_highlight"  name="create_cash_register_sigesit" type="object"/>
+						<button string="Terima Uang dari Sigesit" class="oe_highlight"  name="create_cash_register_sigesit" type="object"/>
 						<button string="Close" class="oe_link" special="cancel" />
 					</footer>
 				</form>
