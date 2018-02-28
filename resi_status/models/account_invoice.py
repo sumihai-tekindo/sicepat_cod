@@ -405,6 +405,32 @@ class account_invoice_line(models.Model):
 	cust_package_number=fields.Text("Customer Package Number")
 	user_ids = fields.Many2many('res.users',string='Users', store=True, readonly=True, compute='_compute_users')
 
+	def get_last_tracking(self,cr,uid,ids,context=None):
+		if not context:context={}
+		last_tracking = False
+		if ids:
+			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
+				for y in x.tracking_ids:
+					last_tracking = y.user_tracking
+		return last_tracking
+
+	def get_last_sigesit(self,cr,uid,ids,context=None):
+		if not context:context={}
+		last_sigesit = False
+		if ids:
+			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
+				for y in x.tracking_ids:
+					last_sigesit = y.sigesit.name
+		return last_sigesit
+
+	def get_last_position(self,cr,uid,ids,context=None):
+		if not context:context={}
+		last_position = False
+		if ids:
+			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
+				for y in x.tracking_ids:
+					last_position = y.position_id.name
+		return last_position
 
 	@api.model
 	def move_line_get_item_cod(self, line):

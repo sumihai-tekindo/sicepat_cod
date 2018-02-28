@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <report 
+            id="report_invoice_form" 
+            model="account.invoice.line" 
+            string="Print Tanda Terima"
+            report_type="qweb-pdf"
+            name="resi_status.report_tanda_terima" 
+            file="resi_status.report_tanda_terima"
+        />
+
+<template id="report_tanda_terima">
+    
+
+    <t t-call="report.html_container">
+
+        <t t-foreach="docs" t-as="o">
+            <div class="header">
+                <div class="row" style="text-align:left;">
+                    <strong>TANDA TERIMA BARANG /</strong>
+                </div>
+                <div class="row" style="text-align:left;">
+                    <table>
+                    <tr style="text-align:left;">
+                        <td>Telah diterima barang COD dari Kurir</td>
+                        <td>&#160;:&#160;</td>
+                        <td><span t-esc="o.get_last_sigesit()"/></td>
+                    </tr>
+                    <tr>
+                        <td>Untuk No.Resi</td>
+                        <td>&#160;:&#160;</td>
+                        <td><span t-esc="o.name"/></td>
+                    </tr>
+                    <tr>
+                        <td>Pada Tanggal</td>
+                        <td>&#160;:&#160;</td>
+                        <td><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></td>
+                    </tr>
+                    <!-- <tr>
+                        <td>Admin Cabang</td>
+                        <td>&#160;:&#160;</td>
+                        <td>Nama CAbang</td>
+                    </tr>
+                     -->
+                    </table>
+                </div>
+            </div>
+            <div class="page">
+                <table class="row">
+                    <tr>
+                        <td>Admin Cabang</td>
+                        <td>&#160;&#160;</td>
+                        <td>(<span t-esc="o.get_last_position()"/>)</td>
+                    </tr>
+                    <tr>
+                        <td><span t-esc="o.get_last_tracking()"/></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>
