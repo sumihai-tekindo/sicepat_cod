@@ -64,46 +64,10 @@ class account_invoice(models.Model):
 					lines.write({'internal_status':'paid','external_status':'reconciled'})
 		return res
 
-	@api.model
-	def move_line_get_cod(self, invoice_id):
-		inv = self.env['account.invoice'].browse(invoice_id)
-		currency = inv.currency_id.with_context(date=inv.date_invoice)
-		company_currency = inv.company_id.currency_id
-
-		res = []
-		for line in inv.invoice_line:
-			mres = self.move_line_get_item(line)
-			mres['invl_id'] = line.id
-			res.append(mres)
-			tax_code_found = False
-			taxes = line.invoice_line_tax_id.compute_all(
-				(line.price_unit * (1.0 - (line.discount or 0.0) / 100.0)),
-				line.quantity, line.product_id, inv.cod_customer)['taxes']
-			for tax in taxes:
-				if inv.type in ('out_invoice', 'in_invoice'):
-					tax_code_id = tax['base_code_id']
-					tax_amount = tax['price_unit'] * line.quantity * tax['base_sign']
-				else:
-					tax_code_id = tax['ref_base_code_id']
-					tax_amount = tax['price_unit'] * line.quantity * tax['ref_base_sign']
-
-				if tax_code_found:
-					if not tax_code_id:
-						continue
-					res.append(dict(mres))
-					res[-1]['price'] = 0.0
-					res[-1]['account_analytic_id'] = False
-				elif not tax_code_id:
-					continue
-				tax_code_found = True
-
-				res[-1]['tax_code_id'] = tax_code_id
-				res[-1]['tax_amount'] = currency.compute(tax_amount, company_currency)
-
-		return res
-
+	
 	@api.model
 	def line_get_convert_cod(self, line, part, date,company_id):
+		#print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",company_id.cod_accrue_account_id.id or False
 		return {
 			'date_maturity': line.get('date_maturity', False),
 			'partner_id': part,
@@ -111,7 +75,7 @@ class account_invoice(models.Model):
 			'date': date,
 			'debit': line['price']>0 and line['price'],
 			'credit': line['price']<0 and -line['price'],
-			'account_id': line['account_id'],
+			'account_id': line['price']< 0 and company_id.cod_accrue_account_id.id or company_id.account_temp_1.id or False,
 			'analytic_lines': line.get('analytic_lines', []),
 			'amount_currency': line['price']>0 and abs(line.get('amount_currency', False)) or -abs(line.get('amount_currency', False)),
 			'currency_id': line.get('currency_id', False),
@@ -135,6 +99,38 @@ class account_invoice(models.Model):
 			:return: the (possibly updated) final move_lines to create for this invoice
 		"""
 		return move_lines
+
+	@api.multi
+	def _get_analytic_lines_cod(self):
+		""" Return a list of dict for creating analytic lines for self[0] """
+		company_currency = self.company_id.currency_id
+		sign = 1 if self.type in ('out_invoice', 'in_refund') else -1
+
+		iml = self.env['account.invoice.line'].move_line_get_cod(self.id)
+		for il in iml:
+			#print "==========account_idaccount_id========",il['account_id']
+			if il['account_analytic_id']:
+				if self.type in ('in_invoice', 'in_refund'):
+					ref = self.reference
+				else:
+					ref = self.number
+				if not self.journal_id.analytic_journal_id:
+					raise except_orm(_('No Analytic Journal!'),
+						_("You have to define an analytic journal on the '%s' journal!") % (self.journal_id.name,))
+				currency = self.currency_id.with_context(date=self.date_invoice)
+				il['analytic_lines'] = [(0,0, {
+					'name': il['name'],
+					'date': self.date_invoice,
+					'account_id': il['account_analytic_id'],
+					'unit_amount': il['quantity'],
+					'amount': currency.compute(il['price'], company_currency) * sign,
+					'product_id': il['product_id'],
+					'product_uom_id': il['uos_id'],
+					'general_account_id': il['account_id'],
+					'journal_id': self.journal_id.analytic_journal_id.id,
+					'ref': ref,
+				})]
+		return iml
 
 	@api.multi
 	def action_move_create_cod(self):
@@ -170,7 +166,8 @@ class account_invoice(models.Model):
 			date_invoice = inv.date_invoice
 
 			# create the analytical lines, one move line per invoice line
-			iml = inv._get_analytic_lines()
+			iml = inv._get_analytic_lines_cod()
+			print "!!!!!!!!!!!!!!!!!!!!!!!!!",iml
 			# check if taxes are all computed
 			compute_taxes = account_invoice_tax.compute(inv.with_context(lang=inv.partner_id.lang))
 			inv.check_tax_lines(compute_taxes)
@@ -195,6 +192,7 @@ class account_invoice(models.Model):
 			# and validation of the invoice
 			inv._recompute_tax_amount()
 			# one move line per tax line
+			# print "------------",iml
 			iml += account_invoice_tax.move_line_get(inv.id)
 
 			if inv.type in ('in_invoice', 'in_refund'):
@@ -228,28 +226,32 @@ class account_invoice(models.Model):
 						'type': 'dest',
 						'name': name,
 						'price': t[1],
-						'account_id': inv.company_id.cod_accrue_account_id.id, #perbaiki disini
+						'account_id': inv.company_id.account_temp_1.id, #perbaiki disini
 						'date_maturity': t[0],
 						'amount_currency': diff_currency and amount_currency,
 						'currency_id': diff_currency and inv.currency_id.id,
 						'ref': ref,
 					})
+				print "$$$$$$$$$ 1 $$$$$$$$$$",iml
 			else:
-				# print "***********xxxx**************",totlines
+				print "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				print inv.company_id.account_temp_1.id
+				print "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
 				iml.append({
 					'type': 'dest',
 					'name': name,
 					'price': total,
-					'account_id': inv.company_id.cod_accrue_account_id.id, #perbaiki disini,
+					'account_id': inv.company_id.account_temp_1.id, #perbaiki disini,
 					'date_maturity': inv.date_due,
 					'amount_currency': diff_currency and total_currency,
 					'currency_id': diff_currency and inv.currency_id.id,
 					'ref': ref,
 				})
+				print "$$$$$$$$$ 2 $$$$$$$$$$",iml
 			date = date_invoice
 
 			part = self.env['res.partner']._find_accounting_partner(inv.cod_customer)
-
+			
 			line = [(0, 0, self.line_get_convert_cod(l, part.id, date, inv.company_id)) for l in iml]
 			line = inv.group_lines(iml, line)
 			journal = inv.company_id.cod_accrue_journal_id.with_context(ctx)
@@ -343,7 +345,7 @@ class account_invoice_line(models.Model):
 			user_ids = self.env['res.users'].sudo().search([('analytic_id','=',self.analytic_destination.id)])
 			self.user_ids = user_ids
 
-
+	cod_customer= fields.Many2one(relation="res.partner",related='invoice_id.cod_customer',string="Resi Number",store=True)
 	name = fields.Char(string='No. Resi')
 	recipient = fields.Char(string='Name of Recipient')
 	price_cod = fields.Float(string='Price COD')
@@ -403,6 +405,62 @@ class account_invoice_line(models.Model):
 	cust_package_number=fields.Text("Customer Package Number")
 	user_ids = fields.Many2many('res.users',string='Users', store=True, readonly=True, compute='_compute_users')
 
+
+	@api.model
+	def move_line_get_item_cod(self, line):
+		return {
+			'type': 'src',
+			'name': line.name.split('\n')[0][:64],
+			'price_unit': line.price_unit,
+			'quantity': line.quantity,
+			'price': line.price_subtotal,
+			'account_id': line.invoice_id.company_id.cod_accrue_account_id.id,
+			'product_id': line.product_id.id,
+			'uos_id': line.uos_id.id,
+			'account_analytic_id': line.account_analytic_id.id,
+			'taxes': line.invoice_line_tax_id,
+		}
+
+	@api.model
+	def move_line_get_cod(self, invoice_id):
+		inv = self.env['account.invoice'].browse(invoice_id)
+		currency = inv.currency_id.with_context(date=inv.date_invoice)
+		company_currency = inv.company_id.currency_id
+
+		res = []
+		for line in inv.invoice_line:
+			mres = self.move_line_get_item_cod(line)
+			mres['invl_id'] = line.id
+			res.append(mres)
+			tax_code_found = False
+			taxes = line.invoice_line_tax_id.compute_all(
+				(line.price_unit * (1.0 - (line.discount or 0.0) / 100.0)),
+				line.quantity, line.product_id, inv.partner_id)['taxes']
+			for tax in taxes:
+				if inv.type in ('out_invoice', 'in_invoice'):
+					tax_code_id = tax['base_code_id']
+					tax_amount = tax['price_unit'] * line.quantity * tax['base_sign']
+				else:
+					tax_code_id = tax['ref_base_code_id']
+					tax_amount = tax['price_unit'] * line.quantity * tax['ref_base_sign']
+
+				if tax_code_found:
+					if not tax_code_id:
+						continue
+					res.append(dict(mres))
+					res[-1]['price'] = 0.0
+					res[-1]['account_analytic_id'] = False
+				elif not tax_code_id:
+					continue
+				tax_code_found = True
+
+				res[-1]['tax_code_id'] = tax_code_id
+				res[-1]['tax_amount'] = currency.compute(tax_amount, company_currency)
+		#print "###########################"
+		#print res
+		#print "###########################"
+		return res
+		
 	def unlink(self,cr,uid,ids,context=None):
 		if not context:context={}
 		res = super(account_invoice_line,self).unlink(cr,uid,ids,context=context)
@@ -425,7 +483,7 @@ class account_invoice_line(models.Model):
 				max_invl_id_track_sequence = 0
 				if x.tracking_ids:
 					max_invl_id_track_sequence = max([a.sequence for a in x.tracking_ids])
-				print "==============",x.id,x.name
+				#print "==============",x.id,x.name
 				tracking_value = {
 					"invoice_line_id": x.id,
 					"sequence": max_invl_id_track_sequence+1 ,
@@ -440,7 +498,7 @@ class account_invoice_line(models.Model):
 		return True
 		
 	
-		# for invl in inv_line_ids:
+	
 
 
 class account_journal(models.Model):

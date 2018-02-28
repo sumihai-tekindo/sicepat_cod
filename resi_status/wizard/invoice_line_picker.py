@@ -19,8 +19,18 @@ class account_invoice_line_picker(models.TransientModel):
 		journal_id = self.pool.get("account.journal").search(cr,uid,[('cod_user_responsible','=',uid),('type','=','cash')])
 		if not journal_id:
 			raise osv.except_osv(_('Error!'),_("There is no journal defined for Sigesit Cash Account, please set the user responsible in Journal"))
+		if context.get('active_ids',False):
+			invl = self.pool.get('account.invoice.line').browse(cr,uid,context.get('active_ids'))
+			emp=False
+			for ix in invl:
+				if emp!=False and emp!=ix.sigesit.id:
+					raise osv.except_osv(_('Error!'),_("Tidak bisa menginput setoran dari resi yang berbeda kurir!"))
+				else:	
+					emp = ix.sigesit.id
+
 		res.update({
 			'user_id':uid,
+			'employee_id':emp,
 			'reconciliation_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
 			'line_ids':context.get('active_ids',False),
 			'journal_id':journal_id[0] or False
@@ -31,25 +41,44 @@ class account_invoice_line_picker(models.TransientModel):
 	def create_cash_register_sigesit(self,cr,uid,ids,context=None):
 		if not context:context={}
 		context.update({'journal_type':'cash','register_type':'cr_gesit'})
-		period_pool = self.pool.get('account.period')
-		for picker in self.browse(cr,uid,ids,context=context):
+		context2={'journal_type':'cash','register_type':'cr_admin'}
 
+		period_pool = self.pool.get('account.period')
+		
+		for picker in self.browse(cr,uid,ids,context=context):
 			date_period = picker.reconciliation_date or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 			pids = period_pool.find(cr, uid, dt=date_period, context=context)
 			user = self.pool.get('res.users').browse(cr,uid,uid)
+			journal_admin = self.pool.get("account.journal").search(cr,uid,[('cod_admin_user','=',uid),('type','=','cash')])
+			if not journal_admin:
+				raise osv.except_osv(_('Error!'),_("There is no journal defined for Admin Cabang Cash Account, please set the user responsible in Journal"))
+
+
 			if pids:
 				context.update({'period_id':pids[0]})
 				cash_register = {
 					'journal_id'		: picker.journal_id.id or False,
-					'date_period'		: date_period,
+					# 'date_period'		: date_period,
 					'period_id'			: pids[0],
 					'sigesit'			: picker.employee_id and picker.employee_id.id,
 					'partner_sigesit'	: picker.employee_id and picker.employee_id.user_id and picker.employee_id.user_id.partner_id and picker.employee_id.user_id.partner_id.id,
+					'analytic_account_id': user.analytic_id and user.analytic_id.id or False,
 				}
+
+				context2.update({'period_id':pids[0]})
+				cash_register_admin = {
+					'journal_id'	: journal_admin[0] or False,
+					# 'date_period'	: date_period,
+					'period_id'		: pids[0],
+					'analytic_account_id': user.analytic_id and user.analytic_id.id or False,
+				}
+				
 			if picker.existing_id:
 				cr_id = picker.existing_id and picker.existing_id.id
 			else:
 				cr_id = self.pool.get('account.bank.statement').create(cr,uid,cash_register,context=context)
+
+			cr_adm_id = self.pool.get('account.bank.statement').create(cr,uid,cash_register_admin,context=context2)
 			line_ids=[]
 			if picker.line_ids:
 				for inv_line in picker.line_ids:
@@ -72,6 +101,35 @@ class account_invoice_line_picker(models.TransientModel):
 						'statement_id'	: cr_id,
 					}
 					cr_line_id = self.pool.get('account.bank.statement.line').create(cr,uid,cr_lines)
-					inv_line.write({'cr_gesit_line':cr_line_id,'cr_gesit_id':cr_id})
+			
+					# partner_sigesit = cgesit.partner_sigesit and cgesit.partner_sigesit.id
+					account_analytic_id = self.pool.get('account.analytic.account').search(cr,uid,[('user_admin_cabang','=',uid),('type','=','normal')])
+					linex = [inv_line.id]
+					customer =inv_line.partner_id.id
+			
+					cr_lines_admin = {
+						'awb_number'	: inv_line.name,
+						'partner_id'	: customer,
+						'company_id'	: user.company_id.id,
+						'name'			: inv_line.name,
+						'date'			: date_period,
+						'amount'		: inv_line.price_subtotal,
+						'internal_status':'cabang',
+						'account_id'	: picker.journal_id and picker.journal_id.default_debit_account_id and picker.journal_id.default_debit_account_id.id,
+						'account_analytic_id': inv_line.account_analytic_id and inv_line.account_analytic_id.id or False,
+						'invoice_line_ids':[(4,linex)],
+						'statement_id'	: cr_adm_id,
+						'cr_gesit_id'	: cr_id,
+						'cr_gesit_line_id'	: cr_line_id,
+
+					}
+					cr_line_id_adm = self.pool.get('account.bank.statement.line').create(cr,uid,cr_lines_admin)
+					inv_line.write({'internal_status':'cabang','cr_gesit_line':cr_line_id,'cr_gesit_id':cr_id,'cr_admin_line':cr_line_id,'cr_admin_id':cr_id})
+
+			self.pool.get('account.bank.statement').write(cr,uid,cr_id,{'admin_receipt_id':cr_adm_id},context=context)
+			self.pool.get('account.bank.statement').button_open(cr,uid,cr_id,context=context)
+			self.pool.get('account.bank.statement').button_confirm_cash(cr,uid,cr_id,context=context)
+			self.pool.get('account.bank.statement').button_open(cr,uid,cr_adm_id,context=context2)
+			self.pool.get('account.bank.statement').button_confirm_cash(cr,uid,cr_adm_id,context=context2)
 		return True
 

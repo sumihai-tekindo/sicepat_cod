@@ -7,9 +7,9 @@
 				<form string="Resi Picker">
 					<group string="General Info">
 						<field name="user_id" readonly="1"/>
-						<field name="employee_id"/>
+						<field name="employee_id" readonly="1"/>
 						<field name="journal_id" readonly="1"/>
-						<field name="reconciliation_date"/>
+						<field name="reconciliation_date" readonly="1"/>
 						<field name="existing_id" invisible="1"/>
 					</group>
 					<notebook>

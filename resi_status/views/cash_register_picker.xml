@@ -37,14 +37,14 @@
 			<field name="target">new</field>
 		</record>
 
-		<record model="ir.values" id="cash_register_gesit_picker_values">
+		<!-- <record model="ir.values" id="cash_register_gesit_picker_values">
 			<field name="model_id" ref="resi_status.model_account_bank_statement_picker" />
 			<field name="name">Create Cash Receipt</field>
 			<field name="key2">client_action_multi</field>
 			<field name="value" eval="'ir.actions.act_window,' + str(ref('action_cash_register_gesit_picker'))" />
 			<field name="key">action</field>
 			<field name="model">account.bank.statement</field>
-		</record>
+		</record> -->
 
 
 		<record id="bank_statement_picker_to_finance" model="ir.ui.view">
@@ -54,13 +54,17 @@
 				<form string="Transfer Payment to Head Office">
 					<group string="General Info">
 						<field name="user_id" readonly="1"/>
-						<field name="journal_id" domain="[('type','=','bank')]"/>
+						<field name="journal_id" domain="[('type','=','bank')]" string="Rekening Tujuan"/>
 						<field name="reconciliation_date"/>
 						<field name="existing_id"/>
+						<field name="reference_number" required="True"/>
 					</group>
 					<notebook>
 						<page string="Sigesit Register">
 							<field name="line_ids" colspan="4" nolabel="1"/>
+						</page>
+						<page string="Additional Notes">
+							<field name="notes" colspan="4" nolabel="1"/>
 						</page>
 					</notebook>
 					<footer>

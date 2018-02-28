@@ -20,6 +20,9 @@
 				<xpath expr="//form/sheet/notebook/page[@string='Transactions']/field[@name='line_ids']/tree" position="attributes">
 					<attribute name='editable'></attribute>
 				</xpath>
+				<field name="currency" position="after">
+					<field name="reference_number"/>
+				</field>
 			</field>
 		</record>
 	</data>

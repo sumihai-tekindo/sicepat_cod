@@ -4,7 +4,11 @@
 			<field name="name">account.invoice.line.submit.form</field>
 			<field name="model">account.invoice.line.submit</field>
 			<field name="arch" type="xml">
-				<form string="Resi Picker">
+				<form string="Access Denied" groups="resi_status.group_cod_cabang">
+					<group string="ACCESS DENIED, only head office can use this menu">
+					</group>
+				</form>
+				<form string="Resi Picker" groups="account.group_account_invoice">
 					<group string="General Info">
 						<field name="partner_id"/>
 						<field name="user_id"/>
@@ -17,7 +21,7 @@
 							<field name="line_ids" colspan="4" nolabel="1"/>
 						</page>
 					</notebook>
-					<footer>
+					<footer groups="account.group_account_invoice">
 						<button string="Create Supplier Invoice" class="oe_highlight"  name="create_supplier_invoice" type="object"/>
 						<button string="Close" class="oe_link" special="cancel" />
 					</footer>

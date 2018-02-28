@@ -29,6 +29,7 @@ class account_bank_statement_line(models.Model):
 									('approved','Approved'),
 									('closed','Closed')],string='Status Retur')
 	cr_gesit_id = fields.Many2one('account.bank.statement','CR Sigesit',ondelete='set null')
+	cr_gesit_line_id = fields.Many2one('account.bank.statement.line','CR Sigesit Line',ondelete='set null')
 
 class account_bank_statement_picker(models.TransientModel):
 	_name = "account.bank.statement.picker"
@@ -38,6 +39,7 @@ class account_bank_statement_picker(models.TransientModel):
 	existing_id = fields.Many2one("account.bank.statement","Existing Reconciliation")
 	line_ids = fields.Many2many("account.bank.statement","account_bank_statement_picker_rel","picker_id","bs_id","Cash Registers")
 	journal_id = fields.Many2one("account.journal","Journal Kas Admin",required=True)
+	reference_number = fields.Char("Nomor Transfer")
 	notes = fields.Text("Notes")
 
 	def default_get(self, cr, uid, fields, context=None):
@@ -126,7 +128,8 @@ class account_bank_statement_picker(models.TransientModel):
 						'journal_id'	: picker.journal_id.id or False,
 						'date_period'	: date_period,
 						'period_id'		: pids[0],
-						'notes'			: picker.notes
+						'notes'			: picker.notes,
+						'reference_number':picker.reference_number,
 					}
 				if picker.existing_id:
 					cr_id = picker.existing_id and picker.existing_id.id

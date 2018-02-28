@@ -149,20 +149,22 @@
 					<field name="status_retur"/>
 					<group>
 						<group name="Filter" string="Filter">
+							<filter name="no_setoran" string="Belum Disetor Ke Admin" domain="[('cr_gesit_line','=',False)]"/>
 							<filter name="status_open" string="Open" domain="[('internal_status','=','open')]"/>  
 							<filter name="status_ant" string="Antar" domain="[('internal_status','=','antar')]"/>  
-							<filter name="status_sigesit" string="Sigesit" domain="[('internal_status','=','sigesit')]"/>  
+							<filter name="status_sigesit" string="Sigesit" domain="[('internal_status','=','DLV')]"/>  
 							<filter name="status_cabang" string="Cabang" domain="[('internal_status','=','cabang')]"/>  
 							<filter name="status_pusat" string="Pusat" domain="[('internal_status','=','pusat')]"/>  
 							<filter name="status_submit" string="Submit" domain="[('internal_status','=','submit')]"/>  
 							<filter name="status_paid" string="Paid" domain="[('internal_status','=','paid')]"/>   
-							<filter name="status_rtn" string="RTPusat" domain="[('internal_status','=','rtn')]"/>  
-							<filter name="status_rtg" string="RTGerai" domain="[('internal_status','=','rtg')]"/>  
-							<filter name="status_rts" string="RTShipper" domain="[('internal_status','=','rts')]"/>  
+							<filter name="status_rtn" string="RTPusat" domain="[('internal_status','=','RTN')]"/>  
+							<filter name="status_rtg" string="RTGerai" domain="[('internal_status','=','RTA')]"/>  
+							<filter name="status_rts" string="RTShipper" domain="[('internal_status','=','RTS')]"/>  
 							<filter name="my_resi" string="My Responsibility" domain="[('rds_destination.user_ids','in',[uid])]"/>
 						</group>
 						<group name="Groupby" string="Group by">
 							<filter name="group_by_sigesit" string="Sigesit" context="{'group_by':'sigesit'}"/>
+							<filter name="group_by_partner" string="Partner" context="{'group_by':'cod_customer'}"/>
 							<filter name="group_by_intstatus" string="Internal Status" context="{'group_by':'internal_status'}"/>
 							<filter name="group_by_extstatus" string="External Status" context="{'group_by':'external_status'}"/>
 							<filter name="group_by_retstatus" string="Retur Status" context="{'group_by':'status_retur'}"/>
@@ -207,8 +209,8 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
-			<field name="domain">[('source_recon_id','=',False),('rds_destination.user_ids','in',[uid]),('invoice_id.type','=','out_invoice')]</field>
-			<field name="context">{}</field>
+			<field name="domain">[('source_recon_id','=',False),('user_ids','=',uid),('invoice_id.type','=','out_invoice')]</field>
+			<field name="context">{'default_no_setoran':1, 'search_default_no_setoran':1,}</field>
 		</record>
 		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree_my">
 			<field name="sequence" eval="1"/>
@@ -233,7 +235,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
-			<field name="domain">[('source_recon_id','=',False),('rds_destination.user_ids','in',[uid]),('invoice_id.type','=','out_invoice'),('status_retur','in',('rtn','rtg','rts'))]</field>
+			<field name="domain">[('source_recon_id','=',False),('user_ids','=',uid),('internal_status','in',('BA','MR','CODA','LOST','BROKEN','HOLD','CC','CU','NTH')),('invoice_id.type','=','out_invoice')]</field>
 			<field name="context">{'problem':True}</field>
 		</record>
 		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree_my_problem">

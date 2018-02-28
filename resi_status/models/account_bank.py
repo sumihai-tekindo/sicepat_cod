@@ -32,7 +32,10 @@ class account_bank_statement(osv.osv):
 		"partner_sigesit" : fields.many2one('res.partner','Partner Sigesit'),
 		"admin_receipt_id" : fields.many2one('account.bank.statement','CR Admin',ondelete='set null'),
 		"admin_receipt_line_id" : fields.many2one('account.bank.statement.line','CR Line Sigesit',ondelete='set null'),
-		"notes": fields.text("Notes")
+		"analytic_account_id"	: fields.many2one('account.analytic.account',"Cabang"),
+		"notes": fields.text("Notes"),
+		"reference_number": fields.char("Nomor Transfer"),
+
 		}
 
 	_defaults = {
@@ -107,7 +110,6 @@ class account_bank_statement(osv.osv):
 
 
 	
-account_bank_statement()
 
 class account_cash_statement(osv.osv):
 	_inherit = "account.bank.statement"
@@ -116,3 +118,5 @@ class account_cash_statement(osv.osv):
 		res =super(account_cash_statement,self).button_confirm_bank(cr,uid,ids,context=context)
 		# print "==============confirm cash2================="
 		return res
+
+
