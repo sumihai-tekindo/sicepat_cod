@@ -1,14 +1,28 @@
-from openerp import models, fields
+from openerp import models, fields,api
 from datetime import datetime
 import psycopg2
 import psycopg2.extras
-
+import requests
 from openerp.osv import expression
 
 class hr_employee(models.Model):
 	_inherit = "hr.employee"
 
 	odoo1_id = fields.Integer("Odoo1 ID")
+	blocked = fields.Boolean("Is COD Blocked")
+
+	@api.multi
+	def block_sigesit(self):
+		for emp in self:
+			emp.blocked = True
+			url = 'http://pickup.sicepat.com:8082/api/integration/blocksigesit?employeeno='+emp.nik
+			r = requests.get(url)
+
+	@api.multi
+	def unblock_sigesit(self):
+		for emp in self:
+			emp.blocked = True
+			url = 'http://pickup.sicepat.com:8082/api/integration/unblocksigesit?employeeno='+emp.nik		
 
 	def fetch_employee(self,cr,uid,context=None):
 		odoo1_ids = self.pool.get('ir.config_parameter').search(cr,uid,[('key','in',['odoo1.url','odoo1.db','odoo1.db_port','odoo1.user','odoo1.password'])])
