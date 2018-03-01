@@ -404,6 +404,7 @@ class account_invoice_line(models.Model):
 	detail_barang = fields.Text("Detail Barang")
 	cust_package_number=fields.Text("Customer Package Number")
 	user_ids = fields.Many2many('res.users',string='Users', store=True, readonly=True, compute='_compute_users')
+	stt_date = fields.Date('Tanggal Transaksi STT',related='invoice_id.date_invoice')
 
 	def get_last_tracking(self,cr,uid,ids,context=None):
 		if not context:context={}

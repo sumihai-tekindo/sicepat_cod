@@ -35,6 +35,8 @@ class account_bank_statement(osv.osv):
 		"analytic_account_id"	: fields.many2one('account.analytic.account',"Cabang"),
 		"notes": fields.text("Notes"),
 		"reference_number": fields.char("Nomor Transfer"),
+		"attachment": fields.binary("Bukti Transfer",
+            help="File bukti transfer bank"),
 
 		}
 

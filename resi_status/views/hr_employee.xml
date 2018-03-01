@@ -14,11 +14,35 @@
 				</xpath>
 				<field name="address_id" position="after">
 					<field name="nik"/>
+					<field name="blocked" readonly="True"/>
 				</field>
 				<xpath expr="//form/sheet/notebook/page[@string='Public Information']/group/group[@string='Position']/field[@name='coach_id']" position="after">
 					<field name='cod_position'/>
 				</xpath>
+				<xpath expr="//form/sheet" position="before">
+					<header>
+						<button name="block_sigesit" groups="resi_status.group_cod_pusat" attrs="{'invisible':[('blocked','=', True)]}" string="Block Sigesit" class="oe_highlight"/>
+						<button name="unblock_sigesit" groups="resi_status.group_cod_pusat" attrs="{'invisible':[('blocked','=', False)]}" string="Unblock Sigesit" class="oe_highlight"/>
+					</header>
+				</xpath>
 			</field>
+		</record>
+		<record id="hr_employee_cod_search" model="ir.ui.view">
+			<field name="name">hr.employee.cod.search</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_filter"/>
+			<field name="arch" type="xml">
+				<field name="category_ids" position="after">
+					<group name="Filter">
+						<filter name='emp_blocked' string="Blocked" icon="terp-personal" domain="[('blocked','=',True)]"/> 
+						<filter name='emp_unblocked' string="Unblocked" icon="terp-personal" domain="[('blocked','=',False)]"/> 
+					</group>
+				</field>
+			</field>
+		</record>
+
+		<record id="hr.open_view_employee_list_my" model="ir.actions.act_window">
+			<field name="context">{'default_emp_blocked':1, 'search_default_emp_blocked':1,}</field>
 		</record>
 	</data>
 </openerp>

@@ -2,6 +2,7 @@ from openerp import models, fields
 from datetime import datetime
 import mysql.connector
 import pymssql
+import requests
 from openerp.osv import expression
 
 class account_invoice(models.Model):

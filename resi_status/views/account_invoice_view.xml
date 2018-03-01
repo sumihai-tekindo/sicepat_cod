@@ -39,8 +39,9 @@
 			<field name="name">customer.invoice.line.tick</field>
 			<field name="model">account.invoice.line</field>
 			<field name="arch" type="xml">
-				<tree string="Resi Numbers" create="false" write="false">
+				<tree string="Resi Numbers" create="false" write="false" colors="red:internal_status=='DLV' and cr_gesit_line==False;black: internal_status != 'DLV'">
 					<field name="name"/>
+					<field name="stt_date"/>
 					<field name="recipient"/>
 					<field name="service_type"/>
 					<field name="account_analytic_id" invisible="1"/>
@@ -51,6 +52,7 @@
 					<field name="nilai_edc"/>
 					<field name="sigesit"/>
 					<field name="internal_status"/>
+					<field name="cr_gesit_line" invisible="1"/>
 					<field name="external_status"/>
 					<field name="status_retur"/>
 				</tree>
@@ -148,10 +150,10 @@
 					<field name="external_status"/>
 					<field name="status_retur"/>
 					<group>
-						<group name="Filter" string="Filter">
+						<group name="Filter" string="Filter by Status">
 							<filter name="no_setoran" string="Belum Disetor Ke Admin" domain="[('cr_gesit_line','=',False)]"/>
 							<filter name="status_open" string="Open" domain="[('internal_status','=','open')]"/>  
-							<filter name="status_ant" string="Antar" domain="[('internal_status','=','antar')]"/>  
+							<filter name="status_ant" string="Antar" domain="[('internal_status','=','ANT')]"/>  
 							<filter name="status_sigesit" string="Sigesit" domain="[('internal_status','=','DLV')]"/>  
 							<filter name="status_cabang" string="Cabang" domain="[('internal_status','=','cabang')]"/>  
 							<filter name="status_pusat" string="Pusat" domain="[('internal_status','=','pusat')]"/>  
@@ -160,7 +162,11 @@
 							<filter name="status_rtn" string="RTPusat" domain="[('internal_status','=','RTN')]"/>  
 							<filter name="status_rtg" string="RTGerai" domain="[('internal_status','=','RTA')]"/>  
 							<filter name="status_rts" string="RTShipper" domain="[('internal_status','=','RTS')]"/>  
-							<filter name="my_resi" string="My Responsibility" domain="[('rds_destination.user_ids','in',[uid])]"/>
+
+						</group>
+						<group name="Filter By Time" string="Filter By Time">
+							<filter name="today" string="Today" domain="[('stt_date','=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+							<filter name="this_month" string="This Month" domain="[('stt_date','&gt;=', datetime.datetime.now().strftime('%Y-%m-01')),('stt_date','&lt;=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
 						</group>
 						<group name="Groupby" string="Group by">
 							<filter name="group_by_sigesit" string="Sigesit" context="{'group_by':'sigesit'}"/>
