@@ -68,6 +68,31 @@
                         <td></td>
                         <td><span t-field="o.total_entry_encoding" style="border-bottom: 4px double black;"/></td>
                     </tr>
+                    <tr>
+                        <td><br></br></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tandatangan</strong></td>
+                        <td>&#160;&#160;</td>
+                        <td>&#160;&#160;</td>
+                    </tr>
+                    <tr>
+                        <td>Admin Cabang</td>
+                        <td></td>
+                        <td>Sigesit</td>
+                    </tr>
+                    <tr>
+                        <td><br><br><br></br></br></br></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span t-field="o.user_id"/></td>
+                        <td></td>
+                        <td><span t-field="o.sigesit"/></td>
+                    </tr>
                 </table>
             </div>
         </t>
