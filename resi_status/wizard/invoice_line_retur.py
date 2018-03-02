@@ -27,4 +27,13 @@ class account_invoice_line_retur(models.TransientModel):
 			invoice_lines = [x.id for x in o.line_ids]
 			print "===============",invoice_lines
 			self.pool.get('account.invoice.line').package_returned(cr,uid,invoice_lines,context=context)
-		return True
+		datas = {
+			 'ids': invoice_lines,
+			 'model': 'account.invoice.line',
+			 # 'form': []
+			}
+		return {
+			'type': 'ir.actions.report.xml',
+			'report_name': 'resi_status.report_tanda_terima',
+			'datas': datas,
+			}

@@ -232,11 +232,11 @@ class account_invoice(models.Model):
 						'currency_id': diff_currency and inv.currency_id.id,
 						'ref': ref,
 					})
-				print "$$$$$$$$$ 1 $$$$$$$$$$",iml
+				# print "$$$$$$$$$ 1 $$$$$$$$$$",iml
 			else:
-				print "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				# print "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 				print inv.company_id.account_temp_1.id
-				print "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
+				# print "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
 				iml.append({
 					'type': 'dest',
 					'name': name,
@@ -247,7 +247,7 @@ class account_invoice(models.Model):
 					'currency_id': diff_currency and inv.currency_id.id,
 					'ref': ref,
 				})
-				print "$$$$$$$$$ 2 $$$$$$$$$$",iml
+				# print "$$$$$$$$$ 2 $$$$$$$$$$",iml
 			date = date_invoice
 
 			part = self.env['res.partner']._find_accounting_partner(inv.cod_customer)
@@ -321,7 +321,7 @@ class account_invoice_line_payment_type(models.Model):
 class account_invoice_line_tracking(models.Model):
 	_name = "account.invoice.line.tracking"
 
-	_order = "invoice_line_id asc, tracking_note_id asc, sequence asc"
+	_order = "pod_datetime asc, tracking_note_id asc, sequence asc"
 
 	invoice_line_id = fields.Many2one("account.invoice.line","Tracking ID")
 	sequence = fields.Integer("Sequence")
@@ -415,13 +415,20 @@ class account_invoice_line(models.Model):
 					last_tracking = y.user_tracking
 		return last_tracking
 
+	def getuser(self,cr,uid,ids,context=None):
+		if not context:context={}
+		user = self.pool.get('res.users').browse(cr,uid,uid)
+		return user.name
+
 	def get_last_sigesit(self,cr,uid,ids,context=None):
 		if not context:context={}
 		last_sigesit = False
 		if ids:
 			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
 				for y in x.tracking_ids:
-					last_sigesit = y.sigesit.name
+					if y.sigesit:
+						last_sigesit = y.sigesit.name
+		# print "============",last_sigesit
 		return last_sigesit
 
 	def get_last_position(self,cr,uid,ids,context=None):

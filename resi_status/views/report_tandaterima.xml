@@ -16,9 +16,9 @@
     <t t-call="report.html_container">
 
         <t t-foreach="docs" t-as="o">
-            <div class="header">
+            <div class="page">
                 <div class="row" style="text-align:left;">
-                    <strong>TANDA TERIMA BARANG /</strong>
+                    <strong>TANDA TERIMA BARANG </strong>
                 </div>
                 <div class="row" style="text-align:left;">
                     <table>
@@ -45,18 +45,30 @@
                      -->
                     </table>
                 </div>
-            </div>
-            <div class="page">
+           
                 <table class="row">
                     <tr>
-                        <td>Admin Cabang</td>
+                        <td> Diterima oleh : Admin Cabang</td>
                         <td>&#160;&#160;</td>
                         <td>(<span t-esc="o.get_last_position()"/>)</td>
                     </tr>
                     <tr>
-                        <td><span t-esc="o.get_last_tracking()"/></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="3">
+                            Jakarta, <span t-esc="time.strftime('%%d/%%m/%%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span t-esc="o.get_last_sigesit()"/></td>
+                        <td>&#160;&#160;</td>
+                        <td><span t-esc="o.getuser()"/></td>
                     </tr>
                 </table>
             </div>

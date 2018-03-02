@@ -143,7 +143,7 @@
 					<field name="account_analytic_id"/>
 					<field name="rds_destination"/>
 					<field name="price_cod"/>
-					<field name="price_package"/>
+					<field name="price_package" sum="Total Nilai COD"/>
 					<field name="nilai_edc"/>
 					<field name="sigesit"/>
 					<field name="internal_status"/>
@@ -163,6 +163,17 @@
 							<filter name="status_rtg" string="RTGerai" domain="[('internal_status','=','RTA')]"/>  
 							<filter name="status_rts" string="RTShipper" domain="[('internal_status','=','RTS')]"/>  
 
+						</group>
+						<group name="resi_bermasalah" string="Filter By Problem">
+							<filter name="nth" string="Not at Home" domain="[('internal_status','=','NTH')]"/>
+							<filter name="cc" string="Criss Cross" domain="[('internal_status','=','CC')]"/>
+							<filter name="cu" string="CNEE Unknown" domain="[('internal_status','=','CU')]"/>
+							<filter name="bad_address" string="Bad Address" domain="[('internal_status','=','BA')]"/>
+							<filter name="misroute" string="Misroute" domain="[('internal_status','=','MR')]"/>
+							<filter name="lost" string="Lost" domain="[('internal_status','=','LOST')]"/>
+							<filter name="broken" string="Broken" domain="[('internal_status','=','BROKEN')]"/>
+							<filter name="coda" string="CODA" domain="[('internal_status','=','CODA')]"/>
+							<filter name="all_problem" string="Semua Masalah" domain="[('internal_status','in',('NTH','CC','CU','BA','MR','LOST','BROKEN','CODA'))]"/>
 						</group>
 						<group name="Filter By Time" string="Filter By Time">
 							<filter name="today" string="Today" domain="[('stt_date','=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>

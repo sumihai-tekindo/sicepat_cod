@@ -131,5 +131,15 @@ class account_invoice_line_picker(models.TransientModel):
 			self.pool.get('account.bank.statement').button_confirm_cash(cr,uid,cr_id,context=context)
 			self.pool.get('account.bank.statement').button_open(cr,uid,cr_adm_id,context=context2)
 			self.pool.get('account.bank.statement').button_confirm_cash(cr,uid,cr_adm_id,context=context2)
-		return True
+		# return True
+		datas = {
+			 'ids': [cr_id],
+			 'model': 'account.bank.statement',
+			 # 'form': []
+			}
+		return {
+			'type': 'ir.actions.report.xml',
+			'report_name': 'resi_status.tanda_terima',
+			'datas': datas,
+			}
 
