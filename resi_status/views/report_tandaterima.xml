@@ -16,36 +16,42 @@
     <t t-call="report.html_container">
 
         <t t-foreach="docs" t-as="o">
-            <div class="page">
+            <div class="header">
                 <div class="row" style="text-align:left;">
-                    <strong>TANDA TERIMA BARANG </strong>
+                    <strong><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></strong>
                 </div>
                 <div class="row" style="text-align:left;">
-                    <table>
+                    <h3><strong style="border-bottom: 4px double black;">TANDA TERIMA BARANG</strong></h3>
+                </div>
+                <!-- <div class="row" style="text-align:left;">
+                    <strong><span t-esc="o.name"/></strong>
+                </div> -->
+            </div>
+            <div class="page">
+                <table class="row">
                     <tr style="text-align:left;">
+                    <td><strong>Sicepat Ekspres Indonesia</strong></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
                         <td>Telah diterima barang COD dari Kurir</td>
                         <td>&#160;:&#160;</td>
                         <td><span t-esc="o.get_last_sigesit()"/></td>
                     </tr>
                     <tr>
-                        <td>Untuk No.Resi</td>
+                        <td>Untuk No. Resi</td>
                         <td>&#160;:&#160;</td>
-                        <td><span t-esc="o.name"/></td>
+                        <td><span t-field="o.name"/></td>
                     </tr>
                     <tr>
                         <td>Pada Tanggal</td>
                         <td>&#160;:&#160;</td>
                         <td><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></td>
                     </tr>
-                    <!-- <tr>
-                        <td>Admin Cabang</td>
-                        <td>&#160;:&#160;</td>
-                        <td>Nama CAbang</td>
-                    </tr>
-                     -->
-                    </table>
-                </div>
-           
+                </table>
+                <br>
+                </br>
                 <table class="row">
                     <tr>
                         <td> Diterima oleh : Admin Cabang</td>
@@ -66,9 +72,24 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span t-esc="o.get_last_sigesit()"/></td>
+                        <td><strong>Tandatangan</strong></td>
                         <td>&#160;&#160;</td>
+                        <td>&#160;&#160;</td>
+                    </tr>
+                    <tr>
+                        <td>Admin Cabang</td>
+                        <td></td>
+                        <td>Sigesit</td>
+                    </tr>
+                    <tr>
+                        <td><br><br><br></br></br></br></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td><span t-esc="o.getuser()"/></td>
+                        <td>&#160;&#160;</td>
+                        <td><span t-esc="o.get_last_sigesit()"/></td>
                     </tr>
                 </table>
             </div>

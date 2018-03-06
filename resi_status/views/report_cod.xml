@@ -38,7 +38,7 @@
                     <tr>
                         <td>Nama Cabang</td>
                         <td>:&#160;</td>
-                        <td><span t-field="o.user_id"/></td>
+                        <td><span t-field="o.analytic_account_id"/></td>
                     </tr>
                     <tr>
                         <td>Penerima</td>
