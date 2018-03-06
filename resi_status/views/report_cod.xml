@@ -16,18 +16,19 @@
     <t t-call="report.html_container">
 
         <t t-foreach="docs" t-as="o">
-            <div class="header">
-                <div class="row" style="text-align:left;">
-                    <strong><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></strong>
-                </div>
-                <div class="row" style="text-align:left;">
-                    <h3><strong style="border-bottom: 4px double black;">TANDA TERIMA UANG</strong></h3>
-                </div>
-                <div class="row" style="text-align:left;">
-                    <strong><span t-esc="o.name"/></strong>
-                </div>
-            </div>
+            
             <div class="page">
+                <div class="header">
+                    <div class="row" style="text-align:left;">
+                        <strong><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></strong>
+                    </div>
+                    <div class="row" style="text-align:left;">
+                        <center><h4><strong style="border-bottom: 4px double black;">TANDA TERIMA UANG</strong></h4></center>
+                    </div>
+                    <div class="row" style="text-align:left;">
+                        <strong><span t-esc="o.name"/></strong>
+                    </div>
+                </div>
                 <table class="row">
                     <tr style="text-align:left;">
                     <td><strong>Sicepat Ekspres Indonesia</strong></td>
@@ -48,6 +49,11 @@
                         <td>Yang Menyerahkan</td>
                         <td>:&#160;</td>
                         <td><span t-field="o.sigesit"/></td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal Penyerahan</td>
+                        <td>:&#160;</td>
+                        <td><span t-field="o.closing_date"/></td>
                     </tr>
                 </table>
                 <br>
@@ -88,6 +94,11 @@
                         <td></td>
                         <td></td>
                     </tr>
+                     <tr>
+                        <td><br><br><br></br></br></br></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td><span t-field="o.user_id"/></td>
                         <td></td>
@@ -95,6 +106,8 @@
                     </tr>
                 </table>
             </div>
+
+
         </t>
     </t>
 </template>

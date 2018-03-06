@@ -15,19 +15,18 @@
 					<field name="journal_id"/>
 					<field name="analytic_account_id"/>
 					<field name="state"/>
-				<group>
-					<group name="Filter" string="Filter">
-						<filter name="no_setoran" string="Belum Ditransfer ke Kas Cabang" domain="[('admin_receipt_id','=',False)]"/>
+					<group>
+						<group name="filter" string="Filter">
+							<filter name="no_setoran" string="Belum Ditransfer ke Kas Cabang" domain="[('admin_receipt_id','=',False)]"/>
+						</group>
+						<group name="groupby" string="Group by">
+							<filter name="group_by_sigesit" string="Sigesit" context="{'group_by':'sigesit'}"/>
+							<filter name="group_by_date" string="Date" context="{'group_by':'date'}"/>
+							<filter name="group_by_analytic" string="Cabang" context="{'group_by':'analytic_account_id'}"/>
+							<filter name="state" string="Status" context="{'group_by':'state'}"/>
+						</group>
 					</group>
-					<group name="Groupby" string="Group by">
-						<field name="sigesit"/>
-						<field name="date"/>
-						<field name="analytic_account_id"/>
-						<field name="state"/>
-					</group>
-				</group>
 				</search>
-				
 			</field>
 		</record>
 
