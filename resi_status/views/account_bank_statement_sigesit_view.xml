@@ -558,6 +558,8 @@
 			  </p>
 			</field>
 		</record>
-
+		<menuitem id="cod_receipt" name="COD Receipts" parent="menu_cod_root" sequence="2"/>
+		<menuitem id="cod_receipt_sigesit" name="Sigesit" parent="cod_receipt" sequence="1" action="resi_status.action_view_bank_statement_sigesit_tree"/>
+		<menuitem id="cod_receipt_admin" name="Admin" parent="cod_receipt" sequence="2" action="resi_status.action_view_bank_statement_admin_tree"/>
 	</data>
 </openerp>

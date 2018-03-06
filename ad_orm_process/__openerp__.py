@@ -1,7 +1,7 @@
 {
     "name": "ORM Force",
     "version": "1.0",
-    "depends": ["base","sale","account","stock"],
+    "depends": ["base"],
     "author": "Dedi - Adsoft",
     "category": "Technical",
     "description": """

@@ -9,10 +9,10 @@
             name="resi_status.tanda_terima" 
             file="resi_status.tanda_terima"
         />
-
+    <record id="resi_status.report_cod_form" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="resi_status.paperformat_hprt"/>
+    </record>
 <template id="tanda_terima">
-    
-
     <t t-call="report.html_container">
 
         <t t-foreach="docs" t-as="o">
@@ -20,25 +20,26 @@
             <div class="page">
                 <div class="header">
                     <div class="row" style="text-align:left;">
-                        <strong><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></strong>
+                        Tgl Print: <span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/>
                     </div>
                     <div class="row" style="text-align:left;">
                         <center><h4><strong style="border-bottom: 4px double black;">TANDA TERIMA UANG</strong></h4></center>
                     </div>
                     <div class="row" style="text-align:left;">
-                        <strong><span t-esc="o.name"/></strong>
+                        <center><strong><span t-esc="o.name"/></strong></center>
                     </div>
                 </div>
-                <table class="row">
-                    <tr style="text-align:left;">
-                    <td><strong>Sicepat Ekspres Indonesia</strong></td>
+                <div>
+                    <br/>
+                </div>
+                <table style="margin-left:-12px;">
+                    <tr>
+                        <td colspan="3"><strong>Sicepat Ekspres Indonesia</strong></td>
                     </tr>
-                </table>
-                <table>
                     <tr>
                         <td>Nama Cabang</td>
                         <td>:&#160;</td>
-                        <td><span t-field="o.analytic_account_id"/></td>
+                        <td><span t-field="o.analytic_account_id.name"/></td>
                     </tr>
                     <tr>
                         <td>Penerima</td>
@@ -51,18 +52,17 @@
                         <td><span t-field="o.sigesit"/></td>
                     </tr>
                     <tr>
-                        <td>Tanggal Penyerahan</td>
+                        <td>Tanggal</td>
                         <td>:&#160;</td>
-                        <td><span t-field="o.closing_date"/></td>
+                        <td><span t-esc="formatLang(o.closing_date, date_time=True)"/></td>
                     </tr>
-                </table>
-                <br>
-                </br>
-                <table class="row">
                     <tr>
-                        <td>No. Resi</td>
-                        <td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;</td>
-                        <td>Nilai</td>
+                        <td colspan="3"><br/></td>
+                    </tr>
+                    <tr>
+                        <th>No. Resi</th>
+                        <th></th>
+                        <th>Nilai</th>
                     </tr>
                     <tr t-foreach="o.line_ids" t-as="line">
                         <td><span t-field="line.name"/></td>
@@ -70,9 +70,9 @@
                         <td><span t-field="line.amount"/></td>
                     </tr>
                     <tr>
-                        <td>Total</td>
-                        <td></td>
-                        <td><span t-field="o.total_entry_encoding" style="border-bottom: 4px double black;"/></td>
+                        <td style="border-top:1px solid black;">Total</td>
+                        <td style="border-top:1px solid black;"></td>
+                        <td style="border-top:1px solid black;"><span t-field="o.total_entry_encoding" style="border-bottom: 4px double black;"/></td>
                     </tr>
                     <tr>
                         <td><br></br></td>

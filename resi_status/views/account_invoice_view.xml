@@ -173,7 +173,8 @@
 							<filter name="lost" string="Lost" domain="[('internal_status','=','LOST')]"/>
 							<filter name="broken" string="Broken" domain="[('internal_status','=','BROKEN')]"/>
 							<filter name="coda" string="CODA" domain="[('internal_status','=','CODA')]"/>
-							<filter name="all_problem" string="Semua Masalah" domain="[('internal_status','in',('NTH','CC','CU','BA','MR','LOST','BROKEN','CODA'))]"/>
+							<filter name="codb" string="COD Bermasalah" domain="[('internal_status','=','CODB')]"/>
+							<filter name="all_problem" string="Semua Masalah" domain="[('internal_status','in',('NTH','CC','CU','BA','MR','LOST','BROKEN','CODA','CODB'))]"/>
 						</group>
 						<group name="Filter By Time" string="Filter By Time">
 							<filter name="today" string="Today" domain="[('stt_date','=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
@@ -252,7 +253,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="customer_invoice_line_resi_tick"/>
-			<field name="domain">[('source_recon_id','=',False),('user_ids','=',uid),('internal_status','in',('BA','MR','CODA','LOST','BROKEN','HOLD','CC','CU','NTH')),('invoice_id.type','=','out_invoice')]</field>
+			<field name="domain">[('source_recon_id','=',False),('user_ids','=',uid),('internal_status','in',('BA','MR','CODA','CODB','LOST','BROKEN','HOLD','CC','CU','NTH')),('invoice_id.type','=','out_invoice')]</field>
 			<field name="context">{'problem':True}</field>
 		</record>
 		<record model="ir.actions.act_window.view" id="act_invoice_line_resi_tick_tree_my_problem">
@@ -276,8 +277,6 @@
 		<menuitem id="menu_cod_resi_tick_my" parent="menu_cod" name="My Resi Numbers" action="action_customer_invoice_line_resi_tick_my" sequence="1"/>
 		<menuitem id="menu_cod_resi_tick_my_problem" parent="menu_cod" name="My Problems" action="action_customer_invoice_line_resi_tick_my_problem" sequence="2"/>
 		
-		<menuitem id="cod_receipt" name="COD Receipts" parent="menu_cod_root" sequence="2"/>
-		<menuitem id="cod_receipt_sigesit" name="Sigesit" parent="cod_receipt" sequence="1" action="resi_status.action_view_bank_statement_sigesit_tree"/>
-		<menuitem id="cod_receipt_admin" name="Admin" parent="cod_receipt" sequence="2" action="resi_status.action_view_bank_statement_admin_tree"/>
+		
 	</data>
 </openerp>

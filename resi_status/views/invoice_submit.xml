@@ -4,20 +4,18 @@
 			<field name="name">account.invoice.line.submit.form</field>
 			<field name="model">account.invoice.line.submit</field>
 			<field name="arch" type="xml">
-				<form string="Access Denied" groups="resi_status.group_cod_cabang">
-					<group string="ACCESS DENIED, only head office can use this menu">
+				<form string="Resi Picker">
+					<group string="ACCESS DENIED, only head office can use this menu" groups="resi_status.group_cod_cabang">
 					</group>
-				</form>
-				<form string="Resi Picker" groups="account.group_account_invoice">
-					<group string="General Info">
+					<group string="General Info" groups="account.group_account_invoice">
 						<field name="partner_id"/>
 						<field name="user_id"/>
 						<field name="journal_id" readonly="1"/>
 						<field name="date_invoice"/>
 						<field name="existing_id"/>
 					</group>
-					<notebook>
-						<page string="Resi Items">
+					<notebook groups="account.group_account_invoice">
+						<page string="Resi Items" groups="account.group_account_invoice">
 							<field name="line_ids" colspan="4" nolabel="1"/>
 						</page>
 					</notebook>

@@ -364,6 +364,7 @@ class account_invoice_line(models.Model):
 										('BA',"Bad Address"),
 										('MR',"Misroute"),
 										('CODA',"Closed Once Delivery Attempt"),
+										('CODB',"COD Bermasalah"),
 										('LOST',"Barang Hilang"),
 										('BROKEN',"Barang Rusak"),
 										('RTN',"Retur ke Pusat"),
@@ -420,16 +421,18 @@ class account_invoice_line(models.Model):
 		user = self.pool.get('res.users').browse(cr,uid,uid)
 		return user.name
 
-	def get_last_sigesit(self,cr,uid,ids,context=None):
+	def get_last_sigesit(self,cr,uid,ids,info='sigesit',context=None):
 		if not context:context={}
 		last_sigesit = False
+		last_date = False
 		if ids:
 			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
 				for y in x.tracking_ids:
 					if y.sigesit:
 						last_sigesit = y.sigesit.name
+						last_date = y.pod_datetime
 		# print "============",last_sigesit
-		return last_sigesit
+		return info=='sigesit' and last_sigesit or last_date
 
 	def get_last_position(self,cr,uid,ids,context=None):
 		if not context:context={}
@@ -437,7 +440,7 @@ class account_invoice_line(models.Model):
 		if ids:
 			for x in self.pool.get('account.invoice.line').browse(cr,uid,ids,context=context):
 				for y in x.tracking_ids:
-					last_position = y.position_id.name
+					last_position = y.user_tracking
 		return last_position
 
 	@api.model

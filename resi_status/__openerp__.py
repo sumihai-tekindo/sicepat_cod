@@ -11,6 +11,7 @@
         'security/ir.model.access.csv',
         'scheduler/ir_cron.xml',
         'workflow/account_invoice_workflow.xml',
+        'datas/hprt_paper_format.xml',
         'views/account_invoice_view.xml',
         'views/paket_bermasalah_view.xml',
         'views/rds_destination_view.xml',

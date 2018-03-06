@@ -12,8 +12,13 @@
             <field name="users" eval="[(4, ref('base.user_root'))]"/>
         </record>
         <record id="group_cod_pusat" model="res.groups">
-            <field name="name">COD Pusat</field>
-            <field name="comment">The user is specified for COD in head office</field>
+            <field name="name">COD Pusat Finance</field>
+            <field name="comment">The user is specified for COD Finance in head office</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_cod_cs" model="res.groups">
+            <field name="name">COD Pusat CS</field>
+            <field name="comment">The user is specified for COD CS in head office</field>
             <field name="users" eval="[(4, ref('base.user_root'))]"/>
         </record>
         <record id="pod_rule_invoice_line" model="ir.rule">

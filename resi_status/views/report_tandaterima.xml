@@ -9,66 +9,64 @@
             name="resi_status.report_tanda_terima" 
             file="resi_status.report_tanda_terima"
         />
-
+    <record id="resi_status.report_invoice_form" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="resi_status.paperformat_hprt"/>
+    </record>
 <template id="report_tanda_terima">
     
 
     <t t-call="report.html_container">
 
         <t t-foreach="docs" t-as="o">
-            <div class="header">
-                <div class="row" style="text-align:left;">
-                    <strong><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></strong>
-                </div>
-                <div class="row" style="text-align:left;">
-                    <h3><strong style="border-bottom: 4px double black;">TANDA TERIMA BARANG</strong></h3>
-                </div>
-                <!-- <div class="row" style="text-align:left;">
-                    <strong><span t-esc="o.name"/></strong>
-                </div> -->
-            </div>
+            
             <div class="page">
-                <table class="row">
+                <div class="header">
+                    <div class="row" style="text-align:left;">
+                        Tanggal print : <span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/>
+                    </div>
+                    <div class="row" style="text-align:left;">
+                        <h4><strong style="border-bottom: 4px double black;">TANDA TERIMA BARANG</strong></h4>
+                    </div>
+                    <!-- <div class="row" style="text-align:left;">
+                        <strong><span t-esc="o.name"/></strong>
+                    </div> -->
+                </div>
+                <table style="margin-left:-12px;">
                     <tr style="text-align:left;">
-                    <td><strong>Sicepat Ekspres Indonesia</strong></td>
+                        <td colspan="3"><strong>Sicepat Ekspres Indonesia</strong></td>
                     </tr>
-                </table>
-                <table>
                     <tr>
-                        <td>Telah diterima barang COD dari Kurir</td>
+                        <td>Telah diterima dari Kurir</td>
                         <td>&#160;:&#160;</td>
-                        <td><span t-esc="o.get_last_sigesit()"/></td>
+                        <td><span t-esc="o.get_last_sigesit(info='sigesit')"/></td>
                     </tr>
                     <tr>
-                        <td>Untuk No. Resi</td>
+                        <td>Barang Untuk No. Resi</td>
                         <td>&#160;:&#160;</td>
                         <td><span t-field="o.name"/></td>
                     </tr>
                     <tr>
                         <td>Pada Tanggal</td>
                         <td>&#160;:&#160;</td>
-                        <td><span t-esc="time.strftime('%%d/%%m/%%Y %%H:%%M:%%S')"/></td>
+                        <td><span t-esc="formatLang(o.get_last_sigesit(info='date'),date_time=True)"/></td>
                     </tr>
-                </table>
-                <br>
-                </br>
-                <table class="row">
                     <tr>
-                        <td> Diterima oleh : Admin Cabang</td>
-                        <td>&#160;&#160;</td>
+                        <td> Diterima oleh</td>
+                        <td>&#160;:&#160;</td>
                         <td>(<span t-esc="o.get_last_position()"/>)</td>
                     </tr>
+                    
                     <tr>
                         <td colspan="3">
-                            Jakarta, <span t-esc="time.strftime('%%d/%%m/%%Y')"/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
+                            Jakarta, <span t-esc="time.strftime('%%d/%%m/%%Y')"/>
                         </td>
                     </tr>
                     <tr>
@@ -90,6 +88,13 @@
                         <td><span t-esc="o.getuser()"/></td>
                         <td>&#160;&#160;</td>
                         <td><span t-esc="o.get_last_sigesit()"/></td>
+                    </tr>
+                     <tr>
+                        <td colspan="3">
+                            <br/>
+                            <br/>
+
+                        </td>
                     </tr>
                 </table>
             </div>
