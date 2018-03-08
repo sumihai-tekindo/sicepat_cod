@@ -186,7 +186,7 @@ class account_invoice(models.Model):
 			cr_pickup.execute(query_pickup)
 			records = cr_pickup.fetchall()
 			for record in records:
-				detail_value = {'detail_barang':record['parcelcontent'],'cust_package_number':record['cust_package_id']}
+				detail_value = {'detail_barang':record['parcel_content'],'cust_package_number':record['cust_package_id']}
 				resi = record['ReceiptNumber']
 				if invoice_dict.get(resi,False):
 					self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
