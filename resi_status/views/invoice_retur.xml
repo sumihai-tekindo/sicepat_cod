@@ -6,7 +6,7 @@
 			<field name="arch" type="xml">
 				<form string="Resi Picker">
 					<group string="General Info">
-						<field name="user_id"/>
+						<field name="user_id" readonly="1"/>
 					</group>
 					<notebook>
 						<page string="Resi Numbers">

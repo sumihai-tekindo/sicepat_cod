@@ -48,7 +48,7 @@
                     <tr>
                         <td>Pada Tanggal</td>
                         <td>&#160;:&#160;</td>
-                        <td><span t-esc="formatLang(o.get_last_sigesit(info='date'),date_time=True)"/></td>
+                        <td><span t-esc="o.get_last_sigesit(info='date')"/></td>
                     </tr>
                     <tr>
                         <td> Diterima oleh</td>

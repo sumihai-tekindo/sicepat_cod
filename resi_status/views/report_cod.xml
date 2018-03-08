@@ -26,7 +26,7 @@
                         <center><h4><strong style="border-bottom: 4px double black;">TANDA TERIMA UANG</strong></h4></center>
                     </div>
                     <div class="row" style="text-align:left;">
-                        <center><strong><span t-esc="o.name"/></strong></center>
+                        <center><strong><span t-field="o.name"/></strong></center>
                     </div>
                 </div>
                 <div>
@@ -54,7 +54,7 @@
                     <tr>
                         <td>Tanggal</td>
                         <td>:&#160;</td>
-                        <td><span t-esc="formatLang(o.closing_date, date_time=True)"/></td>
+                        <td><span t-field="o.closing_date"/></td>
                     </tr>
                     <tr>
                         <td colspan="3"><br/></td>
