@@ -152,7 +152,7 @@ class account_bank_statement_picker(models.TransientModel):
 							'date'			: date_period,
 							'amount'		: cgesit.total_entry_encoding,
 							'internal_status': context.get('destination','pusat'),
-							'account_id'	: picker.journal_id and picker.journal_id.default_debit_account_id and picker.journal_id.default_debit_account_id.id,
+							'account_id'	: cgesit.journal_id and cgesit.journal_id.default_debit_account_id and cgesit.journal_id.default_debit_account_id.id,
 							'account_analytic_id': account_analytic_id and account_analytic_id[0] or False,
 							'invoice_line_ids':[(4,linex)],
 							'statement_id'	: cr_id,
