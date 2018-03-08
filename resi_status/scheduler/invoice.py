@@ -51,14 +51,28 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pickup_config.update({'port' : x.value})
 
-		cnx = mysql.connector.connect(**config)
-		cur = cnx.cursor()
-		querystt = """select s.tgltransaksi,s.pengirim,s.nostt,s.penerima,s.codNilai,coalesce(g.kode) as kode,tujuan,Layanan   
-					from rudydarw_sicepat.stt s 
-					left join Gerai g on s.gerai=g.id 
-					where s.codNilai>0.0 and s.iscodpulled != 1 and tujuan is not NULL
-					order by s.tgltransaksi asc,s.pengirim asc,s.nostt asc
-				 """
+
+		pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
+				port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
+		cur = pickup_conn.cursor(as_dict=False)
+		querystt = """select 
+			stt.tgltransaksi,
+			stt.pengirim,
+			stt.nostt, 
+			pre.recipient_name as penerima,
+			pre.cod_value as codNilai,
+			mts.SiteCode as kode,
+			stt.tujuan,
+			stt.Layanan,
+			pre.parcel_content,
+			pre.cust_package_id
+			from
+			PICKUPORDER.dbo.PartnerRequestExt pre with (nolock)
+			left join BOSICEPAT.POD.dbo.stt stt with (nolock) on stt.nostt=pre.ReceiptNumber
+			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
+			where pre.cod_value >0.0 and stt.tgltransaksi >='2018-03-07 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
+			order by stt.tgltransaksi asc,stt.pengirim asc,stt.nostt asc
+			"""
 		
 		cur.execute(querystt)
 		result = cur.fetchall()
@@ -71,13 +85,14 @@ class account_invoice(models.Model):
 		data = {}
 		all_cod_cust = []
 		for r in result:
-			
+			print "-----------------",r
 			data_tgl = data.get(r[0],{})
 			tgl_pengirim = data_tgl.get(r[1],{})
 			all_cod_cust.append(r[1])
-			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4],'asal':r[5],'tujuan':r[6],'layanan':r[7]}})
+			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4],'asal':r[5],'tujuan':r[6],'layanan':r[7],'parcel_content':r[8],'cust_package_id':r[9]}})
 			data_tgl.update({r[1]:tgl_pengirim})
 			data.update({r[0]:data_tgl})
+		print "======================",data
 		all_cod_cust=list(set(all_cod_cust))
 
 		partner_cod_ids = self.pool.get('res.partner').search(cr,uid,[('name','in',all_cod_cust)])
@@ -141,6 +156,8 @@ class account_invoice(models.Model):
 								'price_unit'			:	awbs.get(awb).get('price_unit',0.0),
 								'recipient'				:	awbs.get(awb).get('penerima',0.0),
 								'price_package'			:	awbs.get(awb).get('price_unit',0.0),
+								'detail_barang'			:	awbs.get(awb).get('parcel_content',0.0),
+								'cust_package_number'	:	awbs.get(awb).get('cust_package_id',0.0),
 								'account_analytic_id'	:	analytic.get(awbs.get(awb).get('asal',0.0)),
 								'internal_status'		:	'open',
 								'rds_destination'		: 	rds_destination.get(awbs.get(awb).get('tujuan',0.0)),
@@ -154,7 +171,7 @@ class account_invoice(models.Model):
 						created_invoices.append(inv_id)
 		invoice_line = self.pool.get('account.invoice.line').search(cr,uid,[('invoice_id','in',created_invoices)])
 		
-		cnx.close()
+		# cnx.close()
 		cur.close()
 		to_update = ""
 		invoice_dict = {}
@@ -165,14 +182,14 @@ class account_invoice(models.Model):
 			invoice_list.append(x.name)
 		if to_update!="":
 			to_update=to_update[:-1]
-			query_update = """update stt set iscodpulled=1 where nostt in (%s)"""%to_update
-			cnx2 = mysql.connector.connect(**config)
+			query_update = """update BOSICEPAT.POD.dbo.stt set iscodpulled=1 where nostt in (%s)"""%to_update
+			cnx2 = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
+				port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
 			cur2 = cnx2.cursor()
 			cur2.execute(query_update)
-			cur2.close()
 			cnx2.close()
 
-			query_pickup = """select ReceiptNumber,parcel_content,cust_package_id from PartnerRequestExt WITH (NOLOCK) where ReceiptNumber in (%s)"""%to_update
+			# query_pickup = """select ReceiptNumber,parcel_content,cust_package_id from PartnerRequestExt WITH (NOLOCK) where ReceiptNumber in (%s)"""%to_update
 			# ss_pickup_config = {
 			# 'user'		: '',
 			# 'password'	: '',
@@ -180,17 +197,17 @@ class account_invoice(models.Model):
 			# 'database' 	: '',
 			# 'port'		: '',
 			# }
-			pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
-				port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
-			cr_pickup = pickup_conn.cursor(as_dict=True)
-			cr_pickup.execute(query_pickup)
-			records = cr_pickup.fetchall()
-			for record in records:
-				detail_value = {'detail_barang':record['parcel_content'],'cust_package_number':record['cust_package_id']}
-				resi = record['ReceiptNumber']
-				if invoice_dict.get(resi,False):
-					self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
-			pickup_conn.close()
+			# pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
+				# port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
+			# cr_pickup = pickup_conn.cursor(as_dict=True)
+			# cr_pickup.execute(query_pickup)
+			# records = cr_pickup.fetchall()
+			# for record in records:
+			# 	detail_value = {'detail_barang':record['parcel_content'],'cust_package_number':record['cust_package_id']}
+			# 	resi = record['ReceiptNumber']
+			# 	if invoice_dict.get(resi,False):
+			# 		self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
+			# pickup_conn.close()
 		return result
 
 

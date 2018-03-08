@@ -32,7 +32,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('internal_status','in',('open','IN','OUT','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('internal_status','in',('open','IN','PICKREQ','OUT','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD'))])
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
 			for x in outstanding_awb:
@@ -55,19 +55,19 @@ class account_invoice(models.Model):
 					select tn.Id,
 							tn.ReceiptNumber,
 							tn.TrackingType,
-							tn.TrackingDatetime,
+							DATEADD(hour, -7, tn.TrackingDatetime) as TrackingDatetime,
 							ts.SiteCode,
 							ts.Name ,
 							dh.CourierName,
 							emp.EmployeeNo,
-							LEAD(tn.TrackingType) over (ORDER BY tn.Id) as nexttn 
+							LEAD(tn.TrackingType) over (ORDER BY tn.TrackingDatetime) as nexttn 
 						from BOSICEPAT.POD.dbo.TrackingNote tn WITH (NOLOCK) 
 						left join BOSICEPAT.POD.dbo.MsTrackingSite ts with (NOLOCK) on tn.TrackingSiteId=ts.Id
 						left join PICKUPORDER.dbo.ReceivedResi rr with (NOLOCK) on tn.ReceiptNumber=rr.NoResi
 						left join PICKUPORDER.dbo.DeliveryHistory dh with (nolock) on rr.Id=dh.ReceivedResiId
 						left join PICKUPORDER.dbo.MsCourier cour with (nolock) on cour.Id=dh.CourierId
 						left join EPETTYCASH.dbo.MsEmployee emp with (nolock) on emp.Id=cour.EmployeeId
-						where tn.ReceiptNumber='%s' %s 
+						where tn.ReceiptNumber='%s' and tn.TrackingType!='PICKREQ' %s 
 					) dummy_table
 					where TrackingType<>coalesce(nexttn,'NONE') """%(x.name,add_clause)
 				# print "queryxxxxxxxxxxxxxxxxx",query_pod
@@ -83,14 +83,16 @@ class account_invoice(models.Model):
 				cr_pod = pod_conn.cursor(as_dict=True)
 				cr_pod.execute(query_pod)
 				records = cr_pod.fetchall()
+				
+				isdlv = False
 				for record in records:
-					print "reccccccccccccccc",record
+					# print "reccccccccccccccc",record
 					analytic_id = analytic_pool.search(cr,uid,[('code','=',record['SiteCode'])])
 					try:
 						analytic_id = analytic_id[0]
 					except:
 						analytic_id = analytic_id
-					print "xxxxxxxxxxxxxxxxxxxxxxxx",record['EmployeeNo']
+					# print "xxxxxxxxxxxxxxxxxxxxxxxx",record['EmployeeNo']
 					emp_id = gesit_pool.search(cr,uid,[('nik','=',record['EmployeeNo'])],context={})
 					try:
 						emp_id = emp_id[0]
@@ -113,10 +115,10 @@ class account_invoice(models.Model):
 						'sigesit':emp_id or False,
 						'analytic_destination':analytic_id or False,
 					}
-					if x.name=='000045362066':
-						print "### 1 ####",detail_value
-						print "### 2 ####",invl_write_value
-					self.pool.get('account.invoice.line.tracking').create(cr,uid,detail_value)
-					self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
+					if isdlv==False:
+						self.pool.get('account.invoice.line.tracking').create(cr,uid,detail_value)
+						self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
+					if record['TrackingType']=='DLV':
+						isdlv=True
 				pod_conn.close()
 			return True

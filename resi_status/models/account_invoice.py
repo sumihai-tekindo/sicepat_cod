@@ -398,7 +398,7 @@ class account_invoice_line(models.Model):
 	update_unblock_failed = fields.Boolean("Update Unblocked to POD",help="True if update to POD is failed")
 	recon_inv_line_id = fields.Many2one('account.invoice.line','Reconciliation Invoice Line',ondelete="set null")
 	recon_inv_id = fields.Many2one('account.invoice','Reconciliation Invoice Line',ondelete="set null")
-	source_recon_id = fields.Many2one('account.invoice.line',"Reconciliation AWB Source",)
+	source_recon_id = fields.Many2one('account.invoice.line',"Reconciliation AWB Source",ondelete="set null")
 	rds_destination = fields.Many2one('rds.destination',"RDS Destination")
 	analytic_destination = fields.Many2one('account.analytic.account',"Current Position Branch")
 	tracking_ids = fields.One2many('account.invoice.line.tracking','invoice_line_id',"Tracking Lines")
@@ -499,12 +499,12 @@ class account_invoice_line(models.Model):
 		#print "###########################"
 		return res
 		
-	def unlink(self,cr,uid,ids,context=None):
-		if not context:context={}
-		res = super(account_invoice_line,self).unlink(cr,uid,ids,context=context)
-		for invl in self.browse(cr,uid,ids,context):
-			if invl.source_recon_id and invl.source_recon_id.id:
-				invl.source_recon_id.write()
+	# def unlink(self,cr,uid,ids,context=None):
+	# 	if not context:context={}
+	# 	res = super(account_invoice_line,self).unlink(cr,uid,ids,context=context)
+	# 	for invl in self.browse(cr,uid,ids,context):
+	# 		if invl.source_recon_id and invl.source_recon_id.id:
+	# 			invl.source_recon_id.write({'invlso'})
 
 	def package_returned(self,cr,uid,ids,context=None):
 		if not context:context={}
