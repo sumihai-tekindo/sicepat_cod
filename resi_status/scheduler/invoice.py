@@ -37,6 +37,8 @@ class account_invoice(models.Model):
 			'database' 	: '',
 			'port'		: '',
 			}
+
+		
 		if ss_pickup_ids:
 			ss_pickup = self.pool.get('ir.config_parameter').browse(cr,uid,ss_pickup_ids)
 			for x in ss_pickup:
@@ -51,6 +53,28 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pickup_config.update({'port' : x.value})
 
+
+		ss_pickup2_ids = self.pool.get('ir.config_parameter').search(cr,uid,[('key','in',['sqlbo.url','sqlbo.db','sqlbo.db_port','sqlbo.user','sqlbo.password'])])
+		ss_pickup2_config = {
+			'user'		: '',
+			'password'	: '',
+			'host' 		: '',
+			'database' 	: '',
+			'port'		: '',
+			}
+		if ss_pickup2_ids:
+			ss_pickup2 = self.pool.get('ir.config_parameter').browse(cr,uid,ss_pickup2_ids)
+			for x in ss_pickup2:
+				if x.key =='sqlbo.url':
+					ss_pickup2_config.update({'host' : x.value})
+				elif x.key =='sqlbo.db':
+					ss_pickup2_config.update({'database' : x.value})
+				elif x.key =='sqlbo.user':
+					ss_pickup2_config.update({'user' : x.value})
+				elif x.key =='sqlbo.password':
+					ss_pickup2_config.update({'password' : x.value})
+				elif x.key =='sqlbo.db_port':
+					ss_pickup2_config.update({'port' : x.value})
 
 		pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
 				port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
@@ -92,7 +116,7 @@ class account_invoice(models.Model):
 			tgl_pengirim.update({r[2]:{'penerima':r[3],'price_unit':r[4],'asal':r[5],'tujuan':r[6],'layanan':r[7],'parcel_content':r[8],'cust_package_id':r[9]}})
 			data_tgl.update({r[1]:tgl_pengirim})
 			data.update({r[0]:data_tgl})
-		print "======================",data
+		# print "======================",data
 		all_cod_cust=list(set(all_cod_cust))
 
 		partner_cod_ids = self.pool.get('res.partner').search(cr,uid,[('name','in',all_cod_cust)])
@@ -182,9 +206,9 @@ class account_invoice(models.Model):
 			invoice_list.append(x.name)
 		if to_update!="":
 			to_update=to_update[:-1]
-			query_update = """update BOSICEPAT.POD.dbo.stt set iscodpulled=1 where nostt in (%s)"""%to_update
-			cnx2 = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
-				port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
+			query_update = """update POD.dbo.stt set iscodpulled=1 where nostt in (%s)"""%to_update
+			cnx2 = pymssql.connect(server=ss_pickup2_config['host'], user=ss_pickup2_config['user'], password=ss_pickup2_config['password'], 
+				port=str(ss_pickup2_config['port']), database=ss_pickup2_config['database'])
 			cur2 = cnx2.cursor()
 			cur2.execute(query_update)
 			cnx2.close()
