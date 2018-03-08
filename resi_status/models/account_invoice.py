@@ -356,6 +356,7 @@ class account_invoice_line(models.Model):
 	payment_type = fields.Many2one('acc.invoice.line.pt',string='Payment Type')
 	internal_status = fields.Selection([('open','Open'),
 										('IN',"Barang Masuk"),
+										('PICKREQ',"Pick Up Request"),
 										('OUT',"Barang Keluar"),
 										('CC',"Criss Cross"),
 										('CU',"CKNEE Unknown"),
