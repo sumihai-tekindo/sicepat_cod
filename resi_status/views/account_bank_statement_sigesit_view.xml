@@ -567,5 +567,96 @@
 		<menuitem id="cod_receipt" name="COD Receipts" parent="menu_cod_root" sequence="2"/>
 		<menuitem id="cod_receipt_sigesit" name="Sigesit" parent="cod_receipt" sequence="1" action="resi_status.action_view_bank_statement_sigesit_tree"/>
 		<menuitem id="cod_receipt_admin" name="Admin" parent="cod_receipt" sequence="2" action="resi_status.action_view_bank_statement_admin_tree"/>
+
+
+		<!-- CR Gesit No filter -->
+
+		<record id="action_view_bank_statement_sigesit_tree_nf" model="ir.actions.act_window">
+			<field name="name">CR Sigesit No Filter</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.bank.statement</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+			<field name="view_id" ref="account_bank_statement_sigesit_tree_view"/>
+			<field name="search_view_id" ref="account_bank_statement_sigesit_search_view"/>
+			<field name="domain">[('journal_id.type', '=', 'cash'),('register_type','=','cr_gesit')]</field>
+			<field name="context">{'default_no_setoran':1, 'search_default_no_setoran':1,'journal_type':'cash','register_type':'cr_gesit',}</field>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to create a new cash sigesit log.
+			  </p><p>
+				A Cash Register Sigesit allows you to manage cash entries in your cash
+				journals. This feature provides an easy way to follow up cash
+				payments on a daily basis. You can enter the coins that are in
+				your cash box, and then post entries when money comes in or
+				goes out of the cash box.
+			  </p>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="act_view_bank_statement_sigesit_tree_nf">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="account_bank_statement_sigesit_tree_view"/>
+			<field name="act_window_id" ref="action_view_bank_statement_sigesit_tree_nf"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_view_bank_statement_sigesit_form_nf">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account_bank_statement_sigesit_form_view"/>
+			<field name="act_window_id" ref="action_view_bank_statement_sigesit_tree_nf"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_view_bank_statement_sigesit_graph_nf">
+			<field name="sequence" eval="3"/>
+			<field name="view_mode">graph</field>
+			<field name="view_id" ref="account_bank_statement_sigesit_graph"/>
+			<field name="act_window_id" ref="action_view_bank_statement_sigesit_tree_nf"/>
+		</record>
+		<menuitem id="cash_register_menu_nf" name="CR Sigesit No Filter" parent="account.menu_finance_bank_and_cash" action="action_view_bank_statement_sigesit_tree_nf" sequence="19"/>
+
+		<!-- CR Admin No filter -->
+		<record id="action_view_bank_statement_admin_tree_nf" model="ir.actions.act_window">
+			<field name="name">CR Admin No Filter</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.bank.statement</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+			<field name="view_id" ref="account_bank_statement_sigesit_tree_view"/>
+			<field name="search_view_id" ref="account_bank_statement_admin_search_view"/>
+			<field name="domain">[('journal_id.type', '=', 'cash'),('register_type','=','cr_admin')]</field>
+			<field name="context">{'default_no_setoran':1, 'search_default_no_setoran':1,'journal_type':'cash','register_type':'cr_admin'}</field>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to create a new cash log.
+			  </p><p>
+				A Cash Register Admin allows you to manage cash entries in your cash
+				journals. This feature provides an easy way to follow up cash
+				payments on a daily basis. You can enter the coins that are in
+				your cash box, and then post entries when money comes in or
+				goes out of the cash box.
+			  </p>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="act_view_bank_statement_admin_tree_nf">
+			<field name="sequence" eval="1"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="account_bank_statement_admin_tree_view"/>
+			<field name="act_window_id" ref="action_view_bank_statement_admin_tree_nf"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_view_bank_statement_admin_form_nf">
+			<field name="sequence" eval="2"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account_bank_statement_admin_form_view"/>
+			<field name="act_window_id" ref="action_view_bank_statement_admin_tree_nf"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="act_view_bank_statement_admin_graph_nf">
+			<field name="sequence" eval="3"/>
+			<field name="view_mode">graph</field>
+			<field name="view_id" ref="account_bank_statement_admin_graph"/>
+			<field name="act_window_id" ref="action_view_bank_statement_admin_tree_nf"/>
+		</record>
+
+		<menuitem id="cod_receipt_admin_nf" name="Admin No Filter" parent="account.menu_finance_bank_and_cash" sequence="20" action="resi_status.action_view_bank_statement_admin_tree_nf"/>
 	</data>
 </openerp>

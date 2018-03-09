@@ -47,8 +47,8 @@
 					<field name="account_analytic_id" invisible="1"/>
 					<field name="analytic_destination"/>
 					<field name="rds_destination" invisible="1"/>
-					<field name="price_cod"/>
-					<field name="price_package"/>
+					<field name="price_cod" invisible="1"/>
+					<field name="price_package" sum="Total"/>
 					<field name="nilai_edc"/>
 					<field name="sigesit"/>
 					<field name="internal_status"/>
