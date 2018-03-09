@@ -2,6 +2,18 @@ from openerp import models, fields,api, _
 from datetime import datetime
 from openerp.osv import osv, expression
 
+class account_bank_statement(models.Model):
+	_inherit="account.bank.statement"
+
+	@api.one
+	@api.depends('analytic_account_id')
+	def _compute_users(self,):
+		if self.analytic_account_id:
+			user_ids = self.env['res.users'].sudo().search([('analytic_id','=',self.analytic_account_id.id)])
+			self.user_ids = user_ids
+
+	user_ids = fields.Many2many('res.users',string='Users', store=True, readonly=True, compute='_compute_users')
+
 class account_bank_statement_line(models.Model):
 	_inherit="account.bank.statement.line"
 

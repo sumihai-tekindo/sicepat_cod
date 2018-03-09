@@ -22,6 +22,8 @@ class account_bank_statement(osv.osv):
 				return 'bs_normal'
 		return 'bs_normal'
 
+	
+
 	_columns = {
 
 		"register_type" : fields.selection(
@@ -36,8 +38,8 @@ class account_bank_statement(osv.osv):
 		"notes": fields.text("Notes"),
 		"reference_number": fields.char("Nomor Transfer"),
 		"attachment": fields.binary("Bukti Transfer",
-            help="File bukti transfer bank"),
-
+			help="File bukti transfer bank"),
+		
 		}
 
 	_defaults = {

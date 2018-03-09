@@ -149,6 +149,9 @@
 						<page string="Journal Entries Sigesit" attrs="{'invisible': [('state','!=','confirm')]}">
 							<field name="move_line_ids" string="Journal Entries Sigesit"/>
 						</page>
+						<page string="User Responsibles">
+							<field name="user_ids" string="User Responsibles" nolabel="1"/>
+						</page>
 					</notebook>
 					<group>
 						<group class="oe_subtotal_footer oe_right">
@@ -198,7 +201,7 @@
 			<field name="view_mode">tree,form,graph</field>
 			<field name="view_id" ref="account_bank_statement_sigesit_tree_view"/>
 			<field name="search_view_id" ref="account_bank_statement_sigesit_search_view"/>
-			<field name="domain">[('journal_id.type', '=', 'cash'),('register_type','=','cr_gesit')]</field>
+			<field name="domain">[('journal_id.type', '=', 'cash'),('register_type','=','cr_gesit'),('user_ids','=',uid)]</field>
 			<field name="context">{'default_no_setoran':1, 'search_default_no_setoran':1,'journal_type':'cash','register_type':'cr_gesit',}</field>
 			<field name="help" type="html">
 			  <p class="oe_view_nocontent_create">
@@ -377,6 +380,9 @@
 						<page string="Journal Entries Admin" attrs="{'invisible': [('state','!=','confirm')]}">
 							<field name="move_line_ids" string="Journal Entries Admin"/>
 						</page>
+						<page string="User Responsibles">
+							<field name="user_ids" string="User Responsibles" nolabel="1"/>
+						</page>
 					</notebook>
 					<group>
 						<group class="oe_subtotal_footer oe_right">
@@ -425,7 +431,7 @@
 			<field name="view_mode">tree,form,graph</field>
 			<field name="view_id" ref="account_bank_statement_sigesit_tree_view"/>
 			<field name="search_view_id" ref="account_bank_statement_admin_search_view"/>
-			<field name="domain">[('journal_id.type', '=', 'cash'),('register_type','=','cr_admin')]</field>
+			<field name="domain">[('journal_id.type', '=', 'cash'),('register_type','=','cr_admin'),('user_ids','=',uid)]</field>
 			<field name="context">{'default_no_setoran':1, 'search_default_no_setoran':1,'journal_type':'cash','register_type':'cr_admin'}</field>
 			<field name="help" type="html">
 			  <p class="oe_view_nocontent_create">
