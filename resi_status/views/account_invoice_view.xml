@@ -186,6 +186,7 @@
 							<filter name="group_by_intstatus" string="Internal Status" context="{'group_by':'internal_status'}"/>
 							<filter name="group_by_extstatus" string="External Status" context="{'group_by':'external_status'}"/>
 							<filter name="group_by_retstatus" string="Retur Status" context="{'group_by':'status_retur'}"/>
+							<filter name="group_by_position" string="Position" context="{'group_by':'analytic_destination'}"/>
 
 						</group>
 					</group>
