@@ -49,27 +49,84 @@ class account_invoice(models.Model):
 					seq_max=1
 				add_clause = ''
 				if tn_ids and tn_ids!='':
-					add_clause='and tn.Id not in (%s)'%tn_ids
-				query_pod = """
-					select * from (
-					select tn.Id,
-							tn.ReceiptNumber,
-							tn.TrackingType,
-							DATEADD(hour, -7, tn.TrackingDatetime) as TrackingDatetime,
-							ts.SiteCode,
-							ts.Name ,
-							dh.CourierName,
-							emp.EmployeeNo,
-							LEAD(tn.TrackingType) over (ORDER BY tn.TrackingDatetime) as nexttn 
-						from BOSICEPAT.POD.dbo.TrackingNote tn WITH (NOLOCK) 
-						left join BOSICEPAT.POD.dbo.MsTrackingSite ts with (NOLOCK) on tn.TrackingSiteId=ts.Id
-						left join PICKUPORDER.dbo.ReceivedResi rr with (NOLOCK) on tn.ReceiptNumber=rr.NoResi
-						left join PICKUPORDER.dbo.DeliveryHistory dh with (nolock) on rr.Id=dh.ReceivedResiId
-						left join PICKUPORDER.dbo.MsCourier cour with (nolock) on cour.Id=dh.CourierId
-						left join EPETTYCASH.dbo.MsEmployee emp with (nolock) on emp.Id=cour.EmployeeId
-						where tn.ReceiptNumber='%s' and tn.TrackingType!='PICKREQ' %s 
-					) dummy_table
-					where TrackingType<>coalesce(nexttn,'NONE') """%(x.name,add_clause)
+					add_clause='where Id not in (%s)'%tn_ids
+				query_pod = """select * from (
+							SELECT  
+							TR.Id as Id,
+							TR.ReceiptNumber as ReceiptNumber,
+							TR.TrackingType as TrackingType,
+							DATEADD(hour, -7, TR.TrackingDatetime) as TrackingDatetime,
+							MTS.SiteCode as SiteCode,
+							MTS.Name as Name,
+							NULL as CourierName,
+							NULL as EmployeeNo
+							FROM BOSICEPAT.POD.dbo.TrackingRecord TR WITH (NOLOCK)
+							LEFT JOIN BOSICEPAT.POD.dbo.MsTrackingSite MTS WITH (NOLOCK) on TR.TrackingSiteId=MTS.Id
+							where TR.ReceiptNumber='%s'
+							UNION
+							SELECT 
+							RR.Id as Id,
+							RR.NoResi as ReceiptNumber,
+							'ANT' as TrackingType,
+							DATEADD(hour, -7, RR.ReceivedDtm) as TrackingDatetime,
+							MB.BranchCodeOdoo as SiteCode,
+							MB.Name as Name,
+							ME.Name as CourierName,
+							ME.EmployeeNo as EmployeeNo
+							FROM PICKUPORDER.dbo.ReceivedResi RR WITH (NOLOCK)
+							LEFT JOIN EPETTYCASH.dbo.MsBranch MB WITH (NOLOCK) on RR.BranchId=MB.Id
+							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
+							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
+							where RR.NoResi='%s'
+							UNION
+							SELECT 
+							RR.Id as Id,
+							RR.NoResi as ReceiptNumber,
+							CASE 
+								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
+								WHEN (DH.IsProblem='Y' ) THEN DP.ProblemCode
+							END as TrackingType,
+							DATEADD(hour, -7, DH.CompletedDtm) as TrackingDatetime,
+							MB.BranchCodeOdoo as SiteCode,
+							MB.Name as Name,
+							ME.Name as CourierName,
+							ME.EmployeeNo as EmployeeNo
+							FROM PICKUPORDER.dbo.ReceivedResi RR WITH (NOLOCK)
+							LEFT JOIN PICKUPORDER.dbo.DeliveryHistory DH WITH (NOLOCK) on DH.ReceivedResiId=RR.Id
+							LEFT JOIN EPETTYCASH.dbo.MsBranch MB WITH (NOLOCK) on RR.BranchId=MB.Id
+							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
+							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
+							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
+							where RR.NoResi='%s'
+							UNION
+							SELECT
+							cast(STT.nostt AS int) as Id,
+							STT.nostt as ReceiptNumber,
+							'IN' as TrackingType,
+							DATEADD(hour, -7, STT.TglFoto) as TrackingDatetime,
+							MS.SiteCode as SiteCode,
+							MS.Name as Name,
+							NULL as CourierName,
+							NULL as EmployeeNo
+							FROM BOSICEPAT.POD.dbo.stt STT WITH (NOLOCK)
+							LEFT JOIN BOSICEPAT.POD.dbo.MsTrackingSite MS on STT.gerai=MS.SiteCodeRds
+							WHERE STT.nostt='%s'
+							UNION 
+							SELECT  
+							cast(TPR.ReceiptNumber AS int) as Id,
+							TPR.ReceiptNumber as ReceiptNumber,
+							'THP' as TrackingType,
+							DATEADD(hour, -7, TPR.UploadDatetime) as TrackingDatetime,
+							MTS.SiteCode as SiteCode,
+							MTS.Name as Name,
+							NULL as CourierName,
+							NULL as EmployeeNo
+							from BOSICEPAT.POD.dbo.ThirdPartyReceipt TPR WITH (NOLOCK)
+							left join BOSICEPAT.POD.dbo.MsTrackingSite MTS with (nolock) on TPR.TrackingSiteId=MTS.SiteCodeRds
+							where TPR.ReceiptNumber='%s'
+							)dummy 
+							%s
+							order by TrackingDatetime"""%(x.name,x.name,x.name,x.name,x.name,add_clause)
 				# print "queryxxxxxxxxxxxxxxxxx",query_pod
 				# ss_pod_config = {
 				# 'user'		: '',
@@ -121,4 +178,4 @@ class account_invoice(models.Model):
 					if record['TrackingType']=='DLV':
 						isdlv=True
 				pod_conn.close()
-			return True
+		return True

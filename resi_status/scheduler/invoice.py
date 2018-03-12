@@ -232,7 +232,7 @@ class account_invoice(models.Model):
 			# 	if invoice_dict.get(resi,False):
 			# 		self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
 			# pickup_conn.close()
-		return result
+		return True
 
 
 	def get_all_blocked_sigesit(self,cr,uid,context=None):

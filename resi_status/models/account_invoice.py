@@ -372,6 +372,7 @@ class account_invoice_line(models.Model):
 										('RTS',"Retur ke Shipper"),
 										('RTA',"Retur ke Gerai"),
 										('HOLD',"Hold/Pending"),
+										('THP',"Resi Pihak Ketiga"),
 										('ANT',"Dalam Pengantaran"),
 										('DLV',"Delivered"),
 										('cabang','Cabang'),
