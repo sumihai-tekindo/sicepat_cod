@@ -109,7 +109,7 @@ class account_invoice(models.Model):
 							NULL as CourierName,
 							NULL as EmployeeNo
 							FROM BOSICEPAT.POD.dbo.stt STT WITH (NOLOCK)
-							LEFT JOIN BOSICEPAT.POD.dbo.MsTrackingSite MS on STT.gerai=MS.SiteCodeRds
+							LEFT JOIN BOSICEPAT.POD.dbo.MsTrackingSite MS with (nolock) on STT.gerai=MS.SiteCodeRds
 							WHERE STT.nostt='%s'
 							UNION 
 							SELECT  

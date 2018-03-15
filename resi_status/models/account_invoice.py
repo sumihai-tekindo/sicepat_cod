@@ -16,7 +16,7 @@ class account_invoice(models.Model):
 			if inv.type=='in_invoice':
 				line_ids = []
 				for line in inv.invoice_line:
-					if line.source_recon_id.id and line.source_recon_id.internal_status in ('submit','approved','paid'):
+					if line.source_recon_id.id:
 						line_ids.append(line.source_recon_id.id)
 				if line_ids:
 					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
@@ -29,7 +29,7 @@ class account_invoice(models.Model):
 			if inv.type=='in_invoice':
 				line_ids = []
 				for line in inv.invoice_line:
-					if line.source_recon_id.id and line.source_recon_id.internal_status=='paid':
+					if line.source_recon_id.id:
 						line_ids.append(line.source_recon_id.id)
 				if line_ids:
 					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
@@ -43,7 +43,7 @@ class account_invoice(models.Model):
 			if inv.type=='in_invoice':
 				line_ids = []
 				for line in inv.invoice_line:
-					if line.source_recon_id.id and line.source_recon_id.internal_status=='submit':
+					if line.source_recon_id.id:
 						line_ids.append(line.source_recon_id.id)
 				if line_ids:
 					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
@@ -57,7 +57,7 @@ class account_invoice(models.Model):
 			if inv.type=='in_invoice':
 				line_ids = []
 				for line in inv.invoice_line:
-					if line.source_recon_id.id and line.source_recon_id.internal_status=='approved':
+					if line.source_recon_id.id:
 						line_ids.append(line.source_recon_id.id)
 				if line_ids:
 					lines = self.env['account.invoice.line'].search([('id','in',line_ids)])
