@@ -321,38 +321,39 @@ class account_invoice(models.Model):
 				isdlv = False
 				for record in records:
 					# print "reccccccccccccccc",record
-					analytic_id = analytic_pool.search(cr,uid,[('code','=',record['SiteCode'])])
-					try:
-						analytic_id = analytic_id[0]
-					except:
-						analytic_id = analytic_id
-					# print "xxxxxxxxxxxxxxxxxxxxxxxx",record['EmployeeNo']
-					emp_id = gesit_pool.search(cr,uid,[('nik','=',record['EmployeeNo'])],context={})
-					try:
-						emp_id = emp_id[0]
-					except:
-						emp_id = emp_id
-					detail_value = {
-							'invoice_line_id':x.id,
-							'sequence':seq_max,
-							# 'resi_number':x.name,
+					if record['TrackingType'] and record['TrackingType']!="":
+						analytic_id = analytic_pool.search(cr,uid,[('code','=',record['SiteCode'])])
+						try:
+							analytic_id = analytic_id[0]
+						except:
+							analytic_id = analytic_id
+						# print "xxxxxxxxxxxxxxxxxxxxxxxx",record['EmployeeNo']
+						emp_id = gesit_pool.search(cr,uid,[('nik','=',record['EmployeeNo'])],context={})
+						try:
+							emp_id = emp_id[0]
+						except:
+							emp_id = emp_id
+						detail_value = {
+								'invoice_line_id':x.id,
+								'sequence':seq_max,
+								# 'resi_number':x.name,
+								'pod_datetime':record['TrackingDatetime'],
+								"position_id": analytic_id or False,
+								"status": record['TrackingType'],
+								"user_tracking": record['CourierName'],
+								"sigesit": emp_id or False,
+								"tracking_note_id":record['Id'],
+								}
+						invl_write_value = {
+							'internal_status':record['TrackingType'],
 							'pod_datetime':record['TrackingDatetime'],
-							"position_id": analytic_id or False,
-							"status": record['TrackingType'],
-							"user_tracking": record['CourierName'],
-							"sigesit": emp_id or False,
-							"tracking_note_id":record['Id'],
-							}
-					invl_write_value = {
-						'internal_status':record['TrackingType'],
-						'pod_datetime':record['TrackingDatetime'],
-						'sigesit':emp_id or False,
-						'analytic_destination':analytic_id or False,
-					}
-					if isdlv==False:
-						self.pool.get('account.invoice.line.tracking').create(cr,uid,detail_value)
-						# self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
-					if record['TrackingType']=='DLV':
-						isdlv=True
+							'sigesit':emp_id or False,
+							'analytic_destination':analytic_id or False,
+						}
+						if isdlv==False:
+							self.pool.get('account.invoice.line.tracking').create(cr,uid,detail_value)
+							# self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
+						if record['TrackingType']=='DLV':
+							isdlv=True
 				pod_conn.close()
 		return True
