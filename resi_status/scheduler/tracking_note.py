@@ -32,7 +32,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('internal_status','in',('open','IN','PICKREQ','OUT','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('internal_status','in',('open','IN','PICKREQ','OUT','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','ANT'))])
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
 			for x in outstanding_awb:
