@@ -144,7 +144,7 @@ class account_invoice(models.Model):
 				isdlv = False
 				existing_tracking = {}
 				for t in x.tracking_ids:
-					existing_tracking.update({t.tracking_note_id.id:t.status})
+					existing_tracking.update({t.tracking_note_id:t.status})
 				for record in records:
 					# print "reccccccccccccccc",record
 					analytic_id = analytic_pool.search(cr,uid,[('code','=',record['SiteCode'])])
