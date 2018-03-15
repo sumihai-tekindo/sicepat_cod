@@ -142,6 +142,9 @@ class account_invoice(models.Model):
 				records = cr_pod.fetchall()
 				
 				isdlv = False
+				existing_tracking = {}
+				for t in x.tracking_ids:
+					existing_tracking.update({t.tracking_note_id.id:t.status})
 				for record in records:
 					# print "reccccccccccccccc",record
 					analytic_id = analytic_pool.search(cr,uid,[('code','=',record['SiteCode'])])
@@ -172,7 +175,7 @@ class account_invoice(models.Model):
 						'sigesit':emp_id or False,
 						'analytic_destination':analytic_id or False,
 					}
-					if isdlv==False:
+					if isdlv==False and (record['Id'] not in existing_tracking.keys() or (record['Id'] in existing_tracking.keys() and record['TrackingType']!=existing_tracking.get(record['Id']))):
 						self.pool.get('account.invoice.line.tracking').create(cr,uid,detail_value)
 						self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
 					if record['TrackingType']=='DLV':
