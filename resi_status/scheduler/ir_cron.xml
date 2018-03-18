@@ -12,6 +12,126 @@
             <field name="active" eval="False"/>
         </record>
 
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_0">
+            <field name="name">COD - Tracking Note Pull 0</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_0'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_1">
+            <field name="name">COD - Tracking Note Pull 1</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_1'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_2">
+            <field name="name">COD - Tracking Note Pull 2</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_2'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_3">
+            <field name="name">COD - Tracking Note Pull 3</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_3'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_4">
+            <field name="name">COD - Tracking Note Pull 4</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_4'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_5">
+            <field name="name">COD - Tracking Note Pull 5</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_5'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_6">
+            <field name="name">COD - Tracking Note Pull 6</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_6'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_7">
+            <field name="name">COD - Tracking Note Pull 7</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_7'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_8">
+            <field name="name">COD - Tracking Note Pull 8</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_8'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.cron" id="cod_tracking_note_pull_cron_9">
+            <field name="name">COD - Tracking Note Pull 9</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice'"/>
+            <field name="function" eval="'scheduled_tracking_note_pull_9'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
         <record model="ir.cron" id="cod_stt_pull_cron">
             <field name="name">COD - STT/AWB Pull</field>
             <field name="interval_number">1</field>
