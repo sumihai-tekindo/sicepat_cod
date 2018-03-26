@@ -117,12 +117,12 @@ class account_invoice(models.Model):
 			data_tgl.update({r[1]:tgl_pengirim})
 			data.update({r[0]:data_tgl})
 		# print "======================",data
-		all_cod_cust=list(set(all_cod_cust))
-
+		all_cod_cust = list(set(all_cod_cust))
+		all_cod_cust = [x.encode("utf-8") for x in all_cod_cust]
+		# print "===============",all_cod_cust
 		partner_cod_ids = self.pool.get('res.partner').search(cr,uid,[('name','in',all_cod_cust)])
-				# print "----------",nomo
 		partner_cod = {}
-		if all_cod_cust and partner_cod_ids and (len(all_cod_cust)!=len(partner_cod_ids)):
+		if all_cod_cust and partner_cod_ids:
 			for pc in self.pool.get('res.partner').browse(cr,uid,partner_cod_ids):
 				partner_cod.update({pc.name:pc.id})
 		not_in_partner = []
