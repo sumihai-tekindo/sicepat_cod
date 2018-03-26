@@ -178,9 +178,12 @@
 						</group>
 						<group name="Filter By Time" string="Filter By Time">
 							<filter name="today" string="Today" domain="[('stt_date','=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+							<filter name="yesterday" string="Yesterday" domain="[('stt_date','=',(context_today()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d'))]"/>
+							<filter name="this_week" string="7 Days Before" domain="[('stt_date','>=',(context_today()+datetime.timedelta(days=-7)).strftime('%Y-%m-%d'))]"/>
 							<filter name="this_month" string="This Month" domain="[('stt_date','&gt;=', datetime.datetime.now().strftime('%Y-%m-01')),('stt_date','&lt;=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
 						</group>
 						<group name="Groupby" string="Group by">
+							<filter name="group_by_date" string="Tgl. Transaksi" context="{'group_by':'stt_date:day'}"/>
 							<filter name="group_by_sigesit" string="Sigesit" context="{'group_by':'sigesit'}"/>
 							<filter name="group_by_partner" string="Partner" context="{'group_by':'cod_customer'}"/>
 							<filter name="group_by_intstatus" string="Internal Status" context="{'group_by':'internal_status'}"/>
