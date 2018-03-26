@@ -32,7 +32,8 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[
+				('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -410,7 +411,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%0'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%0'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -594,7 +595,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%1'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%1'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -778,7 +779,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%2'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%2'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -962,7 +963,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%3'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%3'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -1146,7 +1147,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%4'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%4'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -1330,7 +1331,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%5'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%5'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -1514,7 +1515,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%6'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%6'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -1698,7 +1699,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%7'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%7'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -1882,7 +1883,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%8'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%8'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
@@ -2066,7 +2067,7 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%9'),('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=like','%9'),('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
 			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
