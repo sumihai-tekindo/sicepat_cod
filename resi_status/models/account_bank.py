@@ -22,7 +22,23 @@ class account_bank_statement(osv.osv):
 				return 'bs_normal'
 		return 'bs_normal'
 
-	
+	def _compute_existing_resi(self, cr, uid, ids, field_name, arg, context=None):
+		'''Returns a dictionary with key=the ID of a record and value = the level of this  
+			record in the tree structure.'''
+		res = {}
+		for bs in self.browse(cr, uid, ids, context=context):
+			resi_insides = ""
+			if bs.register_type=='cr_gesit':
+				for bsl in bs.line_ids:
+					if bsl.invoice_line_id:
+						resi_insides+=bsl.invoice_line_id and bsl.invoice_line_id.name
+			elif bs.register_type=='bs_fin' or bs.register_type=='cr_admin':
+				for bsl in bs.line_ids:
+					if bsl.invoice_line_ids:
+						for il in bsl.invoice_line_ids:
+							resi_insides+=il.name
+			res[bs.id] = resi_insides
+		return res
 
 	_columns = {
 
@@ -39,6 +55,7 @@ class account_bank_statement(osv.osv):
 		"reference_number": fields.char("Nomor Transfer"),
 		"attachment": fields.binary("Bukti Transfer",
 			help="File bukti transfer bank"),
+		"resi_inside": fields.function(_compute_existing_resi,  store=True, string="Resi", type="text",)
 		
 		}
 

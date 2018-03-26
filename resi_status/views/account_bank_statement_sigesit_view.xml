@@ -8,6 +8,7 @@
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search string="Cash Receipt Sigesit">
+					<field name="resi_inside"/>
 					<field name="name"/>
 					<field name="sigesit"/>
 					<field name="date"/>
@@ -244,6 +245,7 @@
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search string="Cash Receipt Admin">
+					<field name="resi_inside"/>
 					<field name="name"/>
 					<field name="date"/>
 					<field name="period_id"/>
@@ -473,7 +475,29 @@
 
 
 		<!-- Inheritance Basic Bank Statement -->
-
+		<record id="account_bank_statement_fin_search_view" model="ir.ui.view">
+			<field name="name">account.bank.statement.fin.search.view</field>
+			<field name="model">account.bank.statement</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Bank Statement Finance">
+					<field name="resi_inside"/>
+					<field name="name"/>
+					<field name="date"/>
+					<field name="period_id"/>
+					<field name="journal_id"/>
+					<field name="analytic_account_id"/>
+					<field name="state"/>
+					<group>
+						<group name="groupby" string="Group by">
+							<filter name="group_by_date" string="Date" context="{'group_by':'date'}"/>
+							<filter name="group_by_analytic" string="Cabang" context="{'group_by':'analytic_account_id'}"/>
+							<filter name="state" string="Status" context="{'group_by':'state'}"/>
+						</group>
+					</group>
+				</search>
+			</field>
+		</record>
 		<record id="account_bank_statement_finance_tree_view" model="ir.ui.view">
 			<field name="name">account.bank.statement.finance.tree.view</field>
 			<field name="model">account.bank.statement</field>
@@ -514,7 +538,7 @@
 			<field name="view_mode">tree,form,graph</field>
 			<field name="domain">[('journal_id.type', '=', 'bank'),('register_type','=','bs_fin')]</field>
 			<field name="context">{'journal_type':'bank','register_type':'bs_fin'}</field>
-			<field name="search_view_id" ref="account.view_bank_statement_search"/>
+			<field name="search_view_id" ref="resi_status.account_bank_statement_fin_search_view"/>
 			<field name="help" type="html">
 			  <p class="oe_view_nocontent_create">
 				Click to register a bank statement.

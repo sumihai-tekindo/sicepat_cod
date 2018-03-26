@@ -30,6 +30,7 @@
         'views/analytic_view.xml',
         'views/report_cod.xml',
         'views/report_tandaterima.xml',
+        'views/collection_notes_view.xml',
     ],
     'installable': True,
 }
