@@ -82,7 +82,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -99,7 +99,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -218,7 +218,9 @@ class account_invoice(models.Model):
 				elif x.key =='sqlpickup.db_port':
 					ss_pod_config.update({'port' : x.value})
 			# print "============================",ss_pod_config
-			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[])
+			outstanding_awb_ids = self.pool.get('account.invoice.line').search(cr,uid,[
+				('internal_status','in',('open','IN','PICKREQ','OUT','OTS','CC','CU','NTH','AU','BA','MR','CODA','CODB','BROKEN','RTN','RTA','HOLD','OSD','ANT'))])
+			# outstanding_awb_ids=[4603]
 			outstanding_awb = self.pool.get('account.invoice.line').browse(cr,uid,outstanding_awb_ids)
 			# print "vvvvvvvvvvvvv",outstanding_awb_ids
 			for x in outstanding_awb:
@@ -266,7 +268,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -283,7 +285,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -295,7 +297,7 @@ class account_invoice(models.Model):
 							NULL as CourierName,
 							NULL as EmployeeNo
 							FROM BOSICEPAT.POD.dbo.stt STT WITH (NOLOCK)
-							LEFT JOIN BOSICEPAT.POD.dbo.MsTrackingSite MS on STT.gerai=MS.SiteCodeRds
+							LEFT JOIN BOSICEPAT.POD.dbo.MsTrackingSite MS with (nolock) on STT.gerai=MS.SiteCodeRds
 							WHERE STT.nostt='%s'
 							UNION 
 							SELECT  
@@ -311,8 +313,8 @@ class account_invoice(models.Model):
 							left join BOSICEPAT.POD.dbo.MsTrackingSite MTS with (nolock) on TPR.TrackingSiteId=MTS.SiteCodeRds
 							where TPR.ReceiptNumber='%s'
 							)dummy 
-							%s
-							order by TrackingDatetime"""%(x.name,x.name,x.name,x.name,x.name,add_clause)
+							
+							order by TrackingDatetime"""%(x.name,x.name,x.name,x.name,x.name)
 				# print "queryxxxxxxxxxxxxxxxxx",query_pod
 				# ss_pod_config = {
 				# 'user'		: '',
@@ -328,9 +330,17 @@ class account_invoice(models.Model):
 				records = cr_pod.fetchall()
 				
 				isdlv = False
+				existing_tracking = {}
+				for t in x.tracking_ids:
+					tostatus = existing_tracking.get(t.tracking_note_id,[])
+					tostatus.append(t.status)
+					existing_tracking.update({t.tracking_note_id:tostatus})
+				# if x.id==4759:
+					# print "=======existing_tracking=======",existing_tracking
 				for record in records:
 					# print "reccccccccccccccc",record
 					if record['TrackingType'] and record['TrackingType']!="":
+
 						analytic_id = analytic_pool.search(cr,uid,[('code','=',record['SiteCode'])])
 						try:
 							analytic_id = analytic_id[0]
@@ -359,9 +369,10 @@ class account_invoice(models.Model):
 							'sigesit':emp_id or False,
 							'analytic_destination':analytic_id or False,
 						}
-						if isdlv==False:
+						if isdlv==False and (record['Id'] not in existing_tracking.keys() or (record['Id'] in existing_tracking.keys() and record['TrackingType'] not in existing_tracking.get(record['Id']))):
+							# print "===",x.name,"=======",record['Id'],"---",record['TrackingType']
 							self.pool.get('account.invoice.line.tracking').create(cr,uid,detail_value)
-							# self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
+							self.pool.get('account.invoice.line').write(cr,uid,x.id,invl_write_value)
 						if record['TrackingType']=='DLV':
 							isdlv=True
 				pod_conn.close()
@@ -460,7 +471,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -477,7 +488,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -644,7 +655,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -661,7 +672,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -828,7 +839,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -845,7 +856,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -1012,7 +1023,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -1029,7 +1040,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -1196,7 +1207,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -1213,7 +1224,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -1380,7 +1391,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -1397,7 +1408,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -1564,7 +1575,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -1581,7 +1592,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -1748,7 +1759,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -1765,7 +1776,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -1932,7 +1943,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -1949,7 +1960,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
@@ -2116,7 +2127,7 @@ class account_invoice(models.Model):
 							where RR.NoResi='%s'
 							UNION
 							SELECT 
-							RR.Id as Id,
+							DH.Id as Id,
 							RR.NoResi as ReceiptNumber,
 							CASE 
 								WHEN (DH.IsProblem!='Y' ) THEN 'DLV'
@@ -2133,7 +2144,7 @@ class account_invoice(models.Model):
 							LEFT JOIN PICKUPORDER.dbo.MsCourier MC WITH (NOLOCK) on RR.CourierId=MC.Id
 							LEFT JOIN EPETTYCASH.dbo.MsEmployee ME WITH (NOLOCK) on MC.EmployeeId=ME.Id
 							LEFT JOIN PICKUPORDER.dbo.DeliveryProblem DP WITH (NOLOCK) on DH.ProblemRemark=DP.Description
-							where RR.NoResi='%s'
+							where RR.NoResi='%s' and DH.Id is not NULL
 							UNION
 							SELECT
 							cast(STT.nostt AS int) as Id,
