@@ -403,6 +403,8 @@ class account_invoice_line(models.Model):
 	recon_inv_id = fields.Many2one('account.invoice','Reconciliation Invoice Line',ondelete="set null")
 	source_recon_id = fields.Many2one('account.invoice.line',"Reconciliation AWB Source",ondelete="set null")
 	rds_destination = fields.Many2one('rds.destination',"RDS Destination")
+	destination_prov = fields.Char('Dest. Province',related='rds_destination.province',store=True)
+	destination_city = fields.Char('Dest. City/District',related='rds_destination.city',store=True)
 	analytic_destination = fields.Many2one('account.analytic.account',"Current Position Branch")
 	tracking_ids = fields.One2many('account.invoice.line.tracking','invoice_line_id',"Tracking Lines")
 	service_type = fields.Many2one('consignment.service.type', string='Service Type')

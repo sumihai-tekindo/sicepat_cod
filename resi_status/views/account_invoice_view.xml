@@ -44,6 +44,8 @@
 					<field name="stt_date"/>
 					<field name="recipient"/>
 					<field name="service_type"/>
+					<field name="destination_prov" invisible="1"/>
+					<field name="destination_city" invisible="1"/>
 					<field name="account_analytic_id" invisible="1"/>
 					<field name="analytic_destination"/>
 					<field name="rds_destination" invisible="1"/>
@@ -190,6 +192,8 @@
 							<filter name="group_by_extstatus" string="External Status" context="{'group_by':'external_status'}"/>
 							<filter name="group_by_retstatus" string="Retur Status" context="{'group_by':'status_retur'}"/>
 							<filter name="group_by_position" string="Position" context="{'group_by':'analytic_destination'}"/>
+							<filter name="group_by_province" string="Dest. Prov" context="{'group_by':'destination_prov'}"/>
+							<filter name="group_by_city" string="Dest. City/District" context="{'group_by':'destination_city'}"/>
 
 						</group>
 					</group>
