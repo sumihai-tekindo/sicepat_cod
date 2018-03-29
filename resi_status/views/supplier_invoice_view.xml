@@ -1,0 +1,14 @@
+<openerp>
+	<data>
+		<record id="supplier_invoice_xls_recon_form" model="ir.ui.view">
+			<field name="name">supplier.invoice.xls.recon.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form"/>
+			<field name="arch" type="xml">
+				<button name="invoice_cancel" position="after">
+					<button name="print_supplier_invoice" type="object" string="Print XLS Detail"/>
+				</button>
+			</field>
+		</record>
+	</data>
+</openerp>

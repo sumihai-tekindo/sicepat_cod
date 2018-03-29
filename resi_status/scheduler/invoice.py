@@ -109,7 +109,7 @@ class account_invoice(models.Model):
 		data = {}
 		all_cod_cust = []
 		for r in result:
-			print "-----------------",r
+			# print "-----------------",r
 			data_tgl = data.get(r[0],{})
 			tgl_pengirim = data_tgl.get(r[1],{})
 			all_cod_cust.append(r[1])
@@ -211,6 +211,7 @@ class account_invoice(models.Model):
 				port=str(ss_pickup2_config['port']), database=ss_pickup2_config['database'])
 			cur2 = cnx2.cursor()
 			cur2.execute(query_update)
+			# cnx2.commit()
 			cnx2.close()
 
 			# query_pickup = """select ReceiptNumber,parcel_content,cust_package_id from PartnerRequestExt WITH (NOLOCK) where ReceiptNumber in (%s)"""%to_update

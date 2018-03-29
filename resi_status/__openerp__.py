@@ -31,6 +31,7 @@
         'views/report_cod.xml',
         'views/report_tandaterima.xml',
         'views/collection_notes_view.xml',
+        'views/supplier_invoice_view.xml',
     ],
     'installable': True,
 }
