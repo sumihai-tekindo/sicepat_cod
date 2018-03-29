@@ -73,7 +73,7 @@ class account_invoice(osv.osv):
 				dest = l.rds_destination and l.rds_destination.name or ''
 				if l.source_recon_id:
 					dlv_date=l.source_recon_id.pod_datetime
-					cust_package_number=l.source_recon_id.name
+					cust_package_number=l.source_recon_id.cust_package_number
 					internal_status = l.source_recon_id.internal_status
 					detail_barang = l.source_recon_id.detail_barang
 					dest = l.source_recon_id.rds_destination and l.source_recon_id.rds_destination.name or ''
@@ -84,7 +84,7 @@ class account_invoice(osv.osv):
 					line_ids = self.pool.get('account.invoice.line').search(cr,uid,[('name','=',l.name),('invoice_id.type','=','out_invoice')])
 					for lsource in self.pool.get('account.invoice.line').browse(cr,uid,line_ids):
 						dlv_date=l.pod_datetime
-						cust_package_number=lsource.name
+						cust_package_number=lsource.cust_package_number
 						internal_status=lsource.internal_status
 						detail_barang=lsource.detail_barang
 						dest=lsource.rds_destination.name
@@ -94,7 +94,7 @@ class account_invoice(osv.osv):
 								dlv_date=t.pod_datetime	
 				dlv_date=datetime.strptime(dlv_date,'%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
 				status = dict_status.get(internal_status,'')
-				print "===========",internal_status,status
+				# print "===========",internal_status,status
 				
 				ws.write(row,0,cust_package_number or '-')
 				ws.write(row,1,l.name)
