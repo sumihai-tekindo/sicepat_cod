@@ -31,7 +31,7 @@ class rds_destination(models.Model):
 				'code': x.get('destination_code',False),
 			}
 
-			print "##################",x.get('destination_code',False) in existing_dest.keys()
+			# print "##################",x.get('destination_code',False) in existing_dest.keys()
 			
 			if x.get('destination_code',False) in existing_dest.keys():
 				self.pool.get('rds.destination').write(cr,uid,existing_dest.get(x.get('subdistrict',False),False),values)

@@ -95,6 +95,23 @@ class account_invoice(models.Model):
 			left join BOSICEPAT.POD.dbo.stt stt with (nolock) on stt.nostt=pre.ReceiptNumber
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
 			where pre.cod_value >0.0 and stt.tgltransaksi >='2018-03-07 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
+			UNION
+			select 
+			stt.tgltransaksi,
+			stt.pengirim,
+			stt.nostt, 
+			stt.penerima as penerima,
+			stt.codNilai as codNilai,
+			mts.SiteCode as kode,
+			stt.tujuan,
+			stt.Layanan,
+			'-' as parcel_content,
+			'-' as cust_package_id
+			from 
+			BOSICEPAT.POD.dbo.stt stt with (nolock) 
+			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
+			where stt.asal='BKI10000' and stt.codNilai>=5000 and stt.tgltransaksi>'2017-03-07 00:00:00' 
+			and (stt.iscodpulled is NULL or stt.iscodpulled=0) and stt.pengirim <> 'Lazada Indonesia'
 			order by stt.tgltransaksi asc,stt.pengirim asc,stt.nostt asc
 			"""
 		

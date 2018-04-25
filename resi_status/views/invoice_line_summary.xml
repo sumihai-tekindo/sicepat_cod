@@ -1,0 +1,37 @@
+<openerp>
+	<data>
+		<record id="account_invoice_line_summary" model="ir.ui.view">
+			<field name="name">account.invoice.line.summary.form</field>
+			<field name="model">account.invoice.line.summary</field>
+			<field name="arch" type="xml">
+				<form string="COD Summary Report">
+					<group string="General Info">
+						<field name="stt_date_start"/>
+						<field name="stt_date_end"/>
+						<field name="min_weight"/>
+						<field name="max_weight"/>
+						<field name="service_type"/>
+						<field name="delivery_status"/>
+						<field name="payment_status"/>
+					</group>
+					<footer>
+						<button string="Print Report Summary" class="oe_highlight"  name="print_report" type="object"/>
+						<button string="Close" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		<record id="action_account_invoice_line_summary" model="ir.actions.act_window">
+			<field name="name">COD Summary Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.invoice.line.summary</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account_invoice_line_summary"/>
+			<field name="context">{}</field>
+			<field name="target">new</field>
+		</record>
+		<menuitem id="menu_reporting_cod" name="COD Reports" parent="base.menu_reporting" sequence="5"/>
+		<menuitem id="menu_action_account_invoice_line_summary" name="COD Summary" parent="resi_status.menu_reporting_cod" sequence="1" action="resi_status.action_account_invoice_line_summary"/>
+	</data>
+</openerp>

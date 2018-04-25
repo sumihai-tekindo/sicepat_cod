@@ -348,6 +348,7 @@ class account_invoice_line(models.Model):
 	cod_customer= fields.Many2one(relation="res.partner",related='invoice_id.cod_customer',string="Resi Number",store=True)
 	name = fields.Char(string='No. Resi')
 	recipient = fields.Char(string='Name of Recipient')
+	
 	price_cod = fields.Float(string='Price COD')
 	price_package = fields.Float(string='Price Package')
 	nilai_edc = fields.Char(string='Nilai EDC')
@@ -412,6 +413,13 @@ class account_invoice_line(models.Model):
 	cust_package_number=fields.Text("Customer Package Number")
 	user_ids = fields.Many2many('res.users',string='Users', store=True, readonly=True, compute='_compute_users')
 	stt_date = fields.Date('Tanggal Transaksi STT',related='invoice_id.date_invoice',store=True)
+	
+	tanggal_foto = fields.Datetime('Tanggal Foto')
+	min_lead_time = fields.Integer("Min Lead Time")
+	max_lead_time = fields.Integer("Max Lead Time")
+	recipient_remark = fields.Char("Receipt remark")
+	recipient_phone = fields.Char(string="Recipient Phone Number")
+	sender = fields.Char(string="Pengirim")
 
 	def get_last_tracking(self,cr,uid,ids,context=None):
 		if not context:context={}

@@ -65,13 +65,17 @@ class account_invoice(osv.osv):
 				d = datetime.strptime(p.date,'%Y-%m-%d')
 				if not payment_date or (payment_date and d>payment_date):
 					payment_date=d
+			# print "===========",payment_date
 			for l in i.invoice_line:
-				dlv_date = l.pod_datetime
+				dlv_date = l.source_recon_id.pod_datetime
 				cust_package_number=l.name
 				internal_status='open'
 				detail_barang = ''
 				dest = l.rds_destination and l.rds_destination.name or ''
+				# print "==",l.name
 				if l.source_recon_id:
+					# print "===========",l.source_recon_id,dlv_date
+
 					dlv_date=l.source_recon_id.pod_datetime
 					cust_package_number=l.source_recon_id.cust_package_number
 					internal_status = l.source_recon_id.internal_status
@@ -85,8 +89,8 @@ class account_invoice(osv.osv):
 					for lsource in self.pool.get('account.invoice.line').browse(cr,uid,line_ids):
 						dlv_date=l.pod_datetime
 						cust_package_number=lsource.cust_package_number
-						internal_status=lsource.internal_status
-						detail_barang=lsource.detail_barang
+						internal_status=lsource.internal_status or ''
+						detail_barang=lsource.detail_barang or ''
 						dest=lsource.rds_destination.name
 
 						for t in l.source_recon_id.tracking_ids:
@@ -94,7 +98,6 @@ class account_invoice(osv.osv):
 								dlv_date=t.pod_datetime	
 				dlv_date=datetime.strptime(dlv_date,'%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
 				status = dict_status.get(internal_status,'')
-				# print "===========",internal_status,status
 				
 				ws.write(row,0,cust_package_number or '-')
 				ws.write(row,1,l.name)
@@ -103,7 +106,7 @@ class account_invoice(osv.osv):
 				ws.write(row,4,dest)
 				ws.write(row,5,l.recipient)
 				ws.write(row,6,status)
-				ws.write(row,7,payment_date.strftime('%Y-%m-%d'))
+				ws.write(row,7,payment_date and payment_date.strftime('%Y-%m-%d') or '')
 				ws.write(row,8,detail_barang)
 				row+=1
 		wb.close()
