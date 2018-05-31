@@ -84,7 +84,7 @@ class account_invoice(models.Model):
 			stt.pengirim,
 			stt.nostt, 
 			pre.recipient_name as penerima,
-			pre.cod_value as codNilai,
+			coalesce(pre.cod_value,stt.codNilai) as codNilai,
 			mts.SiteCode as kode,
 			stt.tujuan,
 			stt.Layanan,
@@ -94,7 +94,7 @@ class account_invoice(models.Model):
 			PICKUPORDER.dbo.PartnerRequestExt pre with (nolock)
 			left join BOSICEPAT.POD.dbo.stt stt with (nolock) on stt.nostt=pre.ReceiptNumber
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
-			where pre.cod_value >0.0 and stt.tgltransaksi >='2018-03-07 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
+			where (pre.cod_value >0.0 or stt.codNilai>0) >0.0 and stt.tgltransaksi >='2018-05-30 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
 			UNION
 			select 
 			stt.tgltransaksi,
@@ -110,7 +110,7 @@ class account_invoice(models.Model):
 			from 
 			BOSICEPAT.POD.dbo.stt stt with (nolock) 
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
-			where stt.asal='BKI10000' and stt.codNilai>=5000 and stt.tgltransaksi>'2017-03-07 00:00:00' 
+			where stt.asal='BKI10000' and stt.codNilai>=5000 and stt.tgltransaksi>'2018-05-30 00:00:00' 
 			and (stt.iscodpulled is NULL or stt.iscodpulled=0) and stt.pengirim <> 'Lazada Indonesia'
 			order by stt.tgltransaksi asc,stt.pengirim asc,stt.nostt asc
 			"""
