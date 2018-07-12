@@ -94,7 +94,7 @@ class account_invoice(models.Model):
 			PICKUPORDER.dbo.PartnerRequestExt pre with (nolock)
 			left join BOSICEPAT.POD.dbo.stt stt with (nolock) on stt.nostt=pre.ReceiptNumber
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
-			where (pre.cod_value >0.0 or stt.codNilai>0) >0.0 and stt.tgltransaksi >='2018-05-30 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
+			where (pre.cod_value >0.0 or stt.codNilai>0)  and stt.tgltransaksi >='2018-05-30 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
 			UNION
 			select 
 			stt.tgltransaksi,
