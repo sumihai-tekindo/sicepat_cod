@@ -12,6 +12,18 @@
             <field name="active" eval="False"/>
         </record>
 
+        <record model="ir.cron" id="cod_status_upload_pod_cron">
+            <field name="name">COD - Upload COD status to POD</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'account.invoice.line'"/>
+            <field name="function" eval="'upload_status_stt'"/>
+            <field name="args" eval="'()'" />
+            <field name="active" eval="False"/>
+        </record>
+
         <record model="ir.cron" id="cod_tracking_note_pull_cron_0">
             <field name="name">COD - Tracking Note Pull 0</field>
             <field name="interval_number">5</field>
