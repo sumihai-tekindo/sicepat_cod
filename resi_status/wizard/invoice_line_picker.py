@@ -27,6 +27,8 @@ class account_invoice_line_picker(models.TransientModel):
 					raise osv.except_osv(_('Error!'),_("Tidak bisa menginput setoran dari resi yang berbeda kurir!"))
 				else:	
 					emp = ix.sigesit.id
+				if ix.internal_status!='DLV':
+					raise osv.except_osv(_('Error!'),_("Tidak bisa menginput setoran dari resi yang statusnya belum Delivered !"))
 
 		res.update({
 			'user_id':uid,
