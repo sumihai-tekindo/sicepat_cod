@@ -35,7 +35,7 @@ class wizard_dummy_resi(models.Model):
 									('ANT',"Dalam Pengantaran"),
 									('DLV',"Delivered"),
 									],string='Internal Status')
-	number_of_resi			= fields.Integer("Number of AWB per branch for selected status")	
+	number_of_resi			= fields.Integer("Number of AWB per branch for selected status",default=2)	
 	@api.multi
 	def generate_query_pod(self,resi_number):
 		query_pod = """select * from (
@@ -272,6 +272,9 @@ class wizard_dummy_resi(models.Model):
 			pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
 					port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
 			cur = pickup_conn.cursor(as_dict=False)
+			q=""" """
+			if wizards.partner_id:
+				q="""and stt.pengirim = '"""+wizards.partner_id.name+"""'"""
 			querystt = """select  top """+str(wizards.number_of_resi)+""" 
 				stt.tgltransaksi,
 				stt.pengirim,
@@ -287,10 +290,12 @@ class wizard_dummy_resi(models.Model):
 				left join MsTrackingSite ts with (nolock) on tn.TrackingSiteId=ts.Id
 				left join stt stt with(nolock) on tn.ReceiptNumber=stt.nostt
 				where tn.TrackingType='"""+wizards.internal_status+"""' and stt.codNilai=0 and stt.iscodpulled=0 and ts.SiteCode='"""+analyt.code+"""' 
-				and stt.pengirim = '"""+wizards.partner_id.name+"""'
+				"""+q+"""
 				order by stt.tgltransaksi asc,stt.pengirim asc,stt.nostt asc
 				"""
-			
+			print "-----------------------------"
+			print querystt
+			print "-----------------------------"
 			cur.execute(querystt)
 			result = cur.fetchall()
 			
@@ -327,7 +332,7 @@ class wizard_dummy_resi(models.Model):
 				# print "-----------------",nip
 				if nip and nip!=None and nip !="":
 					pt_id = self.env['res.partner'].create({'name':nip,'customer':True,'supplier':True,})
-					partner_cod.update({nip:pt_id})
+					partner_cod.update({nip:pt_id.id})
 
 			user = self.env['res.users'].search([('id','=',self._uid)])
 			partner = user.company_id.cod_customer

@@ -6,7 +6,7 @@
 			<field name="arch" type="xml">
 				<form string="Dummy Resi Generator">
 					<group string="General Info">
-						<field name="partner_id" required="1" domain="[('customer','=',True)]"/>
+						<field name="partner_id" required="0" domain="[('customer','=',True)]"/>
 						<field name="internal_status" required="1"/>
 						<field name="number_of_resi" required="1"/>
 					</group>
