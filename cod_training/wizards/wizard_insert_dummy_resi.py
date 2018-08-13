@@ -283,7 +283,7 @@ class wizard_dummy_resi(models.Model):
 				from TrackingNote tn with (nolock)
 				left join MsTrackingSite ts with (nolock) on tn.TrackingSiteId=ts.Id
 				left join stt stt with(nolock) on tn.ReceiptNumber=stt.nostt
-				where tn.TrackingType='"""+wizards.internal_status+"""' and stt.iscodpulled=0 and ts.SiteCode='"""+analyt.code+"""' 
+				where tn.TrackingType='"""+wizards.internal_status+"""' and stt.codNilai=0 and stt.iscodpulled=0 and ts.SiteCode='"""+analyt.code+"""' 
 				and stt.pengirim = '"""+wizards.partner_id.name+"""'
 				order by stt.tgltransaksi asc,stt.pengirim asc,stt.nostt asc
 				"""
