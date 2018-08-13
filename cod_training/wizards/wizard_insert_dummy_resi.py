@@ -123,7 +123,7 @@ class wizard_dummy_resi(models.Model):
 		return query_pod
 
 	@api.multi
-	def scheduled_tracking_note_pull(self,):
+	def scheduled_tracking_note_pull(self,requested_status):
 		analytic_pool = self.env['account.analytic.account']
 		gesit_pool = self.env['hr.employee']
 		ss_pod_ids = self.env['ir.config_parameter'].search([('key','in',['sqlpickup.url','sqlpickup.db','sqlpickup.db_port','sqlpickup.user','sqlpickup.password'])])
@@ -193,9 +193,10 @@ class wizard_dummy_resi(models.Model):
 					existing_tracking.update({t.tracking_note_id:tostatus})
 				# if x.id==4759:
 					# print "=======existing_tracking=======",existing_tracking
+				found=False
 				for record in records:
 					# print "reccccccccccccccc",record
-					if record['TrackingType'] and record['TrackingType']!="":
+					if record['TrackingType'] and record['TrackingType']!="" and not found:
 
 						analytic_id = analytic_pool.search([('code','=',record['SiteCode'])],limit=1)
 						try:
@@ -207,7 +208,7 @@ class wizard_dummy_resi(models.Model):
 							emp_id = emp_id[0]
 						except:
 							emp_id = emp_id
-						print "xxxxxxxxxxxxxxxxxxxxxxxx",analytic_id,emp_id
+						
 						detail_value = {
 								'invoice_line_id':x.id,
 								'sequence':seq_max,
@@ -231,6 +232,8 @@ class wizard_dummy_resi(models.Model):
 							x.write(invl_write_value)
 						if record['TrackingType']=='DLV':
 							isdlv=True
+						if record['TrackingType']==requested_status:
+							found=True
 				pod_conn.close()
 		return True
 
@@ -385,7 +388,7 @@ class wizard_dummy_resi(models.Model):
 							created_invoices.append(inv_id.id)
 
 			invoice_line = self.env['account.invoice.line'].search([('invoice_id','in',created_invoices)])
-			self.with_context({'to_pull':invoice_line}).scheduled_tracking_note_pull()
+			self.with_context({'to_pull':invoice_line}).scheduled_tracking_note_pull(wizards.internal_status)
 			# cnx.close()
 			cur.close()
 			to_update = ""
