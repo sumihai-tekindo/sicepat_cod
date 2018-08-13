@@ -1,0 +1,40 @@
+<openerp>
+	<data>
+		<record id="wizard_dummy_resi_view" model="ir.ui.view">
+			<field name="name">wizard.dummy.resi.form</field>
+			<field name="model">wizard.dummy.resi</field>
+			<field name="arch" type="xml">
+				<form string="Dummy Resi Generator">
+					<group string="General Info">
+						<field name="partner_id" required="1" domain="[('customer','=',True)]"/>
+						<field name="internal_status" required="1"/>
+						<field name="number_of_resi" required="1"/>
+					</group>
+					<notebook>
+						<page string="Cabang">
+							<field name="account_analytic_id" required="1"/>
+						</page>
+					</notebook>
+					<footer>
+						<button string="Generate" class="oe_highlight"  name="scheduled_stt_pull" type="object"/>
+						<button string="Close" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_wizard_dummy_resi_view" model="ir.actions.act_window">
+			<field name="name">Generate Dummy Resi</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">wizard.dummy.resi</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="wizard_dummy_resi_view"/>
+			<field name="context">{}</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="action_wizard_dummy_resi_view"
+            id="menu_action_wizard_dummy_resi_view" parent="account.menu_configuration_misc"/>
+	</data>
+</openerp>

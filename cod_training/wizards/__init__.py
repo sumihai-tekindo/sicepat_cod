@@ -1,0 +1,1 @@
+from . import wizard_insert_dummy_resi
