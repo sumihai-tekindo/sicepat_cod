@@ -12,7 +12,7 @@ class account_invoice_line_retur(models.TransientModel):
 
 	def default_get(self, cr, uid, fields, context=None):
 		res = super(account_invoice_line_retur,self).default_get(cr,uid,fields,context=context)
-		print "============",context
+		# print "============",context
 		res.update({
 			'user_id':uid,
 			'line_ids':context.get('active_ids',False),
@@ -25,7 +25,7 @@ class account_invoice_line_retur(models.TransientModel):
 			context={}
 		for o in self.browse(cr,uid,ids,context=context):
 			invoice_lines = [x.id for x in o.line_ids]
-			print "===============",invoice_lines
+			# print "===============",invoice_lines
 			self.pool.get('account.invoice.line').package_returned(cr,uid,invoice_lines,context=context)
 		datas = {
 			 'ids': invoice_lines,

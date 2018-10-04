@@ -378,6 +378,7 @@ class account_invoice_line(models.Model):
 										('OSD',"On Scheduled Delivery"),
 										('ANT',"Dalam Pengantaran"),
 										('DLV',"Delivered"),
+										('force_close','Forced as Close'),
 										('cabang','Cabang'),
 										('pusat','Pusat'),
 										('submit','Submitted to Partner'),

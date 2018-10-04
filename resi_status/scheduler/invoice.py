@@ -31,6 +31,7 @@ class account_invoice_line(models.Model):
 										('OSD',"On Scheduled Delivery"),
 										('ANT',"Dalam Pengantaran"),
 										('DLV',"Delivered"),
+										('force_close','Forced as Close'),
 										('cabang','Cabang'),
 										('pusat','Pusat'),
 										('submit','Submitted to Partner'),
@@ -315,25 +316,6 @@ class account_invoice(models.Model):
 			# cnx2.commit()
 			cnx2.close()
 
-			# query_pickup = """select ReceiptNumber,parcel_content,cust_package_id from PartnerRequestExt WITH (NOLOCK) where ReceiptNumber in (%s)"""%to_update
-			# ss_pickup_config = {
-			# 'user'		: '',
-			# 'password'	: '',
-			# 'host' 		: '',
-			# 'database' 	: '',
-			# 'port'		: '',
-			# }
-			# pickup_conn = pymssql.connect(server=ss_pickup_config['host'], user=ss_pickup_config['user'], password=ss_pickup_config['password'], 
-				# port=str(ss_pickup_config['port']), database=ss_pickup_config['database'])
-			# cr_pickup = pickup_conn.cursor(as_dict=True)
-			# cr_pickup.execute(query_pickup)
-			# records = cr_pickup.fetchall()
-			# for record in records:
-			# 	detail_value = {'detail_barang':record['parcel_content'],'cust_package_number':record['cust_package_id']}
-			# 	resi = record['ReceiptNumber']
-			# 	if invoice_dict.get(resi,False):
-			# 		self.pool.get('account.invoice.line').write(cr,uid,invoice_dict.get(resi),detail_value)
-			# pickup_conn.close()
 		return True
 
 
