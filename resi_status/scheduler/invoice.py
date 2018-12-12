@@ -166,7 +166,7 @@ class account_invoice(models.Model):
 		cur = pickup_conn.cursor(as_dict=False)
 		querystt = """select 
 			stt.tgltransaksi,
-			stt.pengirim,
+			part.Name as pengirim,
 			stt.nostt, 
 			pre.recipient_name as penerima,
 			coalesce(pre.cod_value,stt.codNilai) as codNilai,
@@ -177,6 +177,8 @@ class account_invoice(models.Model):
 			pre.cust_package_id
 			from
 			PICKUPORDER.dbo.PartnerRequestExt pre with (nolock)
+			left join PICKUPORDER.dbo.PartnerRequest req with (nolock) on req.Id=pre.PartnerRequestId
+			left join PICKUPORDER.dbo.Partners part with (nolock) on part.Id=req.PartnerId
 			left join BOSICEPAT.POD.dbo.stt stt with (nolock) on stt.nostt=pre.ReceiptNumber
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
 			where (pre.cod_value >0.0 or stt.codNilai>0)  and stt.tgltransaksi >='2018-05-30 00:00:00' and (stt.iscodpulled is NULL or stt.iscodpulled=0)
@@ -197,7 +199,7 @@ class account_invoice(models.Model):
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
 			where stt.asal='BKI10000' and stt.codNilai>=5000 and stt.tgltransaksi>'2018-05-30 00:00:00' 
 			and (stt.iscodpulled is NULL or stt.iscodpulled=0) and stt.pengirim <> 'Lazada Indonesia'
-			order by stt.tgltransaksi asc,stt.pengirim asc,stt.nostt asc
+			order by stt.tgltransaksi asc,pengirim asc,stt.nostt asc
 			"""
 		
 		cur.execute(querystt)
