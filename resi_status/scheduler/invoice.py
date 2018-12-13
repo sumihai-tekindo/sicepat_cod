@@ -197,8 +197,9 @@ class account_invoice(models.Model):
 			from 
 			BOSICEPAT.POD.dbo.stt stt with (nolock) 
 			left join BOSICEPAT.POD.dbo.MsTrackingSite mts with (nolock) on mts.SiteCodeRds=stt.gerai
+			left join PICKUPORDER.dbo.PartnerRequestExt pre with (nolock) on stt.nostt=pre.ReceiptNumber
 			where stt.asal='BKI10000' and stt.codNilai>=5000 and stt.tgltransaksi>'2018-05-30 00:00:00' 
-			and (stt.iscodpulled is NULL or stt.iscodpulled=0) and stt.pengirim <> 'Lazada Indonesia'
+			and (stt.iscodpulled is NULL or stt.iscodpulled=0) and stt.pengirim <> 'Lazada Indonesia' and stt.nostt <> pre.ReceiptNumber
 			order by stt.tgltransaksi asc,pengirim asc,stt.nostt asc
 			"""
 		
